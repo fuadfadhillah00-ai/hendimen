@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hendimen - Bantu Cepat, Dapat Cepat</title>
+    <title>Dashboard - Hendimen</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -15,6 +15,8 @@
             --warning: #ffc107;
             --danger: #dc3545;
             --info: #17a2b8;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
         }
         
         * {
@@ -85,9 +87,50 @@
             color: var(--primary);
         }
         
-        .auth-buttons {
+        .user-actions {
             display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .role-switch {
+            display: flex;
+            background-color: var(--light-gray);
+            border-radius: 30px;
+            padding: 5px;
+        }
+        
+        .role-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background: transparent;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .role-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
             gap: 10px;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
         
         .btn {
@@ -99,12 +142,6 @@
             border: none;
         }
         
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-        }
-        
         .btn-primary {
             background-color: var(--primary);
             color: white;
@@ -114,215 +151,158 @@
             background-color: #3a5bdf;
         }
         
-        .btn-outline:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-        
         .btn-success {
             background-color: var(--success);
             color: white;
         }
         
-        .btn-warning {
-            background-color: var(--warning);
-            color: var(--dark);
-        }
-        
-        .btn-danger {
-            background-color: var(--danger);
-            color: white;
-        }
-        
-        .btn-info {
-            background-color: var(--info);
-            color: white;
-        }
-        
-        .btn-light {
-            background-color: white;
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
             color: var(--primary);
         }
         
-        .btn-light:hover {
-            background-color: #f0f0f0;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--primary), #6a8aff);
+        .btn-outline:hover {
+            background-color: var(--primary);
             color: white;
-            padding: 80px 0;
-            text-align: center;
         }
         
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 30px;
-        }
-        
-        .hero-buttons {
+        /* Dashboard Layout */
+        .dashboard {
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            margin-top: 30px;
+            gap: 30px;
         }
         
-        /* How It Works Section */
-        .section {
-            padding: 80px 0;
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            height: fit-content;
         }
         
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
+        .sidebar-section {
+            margin-bottom: 25px;
         }
         
-        .section-title h2 {
-            font-size: 2rem;
-            color: var(--dark);
+        .sidebar-section h3 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
             margin-bottom: 10px;
         }
         
-        .section-title p {
-            color: #6c757d;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .steps {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-        
-        .step {
-            flex: 1;
-            min-width: 250px;
-            text-align: center;
-            padding: 30px 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .step-icon {
-            width: 80px;
-            height: 80px;
-            background-color: rgba(74, 107, 255, 0.1);
-            border-radius: 50%;
+        .sidebar-menu a {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2rem;
+            gap: 10px;
+            padding: 10px;
+            text-decoration: none;
+            color: var(--dark);
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(74, 107, 255, 0.1);
             color: var(--primary);
         }
         
-        .step h3 {
-            margin-bottom: 15px;
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 1.8rem;
             color: var(--dark);
         }
         
-        /* Features Section */
-        .features {
-            background-color: var(--light);
-        }
-        
-        .feature-grid {
+        .stats-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
         }
         
-        .feature-card {
+        .stat-card {
             background-color: white;
-            padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            position: relative;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
         }
         
-        .feature-card h3 {
-            margin-bottom: 15px;
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
             color: var(--primary);
         }
         
-        .feature-badge {
-            position: absolute;
-            top: -10px;
-            right: 15px;
-            background-color: var(--secondary);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
+        .stat-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
         }
         
-        /* Payment Methods */
-        .payment-methods {
+        .stat-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .filters {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .filter-row {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
+            gap: 15px;
             flex-wrap: wrap;
         }
         
-        .payment-method {
-            display: flex;
-            align-items: center;
-            background: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        .filter-group {
+            flex: 1;
+            min-width: 150px;
         }
         
-        .payment-method i {
-            font-size: 1.5rem;
-            margin-right: 10px;
-            color: var(--primary);
-        }
-        
-        /* Dashboard Preview */
-        .dashboard-preview {
-            background-color: white;
-            border-radius: 8px;
-            padding: 30px;
-            margin-top: 40px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .dashboard-tabs {
-            display: flex;
-            border-bottom: 1px solid #dee2e6;
-            margin-bottom: 20px;
-        }
-        
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-        }
-        
-        .tab.active {
-            border-bottom: 3px solid var(--primary);
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
+        .filter-group label {
             display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .filter-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.9rem;
         }
         
         .job-list {
@@ -332,19 +312,27 @@
         }
         
         .job-card {
-            border: 1px solid #dee2e6;
+            background-color: white;
             border-radius: 8px;
-            padding: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
         .job-card.emergency {
             border-left: 4px solid var(--danger);
         }
         
-        .job-card h4 {
+        .job-card h3 {
             margin-bottom: 10px;
             color: var(--dark);
+            font-size: 1.2rem;
         }
         
         .job-meta {
@@ -352,13 +340,35 @@
             justify-content: space-between;
             margin-bottom: 10px;
             font-size: 0.9rem;
-            color: #6c757d;
+            color: var(--gray);
         }
         
         .job-price {
             font-weight: bold;
             color: var(--success);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        
+        .job-description {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .job-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .job-tag {
+            background-color: var(--light-gray);
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--gray);
         }
         
         .emergency-badge {
@@ -368,80 +378,34 @@
             border-radius: 4px;
             font-size: 0.8rem;
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
         }
         
-        /* CTA Section */
-        .cta {
-            background-color: var(--secondary);
-            color: white;
-            text-align: center;
-            padding: 60px 0;
-        }
-        
-        .cta h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-        
-        .cta p {
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 50px 0 20px;
-        }
-        
-        .footer-content {
+        .job-actions {
             display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin-bottom: 30px;
+            gap: 10px;
         }
         
-        .footer-column {
+        .job-actions .btn {
             flex: 1;
-            min-width: 200px;
-        }
-        
-        .footer-column h3 {
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-        }
-        
-        .footer-column ul {
-            list-style: none;
-        }
-        
-        .footer-column ul li {
-            margin-bottom: 10px;
-        }
-        
-        .footer-column a {
-            color: #adb5bd;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-column a:hover {
-            color: white;
-        }
-        
-        .copyright {
             text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #495057;
-            color: #adb5bd;
-            font-size: 0.9rem;
         }
         
-        /* Modal */
+        /* Requester Specific Styles */
+        .requester-view .create-job-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        /* Helper Specific Styles */
+        .helper-view .job-card .btn {
+            width: 100%;
+        }
+        
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -490,7 +454,22 @@
             font-size: 1rem;
         }
         
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
         /* Responsive Design */
+        @media (max-width: 992px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+        }
+        
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
@@ -501,22 +480,23 @@
                 margin: 20px 0;
             }
             
-            .hero h1 {
-                font-size: 2rem;
+            .user-actions {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
             }
             
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
+            .role-switch {
+                width: 100%;
+                justify-content: center;
             }
             
-            .steps {
-                flex-direction: column;
+            .stats-cards {
+                grid-template-columns: 1fr;
             }
             
-            .payment-methods {
-                flex-direction: column;
-                align-items: center;
+            .job-list {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -528,357 +508,376 @@
             <nav class="navbar">
                 <div class="logo">Hendi<span>men</span></div>
                 <ul class="nav-links">
-                    <li><a href="#how-it-works">Cara Kerja</a></li>
-                    <li><a href="#features">Fitur</a></li>
-                    <li><a href="#payment">Pembayaran</a></li>
-                    <li><a href="#dashboard">Dashboard</a></li>
-                    <li><a href="#about">Tentang</a></li>
+                    <li><a href="#" class="active">Beranda</a></li>
+                    <li><a href="#">Pekerjaan</a></li>
+                    <li><a href="#">Dompet</a></li>
+                    <li><a href="#">Pesan</a></li>
+                    <li><a href="#">Bantuan</a></li>
                 </ul>
-                <div class="auth-buttons">
-                    <button class="btn btn-outline" onclick="openModal('loginModal')">Masuk</button>
-                    <button class="btn btn-primary" onclick="openModal('registerModal')">Daftar</button>
+                <div class="user-actions">
+                    <div class="role-switch">
+                        <button class="role-btn active" id="requesterBtn">Requester</button>
+                        <button class="role-btn" id="helperBtn">Helper</button>
+                    </div>
+                    <div class="user-profile">
+                        <div class="avatar">AS</div>
+                        <span>Ahmad Surya</span>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Bantu Cepat, Dapat Cepat</h1>
-            <p>Platform yang menghubungkan orang yang butuh bantuan mendesak dengan mereka yang siap membantu dan butuh uang cepat.</p>
-            <div class="hero-buttons">
-                <button class="btn btn-light">Butuh Bantuan</button>
-                <button class="btn btn-outline">Siap Bantu</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Cara Kerja Hendimen</h2>
-                <p>Platform sederhana yang menghubungkan kebutuhan mendesak dengan solusi cepat</p>
-            </div>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-icon">1</div>
-                    <h3>Posting Kebutuhan</h3>
-                    <p>Requester memposting kebutuhan urgent dengan deskripsi, lokasi, dan upah yang ditawarkan.</p>
-                </div>
-                <div class="step">
-                    <div class="step-icon">2</div>
-                    <h3>Temukan & Terima</h3>
-                    <p>Helper melihat daftar kebutuhan di sekitar mereka dan menerima permintaan yang sesuai.</p>
-                </div>
-                <div class="step">
-                    <div class="step-icon">3</div>
-                    <h3>Konfirmasi & Hubungi</h3>
-                    <p>Sistem mengkonfirmasi dan menghubungkan kedua pihak melalui chat dan map.</p>
-                </div>
-                <div class="step">
-                    <div class="step-icon">4</div>
-                    <h3>Transaksi & Rating</h3>
-                    <p>Transaksi aman melalui e-wallet/transfer, dilengkapi sistem rating untuk kepercayaan.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="section features">
-        <div class="container">
-            <div class="section-title">
-                <h2>Fitur Unggulan</h2>
-                <p>Hendimen menyediakan solusi lengkap untuk kebutuhan bantuan mendesak</p>
-            </div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <span class="feature-badge">Baru</span>
-                    <h3>Verifikasi Identitas</h3>
-                    <p>Verifikasi KTP, SIM, atau KTM saat pendaftaran untuk keamanan dan kepercayaan.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Sistem Escrow</h3>
-                    <p>Pembayaran aman dengan sistem escrow yang melindungi kedua belah pihak.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Asuransi Pekerjaan</h3>
-                    <p>Asuransi untuk pekerjaan berisiko dengan premi terjangkau.</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-badge">Populer</span>
-                    <h3>Quest Emergency</h3>
-                    <p>Prioritas untuk pekerjaan mendesak dengan harga lebih tinggi.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Auto-Match</h3>
-                    <p>Sistem pintar mencocokkan pekerjaan berdasarkan lokasi dan skill helper.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Filter Pekerjaan</h3>
-                    <p>Filter pekerjaan berdasarkan waktu, upah, dan kategori untuk pencarian yang tepat.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Live Tracking</h3>
-                    <p>Pelacakan langsung untuk pekerjaan antar-jemput dan pengiriman.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Multi-Payment</h3>
-                    <p>Berbagai metode pembayaran: e-wallet, transfer bank, QRIS, dan tunai.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Saldo Instan</h3>
-                    <p>Penarikan dana instan tanpa menunggu untuk kenyamanan helper.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Poin Loyalitas</h3>
-                    <p>Program loyalitas dengan poin yang dapat ditukar hadiah untuk helper aktif.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Rating & Review</h3>
-                    <p>Sistem rating dua arah untuk membangun reputasi yang transparan.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Profil Helper</h3>
-                    <p>Profil detail helper dengan portofolio dan spesialisasi.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Bonus Referral</h3>
-                    <p>Dapatkan bonus dengan mengajak teman bergabung sebagai helper atau requester.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Notifikasi Real-time</h3>
-                    <p>Notifikasi untuk pekerjaan mendesak atau yang hampir expired.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Payment Section -->
-    <section id="payment" class="section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Mekanisme Pembayaran</h2>
-                <p>Fleksibel dan aman untuk semua jenis transaksi</p>
-            </div>
-            
-            <div class="feature-card">
-                <h3>Pembayaran Tunai</h3>
-                <p>Requester membayar langsung tunai ke helper. Sistem tetap mencatat transaksi dan memotong komisi dari saldo digital helper.</p>
-                <div class="payment-methods">
-                    <div class="payment-method">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span>Tunai</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="feature-card" style="margin-top: 30px;">
-                <h3>Pembayaran Online</h3>
-                <p>Requester membayar melalui sistem escrow. Dana dilepaskan setelah pekerjaan selesai dan dikonfirmasi.</p>
-                <div class="payment-methods">
-                    <div class="payment-method">
-                        <i class="fab fa-cc-visa"></i>
-                        <span>Kartu Kredit</span>
-                    </div>
-                    <div class="payment-method">
-                        <i class="fas fa-mobile-alt"></i>
-                        <span>E-Wallet</span>
-                    </div>
-                    <div class="payment-method">
-                        <i class="fas fa-university"></i>
-                        <span>Transfer Bank</span>
-                    </div>
-                    <div class="payment-method">
-                        <i class="fas fa-qrcode"></i>
-                        <span>QRIS</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Dashboard Preview -->
-    <section id="dashboard" class="section features">
-        <div class="container">
-            <div class="section-title">
-                <h2>Dashboard Helper</h2>
-                <p>Kelola pekerjaan dan penghasilan dengan mudah</p>
-            </div>
-            
-            <div class="dashboard-preview">
-                <div class="dashboard-tabs">
-                    <div class="tab active" onclick="switchTab('availableJobs')">Pekerjaan Tersedia</div>
-                    <div class="tab" onclick="switchTab('myJobs')">Pekerjaan Saya</div>
-                    <div class="tab" onclick="switchTab('wallet')">Dompet Saya</div>
+    <!-- Dashboard Content -->
+    <div class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <h3>Menu Utama</h3>
+                    <ul class="sidebar-menu">
+                        <li><a href="#" class="active"><i class="fas fa-home"></i> Beranda</a></li>
+                        <li><a href="#"><i class="fas fa-briefcase"></i> Pekerjaan Saya</a></li>
+                        <li><a href="#"><i class="fas fa-wallet"></i> Dompet Saya</a></li>
+                        <li><a href="#"><i class="fas fa-star"></i> Rating & Ulasan</a></li>
+                        <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
+                    </ul>
                 </div>
                 
-                <div id="availableJobs" class="tab-content active">
+                <div class="sidebar-section">
+                    <h3>Kategori</h3>
+                    <ul class="sidebar-menu">
+                        <li><a href="#"><i class="fas fa-truck-moving"></i> Pindahan</a></li>
+                        <li><a href="#"><i class="fas fa-car"></i> Antar Jemput</a></li>
+                        <li><a href="#"><i class="fas fa-box"></i> Pengiriman</a></li>
+                        <li><a href="#"><i class="fas fa-tools"></i> Perbaikan</a></li>
+                        <li><a href="#"><i class="fas fa-user-friends"></i> Jaga Acara</a></li>
+                        <li><a href="#"><i class="fas fa-ellipsis-h"></i> Lainnya</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Requester View -->
+                <div class="requester-view" id="requesterView">
+                    <div class="dashboard-header">
+                        <h1>Postingan Bantuan Tersedia</h1>
+                        <button class="btn btn-primary" onclick="openModal('createJobModal')">
+                            <i class="fas fa-plus"></i> Buat Permintaan Bantuan
+                        </button>
+                    </div>
+                    
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <i class="fas fa-bell"></i>
+                            <h3>5</h3>
+                            <p>Permintaan Aktif</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>12</h3>
+                            <p>Selesai</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-star"></i>
+                            <h3>4.8</h3>
+                            <p>Rating Rata-rata</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-wallet"></i>
+                            <h3>Rp 850K</h3>
+                            <p>Total Dibayarkan</p>
+                        </div>
+                    </div>
+                    
+                    <div class="filters">
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label for="categoryFilter">Kategori</label>
+                                <select id="categoryFilter" class="filter-select">
+                                    <option value="all">Semua Kategori</option>
+                                    <option value="moving">Pindahan</option>
+                                    <option value="delivery">Pengiriman</option>
+                                    <option value="transport">Antar Jemput</option>
+                                    <option value="event">Jaga Acara</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="statusFilter">Status</label>
+                                <select id="statusFilter" class="filter-select">
+                                    <option value="all">Semua Status</option>
+                                    <option value="open">Terbuka</option>
+                                    <option value="in-progress">Dalam Proses</option>
+                                    <option value="completed">Selesai</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="sortFilter">Urutkan</label>
+                                <select id="sortFilter" class="filter-select">
+                                    <option value="newest">Terbaru</option>
+                                    <option value="oldest">Terlama</option>
+                                    <option value="price-high">Harga Tertinggi</option>
+                                    <option value="price-low">Harga Terendah</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="job-list">
+                        <!-- Job Card 1 -->
+                        <div class="job-card">
+                            <h3>Bantuan Pindah Barang Kos</h3>
+                            <div class="job-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> Kemang, Jakarta</span>
+                                <span><i class="far fa-clock"></i> 3 jam lalu</span>
+                            </div>
+                            <div class="job-price">Rp 75.000</div>
+                            <div class="job-description">
+                                Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.
+                            </div>
+                            <div class="job-tags">
+                                <span class="job-tag">Pindahan</span>
+                                <span class="job-tag">Jakarta Selatan</span>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn btn-outline">Lihat Detail</button>
+                                <button class="btn btn-primary">Edit</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Job Card 2 -->
                         <div class="job-card emergency">
                             <div class="emergency-badge">Emergency</div>
-                            <h4>Bantuan Pindah Barang</h4>
+                            <h3>Antar ke Rumah Sakit</h3>
                             <div class="job-meta">
-                                <span><i class="fas fa-map-marker-alt"></i> Jakarta Selatan</span>
-                                <span><i class="far fa-clock"></i> 2 jam</span>
+                                <span><i class="fas fa-map-marker-alt"></i> BSD City, Tangerang</span>
+                                <span><i class="far fa-clock"></i> 1 jam lalu</span>
                             </div>
-                            <p>Butuh bantuan pindah barang dari apartemen ke gudang.</p>
-                            <div class="job-price">Rp 150.000</div>
-                            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;">Ambil Pekerjaan</button>
+                            <div class="job-price">Rp 120.000</div>
+                            <div class="job-description">
+                                Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.
+                            </div>
+                            <div class="job-tags">
+                                <span class="job-tag">Antar Jemput</span>
+                                <span class="job-tag">Tangerang</span>
+                                <span class="job-tag">Emergency</span>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn btn-outline">Lihat Detail</button>
+                                <button class="btn btn-primary">Edit</button>
+                            </div>
                         </div>
                         
+                        <!-- Job Card 3 -->
                         <div class="job-card">
-                            <h4>Jaga Stand Acara</h4>
+                            <h3>Jaga Stand Pameran</h3>
                             <div class="job-meta">
-                                <span><i class="fas fa-map-marker-alt"></i> BSD City</span>
-                                <span><i class="far fa-clock"></i> 5 jam</span>
+                                <span><i class="fas fa-map-marker-alt"></i> JCC, Jakarta</span>
+                                <span><i class="far fa-clock"></i> 5 jam lalu</span>
                             </div>
-                            <p>Butuh helper untuk jaga stand pameran produk teknologi.</p>
                             <div class="job-price">Rp 200.000</div>
-                            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;">Ambil Pekerjaan</button>
-                        </div>
-                        
-                        <div class="job-card">
-                            <h4>Antar ke Rumah Sakit</h4>
-                            <div class="job-meta">
-                                <span><i class="fas fa-map-marker-alt"></i> Kemang</span>
-                                <span><i class="far fa-clock"></i> 1.5 jam</span>
+                            <div class="job-description">
+                                Butuh helper untuk jaga stand pameran produk teknologi selama 4 jam. Akan ada briefing singkat sebelumnya.
                             </div>
-                            <p>Butuh antar anggota keluarga ke RS untuk kontrol rutin.</p>
-                            <div class="job-price">Rp 75.000</div>
-                            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;">Ambil Pekerjaan</button>
+                            <div class="job-tags">
+                                <span class="job-tag">Jaga Acara</span>
+                                <span class="job-tag">Jakarta Pusat</span>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn btn-outline">Lihat Detail</button>
+                                <button class="btn btn-primary">Edit</button>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div id="myJobs" class="tab-content">
-                    <p>Daftar pekerjaan yang sedang Anda kerjakan akan muncul di sini.</p>
-                </div>
-                
-                <div id="wallet" class="tab-content">
-                    <p>Informasi saldo, riwayat transaksi, dan opsi penarikan akan muncul di sini.</p>
+                <!-- Helper View -->
+                <div class="helper-view" id="helperView" style="display: none;">
+                    <div class="dashboard-header">
+                        <h1>Pekerjaan Tersedia di Sekitar Anda</h1>
+                        <div class="location-info">
+                            <i class="fas fa-map-marker-alt"></i> Jakarta Selatan
+                        </div>
+                    </div>
+                    
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <i class="fas fa-briefcase"></i>
+                            <h3>8</h3>
+                            <p>Pekerjaan Aktif</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>24</h3>
+                            <p>Selesai</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-star"></i>
+                            <h3>4.9</h3>
+                            <p>Rating Anda</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-wallet"></i>
+                            <h3>Rp 2.1JT</h3>
+                            <p>Pendapatan Bulan Ini</p>
+                        </div>
+                    </div>
+                    
+                    <div class="filters">
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label for="helperCategoryFilter">Kategori</label>
+                                <select id="helperCategoryFilter" class="filter-select">
+                                    <option value="all">Semua Kategori</option>
+                                    <option value="moving">Pindahan</option>
+                                    <option value="delivery">Pengiriman</option>
+                                    <option value="transport">Antar Jemput</option>
+                                    <option value="event">Jaga Acara</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="distanceFilter">Jarak</label>
+                                <select id="distanceFilter" class="filter-select">
+                                    <option value="all">Semua Jarak</option>
+                                    <option value="1km">≤ 1 km</option>
+                                    <option value="5km">≤ 5 km</option>
+                                    <option value="10km">≤ 10 km</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="helperSortFilter">Urutkan</label>
+                                <select id="helperSortFilter" class="filter-select">
+                                    <option value="newest">Terbaru</option>
+                                    <option value="price-high">Harga Tertinggi</option>
+                                    <option value="price-low">Harga Terendah</option>
+                                    <option value="distance">Terdekat</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="job-list">
+                        <!-- Job Card 1 -->
+                        <div class="job-card">
+                            <h3>Bantuan Pindah Barang Kos</h3>
+                            <div class="job-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> 1.2 km</span>
+                                <span><i class="far fa-clock"></i> 3 jam lalu</span>
+                            </div>
+                            <div class="job-price">Rp 75.000</div>
+                            <div class="job-description">
+                                Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.
+                            </div>
+                            <div class="job-tags">
+                                <span class="job-tag">Pindahan</span>
+                                <span class="job-tag">Kemang</span>
+                            </div>
+                            <button class="btn btn-primary">Ambil Pekerjaan</button>
+                        </div>
+                        
+                        <!-- Job Card 2 -->
+                        <div class="job-card emergency">
+                            <div class="emergency-badge">Emergency</div>
+                            <h3>Antar ke Rumah Sakit</h3>
+                            <div class="job-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> 3.5 km</span>
+                                <span><i class="far fa-clock"></i> 1 jam lalu</span>
+                            </div>
+                            <div class="job-price">Rp 120.000</div>
+                            <div class="job-description">
+                                Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.
+                            </div>
+                            <div class="job-tags">
+                                <span class="job-tag">Antar Jemput</span>
+                                <span class="job-tag">BSD City</span>
+                                <span class="job-tag">Emergency</span>
+                            </div>
+                            <button class="btn btn-primary">Ambil Pekerjaan</button>
+                        </div>
+                        
+                        <!-- Job Card 3 -->
+                        <div class="job-card">
+                            <h3>Jaga Stand Pameran</h3>
+                            <div class="job-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> 8.2 km</span>
+                                <span><i class="far fa-clock"></i> 5 jam lalu</span>
+                            </div>
+                            <div class="job-price">Rp 200.000</div>
+                            <div class="job-description">
+                                Butuh helper untuk jaga stand pameran produk teknologi selama 4 jam. Akan ada briefing singkat sebelumnya.
+                            </div>
+                            <div class="job-tags">
+                                <span class="job-tag">Jaga Acara</span>
+                                <span class="job-tag">JCC</span>
+                            </div>
+                            <button class="btn btn-primary">Ambil Pekerjaan</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <h2>Siap Bergabung dengan Hendimen?</h2>
-            <p>Baik Anda butuh bantuan atau ingin membantu dan mendapatkan uang tambahan, Hendimen adalah solusinya.</p>
-            <button class="btn btn-light" onclick="openModal('registerModal')">Daftar Sekarang</button>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Hendimen</h3>
-                    <p>Platform yang menghubungkan orang yang butuh bantuan mendesak dengan mereka yang siap membantu.</p>
-                </div>
-                <div class="footer-column">
-                    <h3>Menu Cepat</h3>
-                    <ul>
-                        <li><a href="#how-it-works">Cara Kerja</a></li>
-                        <li><a href="#features">Fitur</a></li>
-                        <li><a href="#payment">Pembayaran</a></li>
-                        <li><a href="#dashboard">Dashboard</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Bantuan</h3>
-                    <ul>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Syarat & Ketentuan</a></li>
-                        <li><a href="#">Kebijakan Privasi</a></li>
-                        <li><a href="#">Bantuan Pengguna</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Kontak</h3>
-                    <ul>
-                        <li>Email: info@hendimen.com</li>
-                        <li>Telepon: (021) 1234-5678</li>
-                        <li>Alamat: Jakarta, Indonesia</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 Hendimen. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
-            <h2>Masuk ke Hendimen</h2>
-            <form>
-                <div class="form-group">
-                    <label for="loginEmail">Email atau Nomor Telepon</label>
-                    <input type="text" id="loginEmail" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Kata Sandi</label>
-                    <input type="password" id="loginPassword" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Masuk</button>
-            </form>
-            <p style="text-align: center; margin-top: 15px;">Belum punya akun? <a href="#" onclick="closeModal('loginModal'); openModal('registerModal')">Daftar di sini</a></p>
         </div>
     </div>
 
-    <!-- Register Modal -->
-    <div id="registerModal" class="modal">
+    <!-- Create Job Modal -->
+    <div id="createJobModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('registerModal')">&times;</span>
-            <h2>Daftar Akun Hendimen</h2>
+            <span class="close-modal" onclick="closeModal('createJobModal')">&times;</span>
+            <h2>Buat Permintaan Bantuan Baru</h2>
             <form>
                 <div class="form-group">
-                    <label for="userType">Saya ingin mendaftar sebagai:</label>
-                    <select id="userType" class="form-control">
-                        <option value="helper">Helper (Siap Membantu)</option>
-                        <option value="requester">Requester (Butuh Bantuan)</option>
+                    <label for="jobTitle">Judul Pekerjaan</label>
+                    <input type="text" id="jobTitle" class="form-control" placeholder="Contoh: Butuh bantuan pindah barang" required>
+                </div>
+                <div class="form-group">
+                    <label for="jobCategory">Kategori</label>
+                    <select id="jobCategory" class="form-control" required>
+                        <option value="">Pilih Kategori</option>
+                        <option value="moving">Pindahan</option>
+                        <option value="delivery">Pengiriman</option>
+                        <option value="transport">Antar Jemput</option>
+                        <option value="event">Jaga Acara</option>
+                        <option value="other">Lainnya</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="regName">Nama Lengkap</label>
-                    <input type="text" id="regName" class="form-control" required>
+                    <label for="jobDescription">Deskripsi Pekerjaan</label>
+                    <textarea id="jobDescription" class="form-control" placeholder="Jelaskan detail pekerjaan yang dibutuhkan" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="regEmail">Email</label>
-                    <input type="email" id="regEmail" class="form-control" required>
+                    <label for="jobLocation">Lokasi</label>
+                    <input type="text" id="jobLocation" class="form-control" placeholder="Alamat lengkap" required>
                 </div>
                 <div class="form-group">
-                    <label for="regPhone">Nomor Telepon</label>
-                    <input type="tel" id="regPhone" class="form-control" required>
+                    <label for="jobPrice">Upah yang Ditawarkan (Rp)</label>
+                    <input type="number" id="jobPrice" class="form-control" placeholder="Contoh: 75000" required>
                 </div>
                 <div class="form-group">
-                    <label for="regPassword">Kata Sandi</label>
-                    <input type="password" id="regPassword" class="form-control" required>
+                    <label>
+                        <input type="checkbox" id="emergencyJob"> Tandai sebagai kebutuhan emergency (upah akan ditingkatkan 25%)
+                    </label>
                 </div>
-                <div class="form-group">
-                    <label for="regConfirmPassword">Konfirmasi Kata Sandi</label>
-                    <input type="password" id="regConfirmPassword" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="regId">Upload KTP/SIM/KTM</label>
-                    <input type="file" id="regId" class="form-control">
-                    <small>Verifikasi identitas diperlukan untuk keamanan platform</small>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Daftar</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Posting Permintaan</button>
             </form>
-            <p style="text-align: center; margin-top: 15px;">Sudah punya akun? <a href="#" onclick="closeModal('registerModal'); openModal('loginModal')">Masuk di sini</a></p>
         </div>
     </div>
 
     <script>
+        // Switch between Requester and Helper views
+        document.getElementById('requesterBtn').addEventListener('click', function() {
+            document.getElementById('requesterView').style.display = 'block';
+            document.getElementById('helperView').style.display = 'none';
+            document.getElementById('requesterBtn').classList.add('active');
+            document.getElementById('helperBtn').classList.remove('active');
+        });
+        
+        document.getElementById('helperBtn').addEventListener('click', function() {
+            document.getElementById('requesterView').style.display = 'none';
+            document.getElementById('helperView').style.display = 'block';
+            document.getElementById('helperBtn').classList.add('active');
+            document.getElementById('requesterBtn').classList.remove('active');
+        });
+        
         // Modal functions
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
@@ -895,29 +894,15 @@
             }
         }
         
-        // Tab switching function
-        function switchTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Remove active class from all tabs
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show selected tab content
-            document.getElementById(tabId).classList.add('active');
-            
-            // Add active class to clicked tab
-            event.target.classList.add('active');
-        }
+        // Filter functionality
+        document.getElementById('categoryFilter').addEventListener('change', filterJobs);
+        document.getElementById('statusFilter').addEventListener('change', filterJobs);
+        document.getElementById('sortFilter').addEventListener('change', filterJobs);
         
-        // Simulate notification
-        setTimeout(function() {
-            alert("Notifikasi: Ada pekerjaan emergency di dekat lokasi Anda! Cek sekarang.");
-        }, 5000);
+        function filterJobs() {
+            // In a real application, this would filter the job list
+            console.log('Filtering jobs...');
+        }
     </script>
 </body>
 </html>
