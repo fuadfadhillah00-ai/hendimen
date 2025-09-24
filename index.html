@@ -67,26 +67,6 @@
             color: var(--secondary);
         }
         
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 20px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-        
         .user-actions {
             display: flex;
             align-items: center;
@@ -405,6 +385,87 @@
             width: 100%;
         }
         
+        /* Auth Pages */
+        .auth-container {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), #6a8aff);
+        }
+        
+        .auth-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .auth-tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
         /* Modal Styles */
         .modal {
             display: none;
@@ -436,27 +497,13 @@
             cursor: pointer;
         }
         
-        .form-group {
-            margin-bottom: 20px;
+        /* Page Styles */
+        .page {
+            display: none;
         }
         
-        .form-group label {
+        .page.active {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        
-        textarea.form-control {
-            min-height: 100px;
-            resize: vertical;
         }
         
         /* Responsive Design */
@@ -476,14 +523,11 @@
                 padding: 15px 0;
             }
             
-            .nav-links {
-                margin: 20px 0;
-            }
-            
             .user-actions {
                 flex-direction: column;
                 gap: 10px;
                 width: 100%;
+                margin-top: 15px;
             }
             
             .role-switch {
@@ -502,316 +546,343 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">Hendi<span>men</span></div>
-                <ul class="nav-links">
-                    <li><a href="#" class="active">Beranda</a></li>
-                    <li><a href="#">Pekerjaan</a></li>
-                    <li><a href="#">Dompet</a></li>
-                    <li><a href="#">Pesan</a></li>
-                    <li><a href="#">Bantuan</a></li>
-                </ul>
-                <div class="user-actions">
-                    <div class="role-switch">
-                        <button class="role-btn active" id="requesterBtn">Requester</button>
-                        <button class="role-btn" id="helperBtn">Helper</button>
-                    </div>
-                    <div class="user-profile">
-                        <div class="avatar">AS</div>
-                        <span>Ahmad Surya</span>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Dashboard Content -->
-    <div class="container">
-        <div class="dashboard">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="sidebar-section">
-                    <h3>Menu Utama</h3>
-                    <ul class="sidebar-menu">
-                        <li><a href="#" class="active"><i class="fas fa-home"></i> Beranda</a></li>
-                        <li><a href="#"><i class="fas fa-briefcase"></i> Pekerjaan Saya</a></li>
-                        <li><a href="#"><i class="fas fa-wallet"></i> Dompet Saya</a></li>
-                        <li><a href="#"><i class="fas fa-star"></i> Rating & Ulasan</a></li>
-                        <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
-                    </ul>
+    <!-- Auth Pages -->
+    <div id="authPage" class="page active">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" onclick="switchAuthTab('login')">Masuk</div>
+                    <div class="auth-tab" onclick="switchAuthTab('register')">Daftar</div>
                 </div>
                 
-                <div class="sidebar-section">
-                    <h3>Kategori</h3>
-                    <ul class="sidebar-menu">
-                        <li><a href="#"><i class="fas fa-truck-moving"></i> Pindahan</a></li>
-                        <li><a href="#"><i class="fas fa-car"></i> Antar Jemput</a></li>
-                        <li><a href="#"><i class="fas fa-box"></i> Pengiriman</a></li>
-                        <li><a href="#"><i class="fas fa-tools"></i> Perbaikan</a></li>
-                        <li><a href="#"><i class="fas fa-user-friends"></i> Jaga Acara</a></li>
-                        <li><a href="#"><i class="fas fa-ellipsis-h"></i> Lainnya</a></li>
-                    </ul>
-                </div>
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form active">
+                    <div class="form-group">
+                        <label for="loginEmail">Email atau Nomor Telepon</label>
+                        <input type="text" id="loginEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Kata Sandi</label>
+                        <input type="password" id="loginPassword" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Masuk</button>
+                    <div class="auth-footer">
+                        <a href="#">Lupa kata sandi?</a>
+                    </div>
+                </form>
+                
+                <!-- Register Form -->
+                <form id="registerForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="userType">Saya ingin mendaftar sebagai:</label>
+                        <select id="userType" class="form-control">
+                            <option value="helper">Helper (Siap Membantu)</option>
+                            <option value="requester">Requester (Butuh Bantuan)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="regName">Nama Lengkap</label>
+                        <input type="text" id="regName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPhone">Nomor Telepon</label>
+                        <input type="tel" id="regPhone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Kata Sandi</label>
+                        <input type="password" id="regPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Konfirmasi Kata Sandi</label>
+                        <input type="password" id="regConfirmPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regId">Upload KTP/SIM/KTM</label>
+                        <input type="file" id="regId" class="form-control">
+                        <small>Verifikasi identitas diperlukan untuk keamanan platform</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Daftar</button>
+                    <div class="auth-footer">
+                        Dengan mendaftar, Anda menyetujui <a href="#">Syarat & Ketentuan</a> kami
+                    </div>
+                </form>
             </div>
-            
-            <!-- Main Content -->
-            <div class="main-content">
-                <!-- Requester View -->
-                <div class="requester-view" id="requesterView">
-                    <div class="dashboard-header">
-                        <h1>Postingan Bantuan Tersedia</h1>
-                        <button class="btn btn-primary" onclick="openModal('createJobModal')">
-                            <i class="fas fa-plus"></i> Buat Permintaan Bantuan
-                        </button>
-                    </div>
-                    
-                    <div class="stats-cards">
-                        <div class="stat-card">
-                            <i class="fas fa-bell"></i>
-                            <h3>5</h3>
-                            <p>Permintaan Aktif</p>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page">
+        <!-- Header -->
+        <header>
+            <div class="container">
+                <nav class="navbar">
+                    <div class="logo">Hendi<span>men</span></div>
+                    <div class="user-actions">
+                        <div class="role-switch">
+                            <button class="role-btn active" id="requesterBtn">Requester</button>
+                            <button class="role-btn" id="helperBtn">Helper</button>
                         </div>
-                        <div class="stat-card">
-                            <i class="fas fa-check-circle"></i>
-                            <h3>12</h3>
-                            <p>Selesai</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-star"></i>
-                            <h3>4.8</h3>
-                            <p>Rating Rata-rata</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-wallet"></i>
-                            <h3>Rp 850K</h3>
-                            <p>Total Dibayarkan</p>
+                        <div class="user-profile">
+                            <div class="avatar">AS</div>
+                            <span>Ahmad Surya</span>
+                            <button class="btn btn-outline" onclick="logout()">Keluar</button>
                         </div>
                     </div>
-                    
-                    <div class="filters">
-                        <div class="filter-row">
-                            <div class="filter-group">
-                                <label for="categoryFilter">Kategori</label>
-                                <select id="categoryFilter" class="filter-select">
-                                    <option value="all">Semua Kategori</option>
-                                    <option value="moving">Pindahan</option>
-                                    <option value="delivery">Pengiriman</option>
-                                    <option value="transport">Antar Jemput</option>
-                                    <option value="event">Jaga Acara</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label for="statusFilter">Status</label>
-                                <select id="statusFilter" class="filter-select">
-                                    <option value="all">Semua Status</option>
-                                    <option value="open">Terbuka</option>
-                                    <option value="in-progress">Dalam Proses</option>
-                                    <option value="completed">Selesai</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label for="sortFilter">Urutkan</label>
-                                <select id="sortFilter" class="filter-select">
-                                    <option value="newest">Terbaru</option>
-                                    <option value="oldest">Terlama</option>
-                                    <option value="price-high">Harga Tertinggi</option>
-                                    <option value="price-low">Harga Terendah</option>
-                                </select>
-                            </div>
-                        </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="container">
+            <div class="dashboard">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <h3>Menu Utama</h3>
+                        <ul class="sidebar-menu">
+                            <li><a href="#" class="active"><i class="fas fa-home"></i> Beranda</a></li>
+                            <li><a href="#"><i class="fas fa-briefcase"></i> Pekerjaan Saya</a></li>
+                            <li><a href="#"><i class="fas fa-wallet"></i> Dompet Saya</a></li>
+                            <li><a href="#"><i class="fas fa-star"></i> Rating & Ulasan</a></li>
+                            <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
+                            <li><a href="#"><i class="fas fa-cog"></i> Pengaturan</a></li>
+                        </ul>
                     </div>
                     
-                    <div class="job-list">
-                        <!-- Job Card 1 -->
-                        <div class="job-card">
-                            <h3>Bantuan Pindah Barang Kos</h3>
-                            <div class="job-meta">
-                                <span><i class="fas fa-map-marker-alt"></i> Kemang, Jakarta</span>
-                                <span><i class="far fa-clock"></i> 3 jam lalu</span>
-                            </div>
-                            <div class="job-price">Rp 75.000</div>
-                            <div class="job-description">
-                                Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.
-                            </div>
-                            <div class="job-tags">
-                                <span class="job-tag">Pindahan</span>
-                                <span class="job-tag">Jakarta Selatan</span>
-                            </div>
-                            <div class="job-actions">
-                                <button class="btn btn-outline">Lihat Detail</button>
-                                <button class="btn btn-primary">Edit</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Job Card 2 -->
-                        <div class="job-card emergency">
-                            <div class="emergency-badge">Emergency</div>
-                            <h3>Antar ke Rumah Sakit</h3>
-                            <div class="job-meta">
-                                <span><i class="fas fa-map-marker-alt"></i> BSD City, Tangerang</span>
-                                <span><i class="far fa-clock"></i> 1 jam lalu</span>
-                            </div>
-                            <div class="job-price">Rp 120.000</div>
-                            <div class="job-description">
-                                Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.
-                            </div>
-                            <div class="job-tags">
-                                <span class="job-tag">Antar Jemput</span>
-                                <span class="job-tag">Tangerang</span>
-                                <span class="job-tag">Emergency</span>
-                            </div>
-                            <div class="job-actions">
-                                <button class="btn btn-outline">Lihat Detail</button>
-                                <button class="btn btn-primary">Edit</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Job Card 3 -->
-                        <div class="job-card">
-                            <h3>Jaga Stand Pameran</h3>
-                            <div class="job-meta">
-                                <span><i class="fas fa-map-marker-alt"></i> JCC, Jakarta</span>
-                                <span><i class="far fa-clock"></i> 5 jam lalu</span>
-                            </div>
-                            <div class="job-price">Rp 200.000</div>
-                            <div class="job-description">
-                                Butuh helper untuk jaga stand pameran produk teknologi selama 4 jam. Akan ada briefing singkat sebelumnya.
-                            </div>
-                            <div class="job-tags">
-                                <span class="job-tag">Jaga Acara</span>
-                                <span class="job-tag">Jakarta Pusat</span>
-                            </div>
-                            <div class="job-actions">
-                                <button class="btn btn-outline">Lihat Detail</button>
-                                <button class="btn btn-primary">Edit</button>
-                            </div>
-                        </div>
+                    <div class="sidebar-section">
+                        <h3>Kategori</h3>
+                        <ul class="sidebar-menu">
+                            <li><a href="#"><i class="fas fa-truck-moving"></i> Pindahan</a></li>
+                            <li><a href="#"><i class="fas fa-car"></i> Antar Jemput</a></li>
+                            <li><a href="#"><i class="fas fa-box"></i> Pengiriman</a></li>
+                            <li><a href="#"><i class="fas fa-tools"></i> Perbaikan</a></li>
+                            <li><a href="#"><i class="fas fa-user-friends"></i> Jaga Acara</a></li>
+                            <li><a href="#"><i class="fas fa-ellipsis-h"></i> Lainnya</a></li>
+                        </ul>
                     </div>
                 </div>
                 
-                <!-- Helper View -->
-                <div class="helper-view" id="helperView" style="display: none;">
-                    <div class="dashboard-header">
-                        <h1>Pekerjaan Tersedia di Sekitar Anda</h1>
-                        <div class="location-info">
-                            <i class="fas fa-map-marker-alt"></i> Jakarta Selatan
-                        </div>
-                    </div>
-                    
-                    <div class="stats-cards">
-                        <div class="stat-card">
-                            <i class="fas fa-briefcase"></i>
-                            <h3>8</h3>
-                            <p>Pekerjaan Aktif</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-check-circle"></i>
-                            <h3>24</h3>
-                            <p>Selesai</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-star"></i>
-                            <h3>4.9</h3>
-                            <p>Rating Anda</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-wallet"></i>
-                            <h3>Rp 2.1JT</h3>
-                            <p>Pendapatan Bulan Ini</p>
-                        </div>
-                    </div>
-                    
-                    <div class="filters">
-                        <div class="filter-row">
-                            <div class="filter-group">
-                                <label for="helperCategoryFilter">Kategori</label>
-                                <select id="helperCategoryFilter" class="filter-select">
-                                    <option value="all">Semua Kategori</option>
-                                    <option value="moving">Pindahan</option>
-                                    <option value="delivery">Pengiriman</option>
-                                    <option value="transport">Antar Jemput</option>
-                                    <option value="event">Jaga Acara</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label for="distanceFilter">Jarak</label>
-                                <select id="distanceFilter" class="filter-select">
-                                    <option value="all">Semua Jarak</option>
-                                    <option value="1km">≤ 1 km</option>
-                                    <option value="5km">≤ 5 km</option>
-                                    <option value="10km">≤ 10 km</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label for="helperSortFilter">Urutkan</label>
-                                <select id="helperSortFilter" class="filter-select">
-                                    <option value="newest">Terbaru</option>
-                                    <option value="price-high">Harga Tertinggi</option>
-                                    <option value="price-low">Harga Terendah</option>
-                                    <option value="distance">Terdekat</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="job-list">
-                        <!-- Job Card 1 -->
-                        <div class="job-card">
-                            <h3>Bantuan Pindah Barang Kos</h3>
-                            <div class="job-meta">
-                                <span><i class="fas fa-map-marker-alt"></i> 1.2 km</span>
-                                <span><i class="far fa-clock"></i> 3 jam lalu</span>
-                            </div>
-                            <div class="job-price">Rp 75.000</div>
-                            <div class="job-description">
-                                Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.
-                            </div>
-                            <div class="job-tags">
-                                <span class="job-tag">Pindahan</span>
-                                <span class="job-tag">Kemang</span>
-                            </div>
-                            <button class="btn btn-primary">Ambil Pekerjaan</button>
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Requester View -->
+                    <div class="requester-view" id="requesterView">
+                        <div class="dashboard-header">
+                            <h1>Beranda Requester</h1>
+                            <button class="btn btn-primary" onclick="openModal('createJobModal')">
+                                <i class="fas fa-plus"></i> Buat Permintaan Bantuan
+                            </button>
                         </div>
                         
-                        <!-- Job Card 2 -->
-                        <div class="job-card emergency">
-                            <div class="emergency-badge">Emergency</div>
-                            <h3>Antar ke Rumah Sakit</h3>
-                            <div class="job-meta">
-                                <span><i class="fas fa-map-marker-alt"></i> 3.5 km</span>
-                                <span><i class="far fa-clock"></i> 1 jam lalu</span>
+                        <div class="stats-cards">
+                            <div class="stat-card">
+                                <i class="fas fa-bell"></i>
+                                <h3>5</h3>
+                                <p>Permintaan Aktif</p>
                             </div>
-                            <div class="job-price">Rp 120.000</div>
-                            <div class="job-description">
-                                Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.
+                            <div class="stat-card">
+                                <i class="fas fa-check-circle"></i>
+                                <h3>12</h3>
+                                <p>Selesai</p>
                             </div>
-                            <div class="job-tags">
-                                <span class="job-tag">Antar Jemput</span>
-                                <span class="job-tag">BSD City</span>
-                                <span class="job-tag">Emergency</span>
+                            <div class="stat-card">
+                                <i class="fas fa-star"></i>
+                                <h3>4.8</h3>
+                                <p>Rating Rata-rata</p>
                             </div>
-                            <button class="btn btn-primary">Ambil Pekerjaan</button>
+                            <div class="stat-card">
+                                <i class="fas fa-wallet"></i>
+                                <h3>Rp 850K</h3>
+                                <p>Total Dibayarkan</p>
+                            </div>
                         </div>
                         
-                        <!-- Job Card 3 -->
-                        <div class="job-card">
-                            <h3>Jaga Stand Pameran</h3>
-                            <div class="job-meta">
-                                <span><i class="fas fa-map-marker-alt"></i> 8.2 km</span>
-                                <span><i class="far fa-clock"></i> 5 jam lalu</span>
+                        <div class="filters">
+                            <div class="filter-row">
+                                <div class="filter-group">
+                                    <label for="categoryFilter">Kategori</label>
+                                    <select id="categoryFilter" class="filter-select">
+                                        <option value="all">Semua Kategori</option>
+                                        <option value="moving">Pindahan</option>
+                                        <option value="delivery">Pengiriman</option>
+                                        <option value="transport">Antar Jemput</option>
+                                        <option value="event">Jaga Acara</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="statusFilter">Status</label>
+                                    <select id="statusFilter" class="filter-select">
+                                        <option value="all">Semua Status</option>
+                                        <option value="open">Terbuka</option>
+                                        <option value="in-progress">Dalam Proses</option>
+                                        <option value="completed">Selesai</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="sortFilter">Urutkan</label>
+                                    <select id="sortFilter" class="filter-select">
+                                        <option value="newest">Terbaru</option>
+                                        <option value="oldest">Terlama</option>
+                                        <option value="price-high">Harga Tertinggi</option>
+                                        <option value="price-low">Harga Terendah</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="job-price">Rp 200.000</div>
-                            <div class="job-description">
-                                Butuh helper untuk jaga stand pameran produk teknologi selama 4 jam. Akan ada briefing singkat sebelumnya.
+                        </div>
+                        
+                        <div class="job-list">
+                            <!-- Job Card 1 -->
+                            <div class="job-card">
+                                <h3>Bantuan Pindah Barang Kos</h3>
+                                <div class="job-meta">
+                                    <span><i class="fas fa-map-marker-alt"></i> Kemang, Jakarta</span>
+                                    <span><i class="far fa-clock"></i> 3 jam lalu</span>
+                                </div>
+                                <div class="job-price">Rp 75.000</div>
+                                <div class="job-description">
+                                    Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.
+                                </div>
+                                <div class="job-tags">
+                                    <span class="job-tag">Pindahan</span>
+                                    <span class="job-tag">Jakarta Selatan</span>
+                                </div>
+                                <div class="job-actions">
+                                    <button class="btn btn-outline">Lihat Detail</button>
+                                    <button class="btn btn-primary">Edit</button>
+                                </div>
                             </div>
-                            <div class="job-tags">
-                                <span class="job-tag">Jaga Acara</span>
-                                <span class="job-tag">JCC</span>
+                            
+                            <!-- Job Card 2 -->
+                            <div class="job-card emergency">
+                                <div class="emergency-badge">Emergency</div>
+                                <h3>Antar ke Rumah Sakit</h3>
+                                <div class="job-meta">
+                                    <span><i class="fas fa-map-marker-alt"></i> BSD City, Tangerang</span>
+                                    <span><i class="far fa-clock"></i> 1 jam lalu</span>
+                                </div>
+                                <div class="job-price">Rp 120.000</div>
+                                <div class="job-description">
+                                    Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.
+                                </div>
+                                <div class="job-tags">
+                                    <span class="job-tag">Antar Jemput</span>
+                                    <span class="job-tag">Tangerang</span>
+                                    <span class="job-tag">Emergency</span>
+                                </div>
+                                <div class="job-actions">
+                                    <button class="btn btn-outline">Lihat Detail</button>
+                                    <button class="btn btn-primary">Edit</button>
+                                </div>
                             </div>
-                            <button class="btn btn-primary">Ambil Pekerjaan</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Helper View -->
+                    <div class="helper-view" id="helperView" style="display: none;">
+                        <div class="dashboard-header">
+                            <h1>Beranda Helper</h1>
+                            <div class="location-info">
+                                <i class="fas fa-map-marker-alt"></i> Jakarta Selatan
+                            </div>
+                        </div>
+                        
+                        <div class="stats-cards">
+                            <div class="stat-card">
+                                <i class="fas fa-briefcase"></i>
+                                <h3>8</h3>
+                                <p>Pekerjaan Aktif</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-check-circle"></i>
+                                <h3>24</h3>
+                                <p>Selesai</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-star"></i>
+                                <h3>4.9</h3>
+                                <p>Rating Anda</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-wallet"></i>
+                                <h3>Rp 2.1JT</h3>
+                                <p>Pendapatan Bulan Ini</p>
+                            </div>
+                        </div>
+                        
+                        <div class="filters">
+                            <div class="filter-row">
+                                <div class="filter-group">
+                                    <label for="helperCategoryFilter">Kategori</label>
+                                    <select id="helperCategoryFilter" class="filter-select">
+                                        <option value="all">Semua Kategori</option>
+                                        <option value="moving">Pindahan</option>
+                                        <option value="delivery">Pengiriman</option>
+                                        <option value="transport">Antar Jemput</option>
+                                        <option value="event">Jaga Acara</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="distanceFilter">Jarak</label>
+                                    <select id="distanceFilter" class="filter-select">
+                                        <option value="all">Semua Jarak</option>
+                                        <option value="1km">≤ 1 km</option>
+                                        <option value="5km">≤ 5 km</option>
+                                        <option value="10km">≤ 10 km</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="helperSortFilter">Urutkan</label>
+                                    <select id="helperSortFilter" class="filter-select">
+                                        <option value="newest">Terbaru</option>
+                                        <option value="price-high">Harga Tertinggi</option>
+                                        <option value="price-low">Harga Terendah</option>
+                                        <option value="distance">Terdekat</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="job-list">
+                            <!-- Job Card 1 -->
+                            <div class="job-card">
+                                <h3>Bantuan Pindah Barang Kos</h3>
+                                <div class="job-meta">
+                                    <span><i class="fas fa-map-marker-alt"></i> 1.2 km</span>
+                                    <span><i class="far fa-clock"></i> 3 jam lalu</span>
+                                </div>
+                                <div class="job-price">Rp 75.000</div>
+                                <div class="job-description">
+                                    Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.
+                                </div>
+                                <div class="job-tags">
+                                    <span class="job-tag">Pindahan</span>
+                                    <span class="job-tag">Kemang</span>
+                                </div>
+                                <button class="btn btn-primary">Ambil Pekerjaan</button>
+                            </div>
+                            
+                            <!-- Job Card 2 -->
+                            <div class="job-card emergency">
+                                <div class="emergency-badge">Emergency</div>
+                                <h3>Antar ke Rumah Sakit</h3>
+                                <div class="job-meta">
+                                    <span><i class="fas fa-map-marker-alt"></i> 3.5 km</span>
+                                    <span><i class="far fa-clock"></i> 1 jam lalu</span>
+                                </div>
+                                <div class="job-price">Rp 120.000</div>
+                                <div class="job-description">
+                                    Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.
+                                </div>
+                                <div class="job-tags">
+                                    <span class="job-tag">Antar Jemput</span>
+                                    <span class="job-tag">BSD City</span>
+                                    <span class="job-tag">Emergency</span>
+                                </div>
+                                <button class="btn btn-primary">Ambil Pekerjaan</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -824,7 +895,7 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('createJobModal')">&times;</span>
             <h2>Buat Permintaan Bantuan Baru</h2>
-            <form>
+            <form id="createJobForm">
                 <div class="form-group">
                     <label for="jobTitle">Judul Pekerjaan</label>
                     <input type="text" id="jobTitle" class="form-control" placeholder="Contoh: Butuh bantuan pindah barang" required>
@@ -863,6 +934,37 @@
     </div>
 
     <script>
+        // Authentication functions
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            document.querySelector(`.auth-tab:nth-child(${tab === 'login' ? 1 : 2})`).classList.add('active');
+            document.getElementById(`${tab}Form`).classList.add('active');
+        }
+        
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Simulate login
+            document.getElementById('authPage').classList.remove('active');
+            document.getElementById('dashboardPage').classList.add('active');
+        });
+        
+        // Register functionality
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Simulate registration and login
+            document.getElementById('authPage').classList.remove('active');
+            document.getElementById('dashboardPage').classList.add('active');
+        });
+        
+        // Logout functionality
+        function logout() {
+            document.getElementById('dashboardPage').classList.remove('active');
+            document.getElementById('authPage').classList.add('active');
+        }
+        
         // Switch between Requester and Helper views
         document.getElementById('requesterBtn').addEventListener('click', function() {
             document.getElementById('requesterView').style.display = 'block';
@@ -893,6 +995,13 @@
                 event.target.style.display = 'none';
             }
         }
+        
+        // Create job form
+        document.getElementById('createJobForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Permintaan bantuan berhasil dibuat!');
+            closeModal('createJobModal');
+        });
         
         // Filter functionality
         document.getElementById('categoryFilter').addEventListener('change', filterJobs);
