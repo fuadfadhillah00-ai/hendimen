@@ -30,6 +30,7 @@
             background-color: #f5f5f5;
             color: var(--dark);
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .container {
@@ -67,6 +68,15 @@
             color: var(--secondary);
         }
         
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        
         .user-actions {
             display: flex;
             align-items: center;
@@ -88,6 +98,7 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
+            white-space: nowrap;
         }
         
         .role-btn.active {
@@ -114,12 +125,13 @@
         }
         
         .btn {
-            padding: 8px 16px;
+            padding: 10px 16px;
             border-radius: 4px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
             border: none;
+            font-size: 0.9rem;
         }
         
         .btn-primary {
@@ -161,6 +173,11 @@
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             height: fit-content;
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar.mobile-hidden {
+            transform: translateX(-100%);
         }
         
         .sidebar-section {
@@ -206,6 +223,7 @@
         
         .main-content {
             flex: 1;
+            width: 100%;
         }
         
         .dashboard-header {
@@ -213,6 +231,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
         
         .dashboard-header h1 {
@@ -223,7 +243,7 @@
         .stats-cards {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 30px;
         }
         
@@ -313,6 +333,7 @@
             margin-bottom: 10px;
             color: var(--dark);
             font-size: 1.2rem;
+            line-height: 1.3;
         }
         
         .job-meta {
@@ -321,6 +342,8 @@
             margin-bottom: 10px;
             font-size: 0.9rem;
             color: var(--gray);
+            flex-wrap: wrap;
+            gap: 5px;
         }
         
         .job-price {
@@ -334,6 +357,10 @@
             margin-bottom: 15px;
             font-size: 0.95rem;
             line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         
         .job-tags {
@@ -370,6 +397,8 @@
         .job-actions .btn {
             flex: 1;
             text-align: center;
+            padding: 8px 12px;
+            font-size: 0.85rem;
         }
         
         /* Requester Specific Styles */
@@ -392,6 +421,7 @@
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, var(--primary), #6a8aff);
+            padding: 20px;
         }
         
         .auth-card {
@@ -478,15 +508,19 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
         }
         
         .modal-content {
             background-color: white;
             border-radius: 8px;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             padding: 30px;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .close-modal {
@@ -495,6 +529,41 @@
             right: 15px;
             font-size: 1.5rem;
             cursor: pointer;
+            z-index: 10;
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-gray);
+            flex-wrap: wrap;
+        }
+        
+        .job-detail-item {
+            margin-bottom: 15px;
+        }
+        
+        .job-detail-item label {
+            font-weight: 600;
+            color: var(--gray);
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .job-detail-item p {
+            font-size: 1rem;
         }
         
         /* Page Styles */
@@ -506,41 +575,259 @@
             display: block;
         }
         
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--light-gray);
+            margin-bottom: 15px;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+        
+        /* Mobile Overlay */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 99;
+        }
+        
+        /* Bottom Navigation for Mobile */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 90;
+            padding: 10px 0;
+        }
+        
+        .bottom-nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .bottom-nav-item.active {
+            color: var(--primary);
+        }
+        
+        .bottom-nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 3px;
+        }
+        
         /* Responsive Design */
         @media (max-width: 992px) {
             .dashboard {
                 flex-direction: column;
+                gap: 20px;
             }
             
             .sidebar {
                 width: 100%;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                height: calc(100vh - 70px);
+                z-index: 100;
+                overflow-y: auto;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.mobile-visible {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .user-profile span {
+                display: none;
             }
         }
         
         @media (max-width: 768px) {
             .navbar {
-                flex-direction: column;
-                padding: 15px 0;
+                padding: 10px 0;
             }
             
             .user-actions {
-                flex-direction: column;
                 gap: 10px;
-                width: 100%;
-                margin-top: 15px;
             }
             
             .role-switch {
+                padding: 3px;
+            }
+            
+            .role-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .dashboard {
+                margin-top: 20px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            
+            .stat-card {
+                padding: 15px;
+            }
+            
+            .stat-card i {
+                font-size: 1.5rem;
+            }
+            
+            .stat-card h3 {
+                font-size: 1.5rem;
+            }
+            
+            .filters {
+                padding: 15px;
+            }
+            
+            .filter-row {
+                gap: 10px;
+            }
+            
+            .filter-group {
+                min-width: 120px;
+            }
+            
+            .job-list {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .job-card {
+                padding: 15px;
+            }
+            
+            .job-actions {
+                flex-direction: column;
+            }
+            
+            .bottom-nav {
+                display: block;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+            }
+            
+            .modal-footer .btn {
                 width: 100%;
-                justify-content: center;
+                margin-bottom: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
             }
             
             .stats-cards {
                 grid-template-columns: 1fr;
             }
             
-            .job-list {
-                grid-template-columns: 1fr;
+            .role-switch {
+                flex-direction: column;
+                background: transparent;
+                gap: 5px;
+            }
+            
+            .role-btn {
+                border-radius: 4px;
+                background-color: var(--light-gray);
+            }
+            
+            .user-actions {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 5px;
+            }
+            
+            .auth-card {
+                padding: 20px;
+            }
+            
+            .job-meta {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .dashboard-header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .job-card h3 {
+                font-size: 1.1rem;
+            }
+            
+            .job-price {
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -620,6 +907,9 @@
         <header>
             <div class="container">
                 <nav class="navbar">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <div class="logo">Hendi<span>men</span></div>
                     <div class="user-actions">
                         <div class="role-switch">
@@ -636,11 +926,14 @@
             </div>
         </header>
 
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+
         <!-- Dashboard Content -->
         <div class="container">
             <div class="dashboard">
                 <!-- Sidebar -->
-                <div class="sidebar">
+                <div class="sidebar" id="sidebar">
                     <div class="sidebar-section">
                         <h3>Menu Utama</h3>
                         <ul class="sidebar-menu">
@@ -680,7 +973,7 @@
                         <div class="stats-cards">
                             <div class="stat-card">
                                 <i class="fas fa-bell"></i>
-                                <h3>5</h3>
+                                <h3 id="activeJobsCount">0</h3>
                                 <p>Permintaan Aktif</p>
                             </div>
                             <div class="stat-card">
@@ -704,7 +997,7 @@
                             <div class="filter-row">
                                 <div class="filter-group">
                                     <label for="categoryFilter">Kategori</label>
-                                    <select id="categoryFilter" class="filter-select">
+                                    <select id="categoryFilter" class="filter-select" onchange="filterJobs()">
                                         <option value="all">Semua Kategori</option>
                                         <option value="moving">Pindahan</option>
                                         <option value="delivery">Pengiriman</option>
@@ -714,7 +1007,7 @@
                                 </div>
                                 <div class="filter-group">
                                     <label for="statusFilter">Status</label>
-                                    <select id="statusFilter" class="filter-select">
+                                    <select id="statusFilter" class="filter-select" onchange="filterJobs()">
                                         <option value="all">Semua Status</option>
                                         <option value="open">Terbuka</option>
                                         <option value="in-progress">Dalam Proses</option>
@@ -723,7 +1016,7 @@
                                 </div>
                                 <div class="filter-group">
                                     <label for="sortFilter">Urutkan</label>
-                                    <select id="sortFilter" class="filter-select">
+                                    <select id="sortFilter" class="filter-select" onchange="filterJobs()">
                                         <option value="newest">Terbaru</option>
                                         <option value="oldest">Terlama</option>
                                         <option value="price-high">Harga Tertinggi</option>
@@ -733,50 +1026,8 @@
                             </div>
                         </div>
                         
-                        <div class="job-list">
-                            <!-- Job Card 1 -->
-                            <div class="job-card">
-                                <h3>Bantuan Pindah Barang Kos</h3>
-                                <div class="job-meta">
-                                    <span><i class="fas fa-map-marker-alt"></i> Kemang, Jakarta</span>
-                                    <span><i class="far fa-clock"></i> 3 jam lalu</span>
-                                </div>
-                                <div class="job-price">Rp 75.000</div>
-                                <div class="job-description">
-                                    Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.
-                                </div>
-                                <div class="job-tags">
-                                    <span class="job-tag">Pindahan</span>
-                                    <span class="job-tag">Jakarta Selatan</span>
-                                </div>
-                                <div class="job-actions">
-                                    <button class="btn btn-outline">Lihat Detail</button>
-                                    <button class="btn btn-primary">Edit</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Job Card 2 -->
-                            <div class="job-card emergency">
-                                <div class="emergency-badge">Emergency</div>
-                                <h3>Antar ke Rumah Sakit</h3>
-                                <div class="job-meta">
-                                    <span><i class="fas fa-map-marker-alt"></i> BSD City, Tangerang</span>
-                                    <span><i class="far fa-clock"></i> 1 jam lalu</span>
-                                </div>
-                                <div class="job-price">Rp 120.000</div>
-                                <div class="job-description">
-                                    Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.
-                                </div>
-                                <div class="job-tags">
-                                    <span class="job-tag">Antar Jemput</span>
-                                    <span class="job-tag">Tangerang</span>
-                                    <span class="job-tag">Emergency</span>
-                                </div>
-                                <div class="job-actions">
-                                    <button class="btn btn-outline">Lihat Detail</button>
-                                    <button class="btn btn-primary">Edit</button>
-                                </div>
-                            </div>
+                        <div id="requesterJobList" class="job-list">
+                            <!-- Job cards will be dynamically added here -->
                         </div>
                     </div>
                     
@@ -816,7 +1067,7 @@
                             <div class="filter-row">
                                 <div class="filter-group">
                                     <label for="helperCategoryFilter">Kategori</label>
-                                    <select id="helperCategoryFilter" class="filter-select">
+                                    <select id="helperCategoryFilter" class="filter-select" onchange="filterHelperJobs()">
                                         <option value="all">Semua Kategori</option>
                                         <option value="moving">Pindahan</option>
                                         <option value="delivery">Pengiriman</option>
@@ -826,7 +1077,7 @@
                                 </div>
                                 <div class="filter-group">
                                     <label for="distanceFilter">Jarak</label>
-                                    <select id="distanceFilter" class="filter-select">
+                                    <select id="distanceFilter" class="filter-select" onchange="filterHelperJobs()">
                                         <option value="all">Semua Jarak</option>
                                         <option value="1km">≤ 1 km</option>
                                         <option value="5km">≤ 5 km</option>
@@ -835,7 +1086,7 @@
                                 </div>
                                 <div class="filter-group">
                                     <label for="helperSortFilter">Urutkan</label>
-                                    <select id="helperSortFilter" class="filter-select">
+                                    <select id="helperSortFilter" class="filter-select" onchange="filterHelperJobs()">
                                         <option value="newest">Terbaru</option>
                                         <option value="price-high">Harga Tertinggi</option>
                                         <option value="price-low">Harga Terendah</option>
@@ -845,47 +1096,33 @@
                             </div>
                         </div>
                         
-                        <div class="job-list">
-                            <!-- Job Card 1 -->
-                            <div class="job-card">
-                                <h3>Bantuan Pindah Barang Kos</h3>
-                                <div class="job-meta">
-                                    <span><i class="fas fa-map-marker-alt"></i> 1.2 km</span>
-                                    <span><i class="far fa-clock"></i> 3 jam lalu</span>
-                                </div>
-                                <div class="job-price">Rp 75.000</div>
-                                <div class="job-description">
-                                    Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.
-                                </div>
-                                <div class="job-tags">
-                                    <span class="job-tag">Pindahan</span>
-                                    <span class="job-tag">Kemang</span>
-                                </div>
-                                <button class="btn btn-primary">Ambil Pekerjaan</button>
-                            </div>
-                            
-                            <!-- Job Card 2 -->
-                            <div class="job-card emergency">
-                                <div class="emergency-badge">Emergency</div>
-                                <h3>Antar ke Rumah Sakit</h3>
-                                <div class="job-meta">
-                                    <span><i class="fas fa-map-marker-alt"></i> 3.5 km</span>
-                                    <span><i class="far fa-clock"></i> 1 jam lalu</span>
-                                </div>
-                                <div class="job-price">Rp 120.000</div>
-                                <div class="job-description">
-                                    Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.
-                                </div>
-                                <div class="job-tags">
-                                    <span class="job-tag">Antar Jemput</span>
-                                    <span class="job-tag">BSD City</span>
-                                    <span class="job-tag">Emergency</span>
-                                </div>
-                                <button class="btn btn-primary">Ambil Pekerjaan</button>
-                            </div>
+                        <div id="helperJobList" class="job-list">
+                            <!-- Job cards will be dynamically added here -->
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation for Mobile -->
+        <div class="bottom-nav">
+            <div class="bottom-nav-items">
+                <a href="#" class="bottom-nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Beranda</span>
+                </a>
+                <a href="#" class="bottom-nav-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Pekerjaan</span>
+                </a>
+                <a href="#" class="bottom-nav-item">
+                    <i class="fas fa-wallet"></i>
+                    <span>Dompet</span>
+                </a>
+                <a href="#" class="bottom-nav-item">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
             </div>
         </div>
     </div>
@@ -928,12 +1165,119 @@
                         <input type="checkbox" id="emergencyJob"> Tandai sebagai kebutuhan emergency (upah akan ditingkatkan 25%)
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Posting Permintaan</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('createJobModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">Posting Permintaan</button>
+                </div>
             </form>
         </div>
     </div>
 
+    <!-- Job Detail Modal -->
+    <div id="jobDetailModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('jobDetailModal')">&times;</span>
+            <div class="modal-header">
+                <h2 id="detailJobTitle">Judul Pekerjaan</h2>
+                <div id="detailJobBadge"></div>
+            </div>
+            <div class="modal-body">
+                <div class="job-detail-item">
+                    <label>Kategori</label>
+                    <p id="detailJobCategory">-</p>
+                </div>
+                <div class="job-detail-item">
+                    <label>Lokasi</label>
+                    <p id="detailJobLocation">-</p>
+                </div>
+                <div class="job-detail-item">
+                    <label>Upah</label>
+                    <p id="detailJobPrice" class="job-price">-</p>
+                </div>
+                <div class="job-detail-item">
+                    <label>Deskripsi</label>
+                    <p id="detailJobDescription">-</p>
+                </div>
+                <div class="job-detail-item">
+                    <label>Dibuat pada</label>
+                    <p id="detailJobDate">-</p>
+                </div>
+                <div class="job-detail-item">
+                    <label>Status</label>
+                    <p id="detailJobStatus">-</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModal('jobDetailModal')">Tutup</button>
+                <button type="button" class="btn btn-primary" id="detailActionBtn">Ambil Pekerjaan</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Data storage for jobs
+        let jobs = [
+            {
+                id: 1,
+                title: "Bantuan Pindah Barang Kos",
+                category: "moving",
+                description: "Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.",
+                location: "Kemang, Jakarta",
+                price: 75000,
+                date: "3 jam lalu",
+                status: "open",
+                emergency: false,
+                distance: "1.2 km"
+            },
+            {
+                id: 2,
+                title: "Antar ke Rumah Sakit",
+                category: "transport",
+                description: "Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.",
+                location: "BSD City, Tangerang",
+                price: 120000,
+                date: "1 jam lalu",
+                status: "open",
+                emergency: true,
+                distance: "3.5 km"
+            },
+            {
+                id: 3,
+                title: "Jaga Stand Pameran",
+                category: "event",
+                description: "Butuh helper untuk jaga stand pameran produk teknologi selama 4 jam. Akan ada briefing singkat sebelumnya.",
+                location: "JCC, Jakarta",
+                price: 200000,
+                date: "5 jam lalu",
+                status: "open",
+                emergency: false,
+                distance: "8.2 km"
+            }
+        ];
+
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        
+        function toggleMobileMenu() {
+            sidebar.classList.toggle('mobile-visible');
+            mobileOverlay.style.display = sidebar.classList.contains('mobile-visible') ? 'block' : 'none';
+            document.body.style.overflow = sidebar.classList.contains('mobile-visible') ? 'hidden' : 'auto';
+        }
+        
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileOverlay.addEventListener('click', toggleMobileMenu);
+        
+        // Close mobile menu when clicking on a menu item
+        document.querySelectorAll('.sidebar-menu a').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 992) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+        
         // Authentication functions
         function switchAuthTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -949,6 +1293,8 @@
             // Simulate login
             document.getElementById('authPage').classList.remove('active');
             document.getElementById('dashboardPage').classList.add('active');
+            // Load jobs after login
+            loadJobs();
         });
         
         // Register functionality
@@ -957,6 +1303,8 @@
             // Simulate registration and login
             document.getElementById('authPage').classList.remove('active');
             document.getElementById('dashboardPage').classList.add('active');
+            // Load jobs after registration
+            loadJobs();
         });
         
         // Logout functionality
@@ -971,6 +1319,8 @@
             document.getElementById('helperView').style.display = 'none';
             document.getElementById('requesterBtn').classList.add('active');
             document.getElementById('helperBtn').classList.remove('active');
+            // Refresh job list for requester view
+            loadRequesterJobs();
         });
         
         document.getElementById('helperBtn').addEventListener('click', function() {
@@ -978,40 +1328,279 @@
             document.getElementById('helperView').style.display = 'block';
             document.getElementById('helperBtn').classList.add('active');
             document.getElementById('requesterBtn').classList.remove('active');
+            // Refresh job list for helper view
+            loadHelperJobs();
         });
         
         // Modal functions
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
         
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
         
         // Close modal when clicking outside
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
             }
         }
         
         // Create job form
         document.getElementById('createJobForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            const title = document.getElementById('jobTitle').value;
+            const category = document.getElementById('jobCategory').value;
+            const description = document.getElementById('jobDescription').value;
+            const location = document.getElementById('jobLocation').value;
+            let price = parseInt(document.getElementById('jobPrice').value);
+            const emergency = document.getElementById('emergencyJob').checked;
+            
+            // Increase price for emergency jobs
+            if (emergency) {
+                price = Math.round(price * 1.25);
+            }
+            
+            // Create new job object
+            const newJob = {
+                id: jobs.length + 1,
+                title: title,
+                category: category,
+                description: description,
+                location: location,
+                price: price,
+                date: "Baru saja",
+                status: "open",
+                emergency: emergency,
+                distance: "0.5 km" // Default distance for new jobs
+            };
+            
+            // Add to jobs array
+            jobs.unshift(newJob);
+            
+            // Update UI
+            loadRequesterJobs();
+            
+            // Show success message and close modal
             alert('Permintaan bantuan berhasil dibuat!');
             closeModal('createJobModal');
+            
+            // Reset form
+            document.getElementById('createJobForm').reset();
         });
         
-        // Filter functionality
-        document.getElementById('categoryFilter').addEventListener('change', filterJobs);
-        document.getElementById('statusFilter').addEventListener('change', filterJobs);
-        document.getElementById('sortFilter').addEventListener('change', filterJobs);
-        
-        function filterJobs() {
-            // In a real application, this would filter the job list
-            console.log('Filtering jobs...');
+        // Load jobs for requester view
+        function loadRequesterJobs() {
+            const jobList = document.getElementById('requesterJobList');
+            jobList.innerHTML = '';
+            
+            // Filter jobs by status if needed
+            const statusFilter = document.getElementById('statusFilter').value;
+            let filteredJobs = jobs;
+            
+            if (statusFilter !== 'all') {
+                filteredJobs = jobs.filter(job => job.status === statusFilter);
+            }
+            
+            // Update active jobs count
+            document.getElementById('activeJobsCount').textContent = filteredJobs.length;
+            
+            if (filteredJobs.length === 0) {
+                jobList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>Tidak ada permintaan bantuan</h3>
+                        <p>Belum ada permintaan bantuan yang dibuat. Buat permintaan pertama Anda!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredJobs.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = `job-card ${job.emergency ? 'emergency' : ''}`;
+                jobCard.innerHTML = `
+                    ${job.emergency ? '<div class="emergency-badge">Emergency</div>' : ''}
+                    <h3>${job.title}</h3>
+                    <div class="job-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${job.location}</span>
+                        <span><i class="far fa-clock"></i> ${job.date}</span>
+                    </div>
+                    <div class="job-price">Rp ${job.price.toLocaleString('id-ID')}</div>
+                    <div class="job-description">${job.description}</div>
+                    <div class="job-tags">
+                        <span class="job-tag">${getCategoryName(job.category)}</span>
+                        <span class="job-tag">${job.location.split(',')[0]}</span>
+                        ${job.emergency ? '<span class="job-tag">Emergency</span>' : ''}
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Lihat Detail</button>
+                        <button class="btn btn-primary" onclick="editJob(${job.id})">Edit</button>
+                    </div>
+                `;
+                jobList.appendChild(jobCard);
+            });
         }
+        
+        // Load jobs for helper view
+        function loadHelperJobs() {
+            const jobList = document.getElementById('helperJobList');
+            jobList.innerHTML = '';
+            
+            // Filter only open jobs for helpers
+            const openJobs = jobs.filter(job => job.status === 'open');
+            
+            if (openJobs.length === 0) {
+                jobList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>Tidak ada pekerjaan tersedia</h3>
+                        <p>Saat ini tidak ada pekerjaan yang tersedia di sekitar Anda.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            openJobs.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = `job-card ${job.emergency ? 'emergency' : ''}`;
+                jobCard.innerHTML = `
+                    ${job.emergency ? '<div class="emergency-badge">Emergency</div>' : ''}
+                    <h3>${job.title}</h3>
+                    <div class="job-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${job.distance}</span>
+                        <span><i class="far fa-clock"></i> ${job.date}</span>
+                    </div>
+                    <div class="job-price">Rp ${job.price.toLocaleString('id-ID')}</div>
+                    <div class="job-description">${job.description}</div>
+                    <div class="job-tags">
+                        <span class="job-tag">${getCategoryName(job.category)}</span>
+                        <span class="job-tag">${job.location.split(',')[0]}</span>
+                        ${job.emergency ? '<span class="job-tag">Emergency</span>' : ''}
+                    </div>
+                    <button class="btn btn-primary" onclick="takeJob(${job.id})">Ambil Pekerjaan</button>
+                `;
+                jobList.appendChild(jobCard);
+            });
+        }
+        
+        // View job details
+        function viewJobDetail(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+            
+            // Populate modal with job details
+            document.getElementById('detailJobTitle').textContent = job.title;
+            document.getElementById('detailJobCategory').textContent = getCategoryName(job.category);
+            document.getElementById('detailJobLocation').textContent = job.location;
+            document.getElementById('detailJobPrice').textContent = `Rp ${job.price.toLocaleString('id-ID')}`;
+            document.getElementById('detailJobDescription').textContent = job.description;
+            document.getElementById('detailJobDate').textContent = job.date;
+            document.getElementById('detailJobStatus').textContent = getStatusName(job.status);
+            
+            // Set emergency badge if applicable
+            const badgeContainer = document.getElementById('detailJobBadge');
+            badgeContainer.innerHTML = job.emergency ? '<div class="emergency-badge">Emergency</div>' : '';
+            
+            // Set appropriate action button
+            const actionBtn = document.getElementById('detailActionBtn');
+            if (document.getElementById('requesterView').style.display !== 'none') {
+                actionBtn.textContent = 'Edit';
+                actionBtn.onclick = function() { editJob(jobId); };
+            } else {
+                actionBtn.textContent = 'Ambil Pekerjaan';
+                actionBtn.onclick = function() { takeJob(jobId); };
+            }
+            
+            // Show modal
+            openModal('jobDetailModal');
+        }
+        
+        // Take a job (for helpers)
+        function takeJob(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+            
+            if (confirm(`Apakah Anda yakin ingin mengambil pekerjaan "${job.title}"?`)) {
+                // Update job status
+                job.status = 'in-progress';
+                
+                // Show success message
+                alert(`Anda berhasil mengambil pekerjaan "${job.title}"!`);
+                
+                // Reload job lists
+                loadRequesterJobs();
+                loadHelperJobs();
+                
+                // Close detail modal if open
+                closeModal('jobDetailModal');
+            }
+        }
+        
+        // Edit a job (for requesters)
+        function editJob(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+            
+            // For now, just show an alert
+            alert(`Fitur edit untuk pekerjaan "${job.title}" akan segera tersedia!`);
+            
+            // Close detail modal if open
+            closeModal('jobDetailModal');
+        }
+        
+        // Filter jobs for requester
+        function filterJobs() {
+            loadRequesterJobs();
+        }
+        
+        // Filter jobs for helper
+        function filterHelperJobs() {
+            loadHelperJobs();
+        }
+        
+        // Helper function to get category name
+        function getCategoryName(category) {
+            const categories = {
+                'moving': 'Pindahan',
+                'delivery': 'Pengiriman',
+                'transport': 'Antar Jemput',
+                'event': 'Jaga Acara',
+                'other': 'Lainnya'
+            };
+            return categories[category] || category;
+        }
+        
+        // Helper function to get status name
+        function getStatusName(status) {
+            const statuses = {
+                'open': 'Terbuka',
+                'in-progress': 'Dalam Proses',
+                'completed': 'Selesai'
+            };
+            return statuses[status] || status;
+        }
+        
+        // Load jobs when page is ready
+        function loadJobs() {
+            loadRequesterJobs();
+            loadHelperJobs();
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 992) {
+                sidebar.classList.remove('mobile-visible');
+                mobileOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
     </script>
 </body>
 </html>
