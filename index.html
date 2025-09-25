@@ -18,1086 +18,189 @@
             --gray: #6c757d;
             --light-gray: #e9ecef;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            color: var(--dark);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        /* Header Styles */
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary);
-            text-decoration: none;
-        }
-        
-        .logo span {
-            color: var(--secondary);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--dark);
-            cursor: pointer;
-        }
-        
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .role-switch {
-            display: flex;
-            background-color: var(--light-gray);
-            border-radius: 30px;
-            padding: 5px;
-        }
-        
-        .role-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            background: transparent;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-        
-        .role-btn.active {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        .btn {
-            padding: 10px 16px;
-            border-radius: 4px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            font-size: 0.9rem;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: #3a5bdf;
-        }
-        
-        .btn-success {
-            background-color: var(--success);
-            color: white;
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-        }
-        
-        .btn-outline:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        /* Dashboard Layout */
-        .dashboard {
-            display: flex;
-            margin-top: 30px;
-            gap: 30px;
-            min-height: calc(100vh - 100px);
-        }
-        
-        .sidebar {
-            width: 250px;
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            height: fit-content;
-            transition: transform 0.3s ease;
-        }
-        
-        .sidebar.mobile-hidden {
-            transform: translateX(-100%);
-        }
-        
-        .sidebar-section {
-            margin-bottom: 25px;
-        }
-        
-        .sidebar-section h3 {
-            font-size: 1rem;
-            margin-bottom: 15px;
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .sidebar-menu {
-            list-style: none;
-        }
-        
-        .sidebar-menu li {
-            margin-bottom: 10px;
-        }
-        
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            text-decoration: none;
-            color: var(--dark);
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-        
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background-color: rgba(74, 107, 255, 0.1);
-            color: var(--primary);
-        }
-        
-        .sidebar-menu i {
-            width: 20px;
-            text-align: center;
-        }
-        
-        .main-content {
-            flex: 1;
-            width: 100%;
-        }
-        
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .dashboard-header h1 {
-            font-size: 1.8rem;
-            color: var(--dark);
-        }
-        
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        
-        .stat-card i {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-        
-        .stat-card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-        }
-        
-        .stat-card p {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-        
-        .filters {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .filter-row {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-group {
-            flex: 1;
-            min-width: 150px;
-        }
-        
-        .filter-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        
-        .filter-select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-        
-        .job-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .job-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: relative;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .job-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .job-card.emergency {
-            border-left: 4px solid var(--danger);
-        }
-        
-        .job-card h3 {
-            margin-bottom: 10px;
-            color: var(--dark);
-            font-size: 1.2rem;
-            line-height: 1.3;
-        }
-        
-        .job-meta {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            color: var(--gray);
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-        
-        .job-price {
-            font-weight: bold;
-            color: var(--success);
-            font-size: 1.2rem;
-            margin: 10px 0;
-        }
-        
-        .job-description {
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .job-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 15px;
-        }
-        
-        .job-tag {
-            background-color: var(--light-gray);
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: var(--gray);
-        }
-        
-        .emergency-badge {
-            background-color: var(--danger);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-        }
-        
-        .job-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .job-actions .btn {
-            flex: 1;
-            text-align: center;
-            padding: 8px 12px;
-            font-size: 0.85rem;
-        }
-        
-        /* Wallet Page Styles */
-        .wallet-balance {
-            background: linear-gradient(135deg, var(--primary), #6a8aff);
-            color: white;
-            border-radius: 8px;
-            padding: 30px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .wallet-balance h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .wallet-balance .balance {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        
-        .wallet-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .transaction-history {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--light-gray);
-        }
-        
-        .transaction-item:last-child {
-            border-bottom: none;
-        }
-        
-        .transaction-info h4 {
-            margin-bottom: 5px;
-        }
-        
-        .transaction-info p {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-        
-        .transaction-amount.positive {
-            color: var(--success);
-            font-weight: bold;
-        }
-        
-        .transaction-amount.negative {
-            color: var(--danger);
-            font-weight: bold;
-        }
-        
-        /* Rating & Reviews Page Styles */
-        .rating-summary {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .rating-score {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        
-        .rating-stars {
-            color: var(--warning);
-            margin-bottom: 15px;
-        }
-        
-        .reviews-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .review-item {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
-        .reviewer-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .reviewer-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--light-gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        /* History Page Styles */
-        .history-filters {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .history-item {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .history-item-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
-        .history-status {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        
-        .status-completed {
-            background-color: rgba(40, 167, 69, 0.1);
-            color: var(--success);
-        }
-        
-        .status-cancelled {
-            background-color: rgba(220, 53, 69, 0.1);
-            color: var(--danger);
-        }
-        
-        .status-pending {
-            background-color: rgba(255, 193, 7, 0.1);
-            color: var(--warning);
-        }
-        
-        /* Settings Page Styles */
-        .settings-section {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .settings-section h2 {
-            margin-bottom: 20px;
-            color: var(--dark);
-            font-size: 1.3rem;
-        }
-        
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--light-gray);
-        }
-        
-        .setting-item:last-child {
-            border-bottom: none;
-        }
-        
-        .setting-info h4 {
-            margin-bottom: 5px;
-        }
-        
-        .setting-info p {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-        
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-        
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .slider {
-            background-color: var(--primary);
-        }
-        
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-        
-        /* Auth Pages */
-        .auth-container {
-            display: flex;
-            min-height: 100vh;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--primary), #6a8aff);
-            padding: 20px;
-        }
-        
-        .auth-card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-        }
-        
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 25px;
-            border-bottom: 1px solid var(--light-gray);
-        }
-        
-        .auth-tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            font-weight: 500;
-            border-bottom: 3px solid transparent;
-        }
-        
-        .auth-tab.active {
-            border-bottom: 3px solid var(--primary);
-            color: var(--primary);
-        }
-        
-        .auth-form {
-            display: none;
-        }
-        
-        .auth-form.active {
-            display: block;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        
-        textarea.form-control {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .auth-footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-        
-        .auth-footer a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-        
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .modal-content {
-            background-color: white;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 600px;
-            padding: 30px;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 10;
-        }
-        
-        .modal-header {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--light-gray);
-        }
-        
-        .modal-body {
-            margin-bottom: 20px;
-        }
-        
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            padding-top: 15px;
-            border-top: 1px solid var(--light-gray);
-            flex-wrap: wrap;
-        }
-        
-        .job-detail-item {
-            margin-bottom: 15px;
-        }
-        
-        .job-detail-item label {
-            font-weight: 600;
-            color: var(--gray);
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        .job-detail-item p {
-            font-size: 1rem;
-        }
-        
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .empty-state i {
-            font-size: 3rem;
-            color: var(--light-gray);
-            margin-bottom: 15px;
-        }
-        
-        .empty-state h3 {
-            margin-bottom: 10px;
-            color: var(--gray);
-        }
-        
-        /* Mobile Overlay */
-        .mobile-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 99;
-        }
-        
-        /* Bottom Navigation for Mobile */
-        .bottom-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: white;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            z-index: 90;
-            padding: 10px 0;
-        }
-        
-        .bottom-nav-items {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-        
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: var(--gray);
-            font-size: 0.8rem;
-            padding: 5px 10px;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        
-        .bottom-nav-item.active {
-            color: var(--primary);
-        }
-        
-        .bottom-nav-item i {
-            font-size: 1.2rem;
-            margin-bottom: 3px;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+        body { background-color: #f5f5f5; color: var(--dark); line-height: 1.6; overflow-x: hidden;}
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px;}
+        header { background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;}
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 0;}
+        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary);}
+        .logo span { color: var(--secondary);}
+        .mobile-menu-btn { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer;}
+        .user-actions { display: flex; align-items: center; gap: 15px;}
+        .role-switch { display: flex; background-color: var(--light-gray); border-radius: 30px; padding: 5px;}
+        .role-btn { padding: 8px 16px; border: none; border-radius: 20px; background: transparent; font-weight: 500; cursor: pointer; transition: all 0.3s; white-space: nowrap;}
+        .role-btn.active { background-color: var(--primary); color: white;}
+        .user-profile { display: flex; align-items: center; gap: 10px;}
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;}
+        .btn { padding: 10px 16px; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.3s; border: none; font-size: 0.9rem;}
+        .btn-primary { background-color: var(--primary); color: white;}
+        .btn-primary:hover { background-color: #3a5bdf;}
+        .btn-success { background-color: var(--success); color: white;}
+        .btn-outline { background-color: transparent; border: 1px solid var(--primary); color: var(--primary);}
+        .btn-outline:hover { background-color: var(--primary); color: white;}
+        .dashboard { display: flex; margin-top: 30px; gap: 30px;}
+        .sidebar { width: 250px; background-color: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: fit-content; transition: transform 0.3s ease;}
+        .sidebar.mobile-hidden { transform: translateX(-100%);}
+        .sidebar-section { margin-bottom: 25px;}
+        .sidebar-section h3 { font-size: 1rem; margin-bottom: 15px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px;}
+        .sidebar-menu { list-style: none;}
+        .sidebar-menu li { margin-bottom: 10px;}
+        .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 10px; text-decoration: none; color: var(--dark); border-radius: 4px; transition: all 0.3s;}
+        .sidebar-menu a:hover, .sidebar-menu a.active { background-color: rgba(74, 107, 255, 0.1); color: var(--primary);}
+        .sidebar-menu i { width: 20px; text-align: center;}
+        .main-content { flex: 1; width: 100%;}
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;}
+        .dashboard-header h1 { font-size: 1.8rem; color: var(--dark);}
+        .stats-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;}
+        .stat-card { background-color: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); text-align: center;}
+        .stat-card i { font-size: 2rem; margin-bottom: 10px; color: var(--primary);}
+        .stat-card h3 { font-size: 1.8rem; margin-bottom: 5px;}
+        .stat-card p { color: var(--gray); font-size: 0.9rem;}
+        .filters { background-color: white; border-radius: 8px; padding: 20px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);}
+        .filter-row { display: flex; gap: 15px; flex-wrap: wrap;}
+        .filter-group { flex: 1; min-width: 150px;}
+        .filter-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9rem;}
+        .filter-select { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 0.9rem;}
+        .job-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;}
+        .job-card { background-color: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: relative; transition: transform 0.3s, box-shadow 0.3s;}
+        .job-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
+        .job-card.emergency { border-left: 4px solid var(--danger);}
+        .job-card h3 { margin-bottom: 10px; color: var(--dark); font-size: 1.2rem; line-height: 1.3;}
+        .job-meta { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; color: var(--gray); flex-wrap: wrap; gap: 5px;}
+        .job-price { font-weight: bold; color: var(--success); font-size: 1.2rem; margin: 10px 0;}
+        .job-description { margin-bottom: 15px; font-size: 0.95rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;}
+        .job-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 15px;}
+        .job-tag { background-color: var(--light-gray); padding: 3px 8px; border-radius: 20px; font-size: 0.8rem; color: var(--gray);}
+        .emergency-badge { background-color: var(--danger); color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; position: absolute; top: 15px; right: 15px;}
+        .job-actions { display: flex; gap: 10px;}
+        .job-actions .btn { flex: 1; text-align: center; padding: 8px 12px; font-size: 0.85rem;}
+        .requester-view .create-job-btn { display: flex; align-items: center; gap: 10px; margin-bottom: 20px;}
+        .helper-view .job-card .btn { width: 100%;}
+        .auth-container { display: flex; min-height: 100vh; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--primary), #6a8aff); padding: 20px;}
+        .auth-card { background-color: white; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; padding: 30px;}
+        .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 1px solid var(--light-gray);}
+        .auth-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; font-weight: 500; border-bottom: 3px solid transparent;}
+        .auth-tab.active { border-bottom: 3px solid var(--primary); color: var(--primary);}
+        .auth-form { display: none;}
+        .auth-form.active { display: block;}
+        .form-group { margin-bottom: 20px;}
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500;}
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 1rem;}
+        textarea.form-control { min-height: 100px; resize: vertical;}
+        .auth-footer { text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--gray);}
+        .auth-footer a { color: var(--primary); text-decoration: none;}
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; overflow-y: auto; padding: 20px;}
+        .modal-content { background-color: white; border-radius: 8px; width: 90%; max-width: 600px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto;}
+        .close-modal { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; cursor: pointer; z-index: 10;}
+        .modal-header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--light-gray);}
+        .modal-body { margin-bottom: 20px;}
+        .modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding-top: 15px; border-top: 1px solid var(--light-gray); flex-wrap: wrap;}
+        .job-detail-item { margin-bottom: 15px;}
+        .job-detail-item label { font-weight: 600; color: var(--gray); display: block; margin-bottom: 5px;}
+        .job-detail-item p { font-size: 1rem;}
+        .page { display: none;}
+        .page.active { display: block;}
+        .empty-state { text-align: center; padding: 40px 20px; background-color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);}
+        .empty-state i { font-size: 3rem; color: var(--light-gray); margin-bottom: 15px;}
+        .empty-state h3 { margin-bottom: 10px; color: var(--gray);}
+        .mobile-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 99;}
+        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background-color: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 90; padding: 10px 0;}
+        .bottom-nav-items { display: flex; justify-content: space-around; align-items: center;}
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--gray); font-size: 0.8rem; padding: 5px 10px; border-radius: 8px; transition: all 0.3s;}
+        .bottom-nav-item.active { color: var(--primary);}
+        .bottom-nav-item i { font-size: 1.2rem; margin-bottom: 3px;}
+        .tabbed-section { margin-bottom: 25px;}
+        .tabbed-menu { display: flex; background: var(--light-gray); border-radius: 6px; margin-bottom: 18px; overflow: hidden;}
+        .tabbed-btn { flex: 1; padding: 10px 0; border: none; background: none; font-weight: 500; color: var(--gray); cursor: pointer; transition: all 0.2s;}
+        .tabbed-btn.active { background: var(--primary); color: #fff;}
         /* Responsive Design */
         @media (max-width: 992px) {
-            .dashboard {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .sidebar {
-                width: 100%;
-                position: fixed;
-                top: 70px;
-                left: 0;
-                height: calc(100vh - 70px);
-                z-index: 100;
-                overflow-y: auto;
-                transform: translateX(-100%);
-            }
-            
-            .sidebar.mobile-visible {
-                transform: translateX(0);
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .user-profile span {
-                display: none;
-            }
+            .dashboard { flex-direction: column; gap: 20px;}
+            .sidebar { width: 100%; position: fixed; top: 70px; left: 0; height: calc(100vh - 70px); z-index: 100; overflow-y: auto; transform: translateX(-100%);}
+            .sidebar.mobile-visible { transform: translateX(0);}
+            .main-content { margin-left: 0;}
+            .mobile-menu-btn { display: block;}
+            .user-profile span { display: none;}
         }
-        
         @media (max-width: 768px) {
-            .navbar {
-                padding: 10px 0;
-            }
-            
-            .user-actions {
-                gap: 10px;
-            }
-            
-            .role-switch {
-                padding: 3px;
-            }
-            
-            .role-btn {
-                padding: 6px 12px;
-                font-size: 0.85rem;
-            }
-            
-            .dashboard {
-                margin-top: 20px;
-            }
-            
-            .dashboard-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .dashboard-header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .stats-cards {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-            }
-            
-            .stat-card {
-                padding: 15px;
-            }
-            
-            .stat-card i {
-                font-size: 1.5rem;
-            }
-            
-            .stat-card h3 {
-                font-size: 1.5rem;
-            }
-            
-            .filters {
-                padding: 15px;
-            }
-            
-            .filter-row {
-                gap: 10px;
-            }
-            
-            .filter-group {
-                min-width: 120px;
-            }
-            
-            .job-list {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .job-card {
-                padding: 15px;
-            }
-            
-            .job-actions {
-                flex-direction: column;
-            }
-            
-            .wallet-balance {
-                padding: 20px;
-            }
-            
-            .wallet-balance .balance {
-                font-size: 2rem;
-            }
-            
-            .wallet-actions {
-                flex-direction: column;
-            }
-            
-            .bottom-nav {
-                display: block;
-            }
-            
-            .modal-content {
-                padding: 20px;
-            }
-            
-            .modal-footer {
-                flex-direction: column;
-            }
-            
-            .modal-footer .btn {
-                width: 100%;
-                margin-bottom: 10px;
-            }
+            .navbar { padding: 10px 0;}
+            .user-actions { gap: 10px;}
+            .role-switch { padding: 3px;}
+            .role-btn { padding: 6px 12px; font-size: 0.85rem;}
+            .dashboard { margin-top: 20px;}
+            .dashboard-header { flex-direction: column; align-items: flex-start;}
+            .dashboard-header h1 { font-size: 1.5rem;}
+            .stats-cards { grid-template-columns: 1fr 1fr; gap: 10px;}
+            .stat-card { padding: 15px;}
+            .stat-card i { font-size: 1.5rem;}
+            .stat-card h3 { font-size: 1.5rem;}
+            .filters { padding: 15px;}
+            .filter-row { gap: 10px;}
+            .filter-group { min-width: 120px;}
+            .job-list { grid-template-columns: 1fr; gap: 15px;}
+            .job-card { padding: 15px;}
+            .job-actions { flex-direction: column;}
+            .bottom-nav { display: block;}
+            .modal-content { padding: 20px;}
+            .modal-footer { flex-direction: column;}
+            .modal-footer .btn { width: 100%; margin-bottom: 10px;}
         }
-        
         @media (max-width: 480px) {
-            .container {
-                padding: 0 10px;
-            }
-            
-            .logo {
-                font-size: 1.3rem;
-            }
-            
-            .stats-cards {
-                grid-template-columns: 1fr;
-            }
-            
-            .role-switch {
-                flex-direction: column;
-                background: transparent;
-                gap: 5px;
-            }
-            
-            .role-btn {
-                border-radius: 4px;
-                background-color: var(--light-gray);
-            }
-            
-            .user-actions {
-                flex-direction: column;
-                align-items: flex-end;
-                gap: 5px;
-            }
-            
-            .auth-card {
-                padding: 20px;
-            }
-            
-            .job-meta {
-                flex-direction: column;
-            }
-            
-            .transaction-item, .history-item-header, .review-header {
-                flex-direction: column;
-                gap: 10px;
-            }
+            .container { padding: 0 10px;}
+            .logo { font-size: 1.3rem;}
+            .stats-cards { grid-template-columns: 1fr;}
+            .role-switch { flex-direction: column; background: transparent; gap: 5px;}
+            .role-btn { border-radius: 4px; background-color: var(--light-gray);}
+            .user-actions { flex-direction: column; align-items: flex-end; gap: 5px;}
+            .auth-card { padding: 20px;}
+            .job-meta { flex-direction: column;}
         }
-        
         @media (max-width: 360px) {
-            .dashboard-header h1 {
-                font-size: 1.3rem;
-            }
-            
-            .btn {
-                padding: 8px 12px;
-                font-size: 0.8rem;
-            }
-            
-            .job-card h3 {
-                font-size: 1.1rem;
-            }
-            
-            .job-price {
-                font-size: 1.1rem;
-            }
+            .dashboard-header h1 { font-size: 1.3rem;}
+            .btn { padding: 8px 12px; font-size: 0.8rem;}
+            .job-card h3 { font-size: 1.1rem;}
+            .job-price { font-size: 1.1rem;}
         }
     </style>
 </head>
 <body>
+    <!-- Penjelasan Fitur -->
+    <div class="container" style="margin:32px auto 0; max-width:700px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);padding:24px 20px 10px 20px;">
+        <h2 style="color:var(--primary);margin-bottom:14px;">Checklist Implementasi Dashboard Hendimen</h2>
+        <ul style="margin-bottom:12px;">
+            <li>Semua Menu Navigasi Dapat Diakses</li>
+            <ul>
+                <li>Beranda (dashboard utama)</li>
+                <li>Pekerjaan Saya (daftar pekerjaan yang aktif/selesai)</li>
+                <li>Dompet Saya (manajemen saldo dan transaksi)</li>
+                <li>Rating &amp; Ulasan (review dari pengguna lain)</li>
+                <li>Riwayat (histori pekerjaan)</li>
+                <li>Pengaturan (konfigurasi akun dan notifikasi)</li>
+            </ul>
+            <li>Halaman Masing-masing dengan Konten Lengkap</li>
+            <ul>
+                <li>Setiap halaman memiliki layout dan konten yang sesuai</li>
+                <li>Data dummy yang realistis untuk setiap halaman</li>
+                <li>Filter dan fungsi pencarian di halaman yang relevan</li>
+            </ul>
+            <li>Navigasi yang Konsisten</li>
+            <ul>
+                <li>Sidebar navigation untuk desktop</li>
+                <li>Bottom navigation untuk mobile</li>
+                <li>Highlight menu aktif</li>
+                <li>Transisi halus antar halaman</li>
+            </ul>
+            <li>Fungsi Interaktif di Setiap Halaman</li>
+            <ul>
+                <li>Filter dan sorting di halaman beranda dan riwayat</li>
+                <li>Aksi seperti "Ambil Pekerjaan", "Beri Rating", dll.</li>
+                <li>Toggle switch di halaman pengaturan</li>
+                <li>Form dan modal yang berfungsi</li>
+            </ul>
+        </ul>
+    </div>
+    <!-- End Penjelasan Fitur -->
+
     <!-- Auth Pages -->
     <div id="authPage" class="page active">
         <div class="auth-container">
@@ -1106,8 +209,6 @@
                     <div class="auth-tab active" onclick="switchAuthTab('login')">Masuk</div>
                     <div class="auth-tab" onclick="switchAuthTab('register')">Daftar</div>
                 </div>
-                
-                <!-- Login Form -->
                 <form id="loginForm" class="auth-form active">
                     <div class="form-group">
                         <label for="loginEmail">Email atau Nomor Telepon</label>
@@ -1122,8 +223,6 @@
                         <a href="#">Lupa kata sandi?</a>
                     </div>
                 </form>
-                
-                <!-- Register Form -->
                 <form id="registerForm" class="auth-form">
                     <div class="form-group">
                         <label for="userType">Saya ingin mendaftar sebagai:</label>
@@ -1168,14 +267,13 @@
 
     <!-- Dashboard Page -->
     <div id="dashboardPage" class="page">
-        <!-- Header -->
         <header>
             <div class="container">
                 <nav class="navbar">
                     <button class="mobile-menu-btn" id="mobileMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <a href="#" class="logo" onclick="navigateTo('beranda')">Hendi<span>men</span></a>
+                    <div class="logo">Hendi<span>men</span></div>
                     <div class="user-actions">
                         <div class="role-switch">
                             <button class="role-btn active" id="requesterBtn">Requester</button>
@@ -1190,44 +288,36 @@
                 </nav>
             </div>
         </header>
-
-        <!-- Mobile Overlay -->
         <div class="mobile-overlay" id="mobileOverlay"></div>
-
-        <!-- Dashboard Content -->
         <div class="container">
             <div class="dashboard">
-                <!-- Sidebar -->
                 <div class="sidebar" id="sidebar">
                     <div class="sidebar-section">
                         <h3>Menu Utama</h3>
                         <ul class="sidebar-menu">
-                            <li><a href="#" class="active" onclick="navigateTo('beranda')"><i class="fas fa-home"></i> Beranda</a></li>
-                            <li><a href="#" onclick="navigateTo('pekerjaan')"><i class="fas fa-briefcase"></i> Pekerjaan Saya</a></li>
-                            <li><a href="#" onclick="navigateTo('dompet')"><i class="fas fa-wallet"></i> Dompet Saya</a></li>
-                            <li><a href="#" onclick="navigateTo('rating')"><i class="fas fa-star"></i> Rating & Ulasan</a></li>
-                            <li><a href="#" onclick="navigateTo('riwayat')"><i class="fas fa-history"></i> Riwayat</a></li>
-                            <li><a href="#" onclick="navigateTo('pengaturan')"><i class="fas fa-cog"></i> Pengaturan</a></li>
+                            <li><a href="#" class="sidebar-link active" data-page="homePage"><i class="fas fa-home"></i> Beranda</a></li>
+                            <li><a href="#" class="sidebar-link" data-page="jobsPage"><i class="fas fa-briefcase"></i> Pekerjaan Saya</a></li>
+                            <li><a href="#" class="sidebar-link" data-page="walletPage"><i class="fas fa-wallet"></i> Dompet Saya</a></li>
+                            <li><a href="#" class="sidebar-link" data-page="ratingPage"><i class="fas fa-star"></i> Rating &amp; Ulasan</a></li>
+                            <li><a href="#" class="sidebar-link" data-page="historyPage"><i class="fas fa-history"></i> Riwayat</a></li>
+                            <li><a href="#" class="sidebar-link" data-page="settingsPage"><i class="fas fa-cog"></i> Pengaturan</a></li>
                         </ul>
                     </div>
-                    
                     <div class="sidebar-section">
                         <h3>Kategori</h3>
                         <ul class="sidebar-menu">
-                            <li><a href="#"><i class="fas fa-truck-moving"></i> Pindahan</a></li>
-                            <li><a href="#"><i class="fas fa-car"></i> Antar Jemput</a></li>
-                            <li><a href="#"><i class="fas fa-box"></i> Pengiriman</a></li>
-                            <li><a href="#"><i class="fas fa-tools"></i> Perbaikan</a></li>
-                            <li><a href="#"><i class="fas fa-user-friends"></i> Jaga Acara</a></li>
-                            <li><a href="#"><i class="fas fa-ellipsis-h"></i> Lainnya</a></li>
+                            <li><a href="#" class="cat-link" data-cat="moving"><i class="fas fa-truck-moving"></i> Pindahan</a></li>
+                            <li><a href="#" class="cat-link" data-cat="transport"><i class="fas fa-car"></i> Antar Jemput</a></li>
+                            <li><a href="#" class="cat-link" data-cat="delivery"><i class="fas fa-box"></i> Pengiriman</a></li>
+                            <li><a href="#" class="cat-link" data-cat="tools"><i class="fas fa-tools"></i> Perbaikan</a></li>
+                            <li><a href="#" class="cat-link" data-cat="event"><i class="fas fa-user-friends"></i> Jaga Acara</a></li>
+                            <li><a href="#" class="cat-link" data-cat="other"><i class="fas fa-ellipsis-h"></i> Lainnya</a></li>
                         </ul>
                     </div>
                 </div>
-                
-                <!-- Main Content -->
                 <div class="main-content">
-                    <!-- Beranda Page -->
-                    <div id="berandaPage" class="page active">
+                    <!-- Halaman Beranda -->
+                    <div id="homePage" class="tabbed-section page-main active">
                         <!-- Requester View -->
                         <div class="requester-view" id="requesterView">
                             <div class="dashboard-header">
@@ -1236,30 +326,12 @@
                                     <i class="fas fa-plus"></i> Buat Permintaan Bantuan
                                 </button>
                             </div>
-                            
                             <div class="stats-cards">
-                                <div class="stat-card">
-                                    <i class="fas fa-bell"></i>
-                                    <h3 id="activeJobsCount">0</h3>
-                                    <p>Permintaan Aktif</p>
-                                </div>
-                                <div class="stat-card">
-                                    <i class="fas fa-check-circle"></i>
-                                    <h3>12</h3>
-                                    <p>Selesai</p>
-                                </div>
-                                <div class="stat-card">
-                                    <i class="fas fa-star"></i>
-                                    <h3>4.8</h3>
-                                    <p>Rating Rata-rata</p>
-                                </div>
-                                <div class="stat-card">
-                                    <i class="fas fa-wallet"></i>
-                                    <h3>Rp 850K</h3>
-                                    <p>Total Dibayarkan</p>
-                                </div>
+                                <div class="stat-card"><i class="fas fa-bell"></i><h3 id="activeJobsCount">0</h3><p>Permintaan Aktif</p></div>
+                                <div class="stat-card"><i class="fas fa-check-circle"></i><h3>12</h3><p>Selesai</p></div>
+                                <div class="stat-card"><i class="fas fa-star"></i><h3>4.8</h3><p>Rating Rata-rata</p></div>
+                                <div class="stat-card"><i class="fas fa-wallet"></i><h3>Rp 850K</h3><p>Total Dibayarkan</p></div>
                             </div>
-                            
                             <div class="filters">
                                 <div class="filter-row">
                                     <div class="filter-group">
@@ -1292,44 +364,20 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div id="requesterJobList" class="job-list">
-                                <!-- Job cards will be dynamically added here -->
-                            </div>
+                            <div id="requesterJobList" class="job-list"></div>
                         </div>
-                        
                         <!-- Helper View -->
                         <div class="helper-view" id="helperView" style="display: none;">
                             <div class="dashboard-header">
                                 <h1>Beranda Helper</h1>
-                                <div class="location-info">
-                                    <i class="fas fa-map-marker-alt"></i> Jakarta Selatan
-                                </div>
+                                <div class="location-info"><i class="fas fa-map-marker-alt"></i> Jakarta Selatan</div>
                             </div>
-                            
                             <div class="stats-cards">
-                                <div class="stat-card">
-                                    <i class="fas fa-briefcase"></i>
-                                    <h3>8</h3>
-                                    <p>Pekerjaan Aktif</p>
-                                </div>
-                                <div class="stat-card">
-                                    <i class="fas fa-check-circle"></i>
-                                    <h3>24</h3>
-                                    <p>Selesai</p>
-                                </div>
-                                <div class="stat-card">
-                                    <i class="fas fa-star"></i>
-                                    <h3>4.9</h3>
-                                    <p>Rating Anda</p>
-                                </div>
-                                <div class="stat-card">
-                                    <i class="fas fa-wallet"></i>
-                                    <h3>Rp 2.1JT</h3>
-                                    <p>Pendapatan Bulan Ini</p>
-                                </div>
+                                <div class="stat-card"><i class="fas fa-briefcase"></i><h3>8</h3><p>Pekerjaan Aktif</p></div>
+                                <div class="stat-card"><i class="fas fa-check-circle"></i><h3>24</h3><p>Selesai</p></div>
+                                <div class="stat-card"><i class="fas fa-star"></i><h3>4.9</h3><p>Rating Anda</p></div>
+                                <div class="stat-card"><i class="fas fa-wallet"></i><h3>Rp 2.1JT</h3><p>Pendapatan Bulan Ini</p></div>
                             </div>
-                            
                             <div class="filters">
                                 <div class="filter-row">
                                     <div class="filter-group">
@@ -1362,368 +410,181 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div id="helperJobList" class="job-list">
-                                <!-- Job cards will be dynamically added here -->
-                            </div>
+                            <div id="helperJobList" class="job-list"></div>
                         </div>
                     </div>
-
-                    <!-- Pekerjaan Saya Page -->
-                    <div id="pekerjaanPage" class="page">
+                    <!-- Halaman Pekerjaan Saya -->
+                    <div id="jobsPage" class="tabbed-section page-main" style="display:none;">
                         <div class="dashboard-header">
                             <h1>Pekerjaan Saya</h1>
                         </div>
-                        
-                        <div class="filters">
-                            <div class="filter-row">
-                                <div class="filter-group">
-                                    <label for="myJobsStatusFilter">Status</label>
-                                    <select id="myJobsStatusFilter" class="filter-select">
-                                        <option value="all">Semua Status</option>
-                                        <option value="active">Aktif</option>
-                                        <option value="completed">Selesai</option>
-                                        <option value="cancelled">Dibatalkan</option>
-                                    </select>
-                                </div>
-                                <div class="filter-group">
-                                    <label for="myJobsSortFilter">Urutkan</label>
-                                    <select id="myJobsSortFilter" class="filter-select">
-                                        <option value="newest">Terbaru</option>
-                                        <option value="oldest">Terlama</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="tabbed-menu" style="margin-bottom:20px;">
+                            <button class="tabbed-btn active" data-tab="activeJobsTab" onclick="switchTab('activeJobsTab', this)">Aktif</button>
+                            <button class="tabbed-btn" data-tab="completedJobsTab" onclick="switchTab('completedJobsTab', this)">Selesai</button>
                         </div>
-                        
-                        <div class="job-list">
-                            <div class="job-card">
-                                <h3>Bantuan Pindah Barang Kos</h3>
-                                <div class="job-meta">
-                                    <span><i class="fas fa-map-marker-alt"></i> Kemang, Jakarta</span>
-                                    <span><i class="far fa-clock"></i> 2 hari lalu</span>
-                                </div>
-                                <div class="job-price">Rp 75.000</div>
-                                <div class="job-description">
-                                    Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.
-                                </div>
-                                <div class="job-tags">
-                                    <span class="job-tag">Pindahan</span>
-                                    <span class="job-tag">Jakarta Selatan</span>
-                                    <span class="status-completed">Selesai</span>
-                                </div>
-                                <div class="job-actions">
-                                    <button class="btn btn-outline" onclick="viewJobDetail(1)">Lihat Detail</button>
-                                    <button class="btn btn-primary">Beri Rating</button>
+                        <!-- Tab Aktif -->
+                        <div id="activeJobsTab" class="tab-page">
+                            <div class="filters">
+                                <div class="filter-row">
+                                    <div class="filter-group">
+                                        <label for="myJobSearch">Cari Pekerjaan</label>
+                                        <input id="myJobSearch" class="form-control" type="text" placeholder="Judul pekerjaan..." oninput="filterMyJobs()">
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <div class="job-card">
-                                <h3>Jaga Stand Pameran</h3>
-                                <div class="job-meta">
-                                    <span><i class="fas fa-map-marker-alt"></i> JCC, Jakarta</span>
-                                    <span><i class="far fa-clock"></i> 5 hari lalu</span>
-                                </div>
-                                <div class="job-price">Rp 200.000</div>
-                                <div class="job-description">
-                                    Butuh helper untuk jaga stand pameran produk teknologi selama 4 jam. Akan ada briefing singkat sebelumnya.
-                                </div>
-                                <div class="job-tags">
-                                    <span class="job-tag">Jaga Acara</span>
-                                    <span class="job-tag">Jakarta Pusat</span>
-                                    <span class="status-pending">Dalam Proses</span>
-                                </div>
-                                <div class="job-actions">
-                                    <button class="btn btn-outline" onclick="viewJobDetail(3)">Lihat Detail</button>
-                                    <button class="btn btn-primary">Lacak</button>
+                            <div id="activeJobList" class="job-list"></div>
+                        </div>
+                        <!-- Tab Selesai -->
+                        <div id="completedJobsTab" class="tab-page" style="display:none;">
+                            <div class="filters">
+                                <div class="filter-row">
+                                    <div class="filter-group">
+                                        <label for="myJobDoneSearch">Cari Pekerjaan Selesai</label>
+                                        <input id="myJobDoneSearch" class="form-control" type="text" placeholder="Judul pekerjaan..." oninput="filterMyJobs()">
+                                    </div>
                                 </div>
                             </div>
+                            <div id="completedJobList" class="job-list"></div>
                         </div>
                     </div>
-
-                    <!-- Dompet Saya Page -->
-                    <div id="dompetPage" class="page">
+                    <!-- Halaman Dompet -->
+                    <div id="walletPage" class="tabbed-section page-main" style="display:none;">
                         <div class="dashboard-header">
                             <h1>Dompet Saya</h1>
                         </div>
-                        
-                        <div class="wallet-balance">
-                            <h2>Saldo Tersedia</h2>
-                            <div class="balance">Rp 1.250.000</div>
-                            <div class="wallet-actions">
-                                <button class="btn btn-light"><i class="fas fa-plus"></i> Top Up</button>
-                                <button class="btn btn-light"><i class="fas fa-arrow-up"></i> Tarik Dana</button>
-                                <button class="btn btn-light"><i class="fas fa-exchange-alt"></i> Transfer</button>
-                            </div>
+                        <div style="background:#fff; border-radius:8px; padding:24px 24px 10px 24px;margin-bottom:18px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+                            <div style="font-size:1.2rem;color:var(--gray);margin-bottom:7px;">Saldo Tersedia</div>
+                            <div style="font-size:2.2rem;font-weight:700;color:var(--primary);margin-bottom:15px;">Rp 1.250.000</div>
+                            <button class="btn btn-success" onclick="alert('Fitur top up akan segera hadir!')"><i class="fas fa-plus"></i> Top Up</button>
+                            <button class="btn btn-outline" onclick="alert('Fitur tarik saldo akan segera hadir!')"><i class="fas fa-arrow-down"></i> Tarik Saldo</button>
                         </div>
-                        
-                        <div class="transaction-history">
-                            <h3>Riwayat Transaksi</h3>
-                            <div class="transaction-item">
-                                <div class="transaction-info">
-                                    <h4>Pembayaran Helper - Pindah Barang</h4>
-                                    <p>12 Okt 2023, 14:30</p>
-                                </div>
-                                <div class="transaction-amount negative">- Rp 75.000</div>
-                            </div>
-                            <div class="transaction-item">
-                                <div class="transaction-info">
-                                    <h4>Top Up Saldo</h4>
-                                    <p>10 Okt 2023, 09:15</p>
-                                </div>
-                                <div class="transaction-amount positive">+ Rp 500.000</div>
-                            </div>
-                            <div class="transaction-item">
-                                <div class="transaction-info">
-                                    <h4>Pembayaran Helper - Antar Barang</h4>
-                                    <p>5 Okt 2023, 16:45</p>
-                                </div>
-                                <div class="transaction-amount negative">- Rp 45.000</div>
-                            </div>
-                            <div class="transaction-item">
-                                <div class="transaction-info">
-                                    <h4>Pendapatan dari Helper</h4>
-                                    <p>1 Okt 2023, 11:20</p>
-                                </div>
-                                <div class="transaction-amount positive">+ Rp 120.000</div>
-                            </div>
+                        <div style="margin-bottom:10px;font-weight:600;font-size:1.1rem;">Riwayat Transaksi</div>
+                        <div style="background:#fff; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.05);padding:16px;">
+                            <table style="width:100%;border-collapse:collapse;">
+                                <thead>
+                                    <tr style="background:var(--light-gray);">
+                                        <th style="text-align:left;padding:10px;">Tanggal</th>
+                                        <th style="text-align:left;">Deskripsi</th>
+                                        <th style="text-align:right;">Jumlah</th>
+                                        <th style="text-align:right;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="walletHistory">
+                                    <!-- Riwayat dummy akan diisi JS -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
-                    <!-- Rating & Ulasan Page -->
-                    <div id="ratingPage" class="page">
+                    <!-- Halaman Rating & Ulasan -->
+                    <div id="ratingPage" class="tabbed-section page-main" style="display:none;">
                         <div class="dashboard-header">
-                            <h1>Rating & Ulasan</h1>
+                            <h1>Rating &amp; Ulasan</h1>
                         </div>
-                        
-                        <div class="rating-summary">
-                            <div class="rating-score">4.8</div>
-                            <div class="rating-stars">
+                        <div class="stats-cards" style="margin-bottom:20px;">
+                            <div class="stat-card">
                                 <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
+                                <h3>4.8</h3>
+                                <p>Rating Rata-rata</p>
                             </div>
-                            <p>Berdasarkan 24 ulasan</p>
+                            <div class="stat-card">
+                                <i class="fas fa-users"></i>
+                                <h3>45</h3>
+                                <p>Total Ulasan</p>
+                            </div>
                         </div>
-                        
-                        <div class="reviews-list">
-                            <div class="review-item">
-                                <div class="review-header">
-                                    <div class="reviewer-info">
-                                        <div class="reviewer-avatar">RS</div>
-                                        <div>
-                                            <h4>Rina Sari</h4>
-                                            <div class="rating-stars">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span>2 hari lalu</span>
-                                </div>
-                                <p>Helper sangat profesional dan cepat tanggap. Pekerjaan selesai tepat waktu dengan hasil memuaskan. Terima kasih!</p>
-                            </div>
-                            
-                            <div class="review-item">
-                                <div class="review-header">
-                                    <div class="reviewer-info">
-                                        <div class="reviewer-avatar">BD</div>
-                                        <div>
-                                            <h4>Budi Darmawan</h4>
-                                            <div class="rating-stars">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span>5 hari lalu</span>
-                                </div>
-                                <p>Pelayanan cukup baik, tetapi agak terlambat 15 menit dari janji. Secara keseluruhan pekerjaan dilakukan dengan baik.</p>
+                        <div style="background:#fff; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.05);padding:20px;">
+                            <div style="font-weight:600;font-size:1.1rem;margin-bottom:10px;">Ulasan Pengguna</div>
+                            <div id="reviewList">
+                                <!-- Dummy ulasan akan diisi JS -->
                             </div>
                         </div>
                     </div>
-
-                    <!-- Riwayat Page -->
-                    <div id="riwayatPage" class="page">
+                    <!-- Halaman Riwayat -->
+                    <div id="historyPage" class="tabbed-section page-main" style="display:none;">
                         <div class="dashboard-header">
                             <h1>Riwayat Pekerjaan</h1>
                         </div>
-                        
-                        <div class="history-filters">
+                        <div class="filters">
                             <div class="filter-row">
                                 <div class="filter-group">
-                                    <label for="historyTypeFilter">Jenis</label>
-                                    <select id="historyTypeFilter" class="filter-select">
-                                        <option value="all">Semua Jenis</option>
-                                        <option value="requested">Sebagai Requester</option>
-                                        <option value="helped">Sebagai Helper</option>
-                                    </select>
+                                    <label for="historySearch">Cari Riwayat</label>
+                                    <input id="historySearch" class="form-control" type="text" placeholder="Judul atau lokasi..." oninput="filterHistory()">
                                 </div>
                                 <div class="filter-group">
-                                    <label for="historyPeriodFilter">Periode</label>
-                                    <select id="historyPeriodFilter" class="filter-select">
-                                        <option value="all">Semua Waktu</option>
-                                        <option value="week">Minggu Ini</option>
-                                        <option value="month">Bulan Ini</option>
-                                        <option value="3months">3 Bulan Terakhir</option>
+                                    <label for="historySort">Urutkan</label>
+                                    <select id="historySort" class="filter-select" onchange="filterHistory()">
+                                        <option value="newest">Terbaru</option>
+                                        <option value="oldest">Terlama</option>
+                                        <option value="price-high">Harga Tertinggi</option>
+                                        <option value="price-low">Harga Terendah</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="history-list">
-                            <div class="history-item">
-                                <div class="history-item-header">
-                                    <h3>Bantuan Pindah Barang Kos</h3>
-                                    <span class="history-status status-completed">Selesai</span>
-                                </div>
-                                <div class="job-meta">
-                                    <span><i class="fas fa-map-marker-alt"></i> Kemang, Jakarta</span>
-                                    <span><i class="far fa-clock"></i> 12 Okt 2023, 14:30</span>
-                                </div>
-                                <div class="job-price">Rp 75.000</div>
-                            </div>
-                            
-                            <div class="history-item">
-                                <div class="history-item-header">
-                                    <h3>Jaga Stand Pameran</h3>
-                                    <span class="history-status status-pending">Dalam Proses</span>
-                                </div>
-                                <div class="job-meta">
-                                    <span><i class="fas fa-map-marker-alt"></i> JCC, Jakarta</span>
-                                    <span><i class="far fa-clock"></i> 10 Okt 2023, 09:00</span>
-                                </div>
-                                <div class="job-price">Rp 200.000</div>
-                            </div>
-                            
-                            <div class="history-item">
-                                <div class="history-item-header">
-                                    <h3>Antar ke Rumah Sakit</h3>
-                                    <span class="history-status status-cancelled">Dibatalkan</span>
-                                </div>
-                                <div class="job-meta">
-                                    <span><i class="fas fa-map-marker-alt"></i> BSD City, Tangerang</span>
-                                    <span><i class="far fa-clock"></i> 5 Okt 2023, 16:45</span>
-                                </div>
-                                <div class="job-price">Rp 120.000</div>
-                            </div>
-                        </div>
+                        <div id="historyList" class="job-list"></div>
                     </div>
-
-                    <!-- Pengaturan Page -->
-                    <div id="pengaturanPage" class="page">
+                    <!-- Halaman Pengaturan -->
+                    <div id="settingsPage" class="tabbed-section page-main" style="display:none;">
                         <div class="dashboard-header">
-                            <h1>Pengaturan</h1>
+                            <h1>Pengaturan Akun</h1>
                         </div>
-                        
-                        <div class="settings-section">
-                            <h2>Akun</h2>
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Informasi Profil</h4>
-                                    <p>Kelola informasi profil dan preferensi akun Anda</p>
+                        <div style="background:#fff; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.05);padding:24px 22px 18px 22px;">
+                            <div class="form-group" style="margin-bottom:18px;">
+                                <label>Notifikasi</label>
+                                <div>
+                                    <input type="checkbox" id="notifJob" checked> Notifikasi pekerjaan baru
                                 </div>
-                                <button class="btn btn-outline">Edit</button>
+                                <div>
+                                    <input type="checkbox" id="notifPromo"> Notifikasi promo &amp; update
+                                </div>
                             </div>
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Keamanan</h4>
-                                    <p>Ubah kata sandi dan pengaturan keamanan</p>
-                                </div>
-                                <button class="btn btn-outline">Edit</button>
-                            </div>
-                        </div>
-                        
-                        <div class="settings-section">
-                            <h2>Notifikasi</h2>
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Notifikasi Email</h4>
-                                    <p>Terima pemberitahuan melalui email</p>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Notifikasi Pekerjaan Baru</h4>
-                                    <p>Dapatkan pemberitahuan ketika ada pekerjaan baru</p>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Notifikasi Pembayaran</h4>
-                                    <p>Pemberitahuan terkait transaksi pembayaran</p>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox">
-                                    <span class="slider"></span>
+                            <div class="form-group">
+                                <label>Mode Gelap</label>
+                                <label style="position:relative;display:inline-block;width:46px;height:24px;">
+                                    <input type="checkbox" id="darkModeSwitch" onchange="toggleDarkMode()" style="opacity:0;width:0;height:0;">
+                                    <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;border-radius:24px;transition:.4s;">
+                                        <span id="darkModeSlider" style="position:absolute;left:2px;top:2px;width:20px;height:20px;background:white;border-radius:50%;transition:.4s;"></span>
+                                    </span>
                                 </label>
                             </div>
                         </div>
-                        
-                        <div class="settings-section">
-                            <h2>Lainnya</h2>
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Bahasa</h4>
-                                    <p>Pilih bahasa yang digunakan di aplikasi</p>
-                                </div>
-                                <select class="filter-select" style="width: auto;">
-                                    <option>Bahasa Indonesia</option>
-                                    <option>English</option>
-                                </select>
-                            </div>
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Bantuan & Dukungan</h4>
-                                    <p>Pusat bantuan dan kontak dukungan</p>
-                                </div>
-                                <button class="btn btn-outline">Buka</button>
-                            </div>
+                        <div style="margin-top:18px;">
+                            <button class="btn btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Keluar Akun</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- Bottom Navigation for Mobile -->
         <div class="bottom-nav">
             <div class="bottom-nav-items">
-                <a href="#" class="bottom-nav-item active" onclick="navigateTo('beranda')">
+                <a href="#" class="bottom-nav-item active" data-page="homePage">
                     <i class="fas fa-home"></i>
                     <span>Beranda</span>
                 </a>
-                <a href="#" class="bottom-nav-item" onclick="navigateTo('pekerjaan')">
+                <a href="#" class="bottom-nav-item" data-page="jobsPage">
                     <i class="fas fa-briefcase"></i>
                     <span>Pekerjaan</span>
                 </a>
-                <a href="#" class="bottom-nav-item" onclick="navigateTo('dompet')">
+                <a href="#" class="bottom-nav-item" data-page="walletPage">
                     <i class="fas fa-wallet"></i>
                     <span>Dompet</span>
                 </a>
-                <a href="#" class="bottom-nav-item" onclick="navigateTo('pengaturan')">
-                    <i class="fas fa-user"></i>
-                    <span>Profil</span>
+                <a href="#" class="bottom-nav-item" data-page="ratingPage">
+                    <i class="fas fa-star"></i>
+                    <span>Ulasan</span>
+                </a>
+                <a href="#" class="bottom-nav-item" data-page="historyPage">
+                    <i class="fas fa-history"></i>
+                    <span>Riwayat</span>
+                </a>
+                <a href="#" class="bottom-nav-item" data-page="settingsPage">
+                    <i class="fas fa-cog"></i>
+                    <span>Pengaturan</span>
                 </a>
             </div>
         </div>
     </div>
-
     <!-- Create Job Modal -->
     <div id="createJobModal" class="modal">
         <div class="modal-content">
@@ -1769,7 +630,6 @@
             </form>
         </div>
     </div>
-
     <!-- Job Detail Modal -->
     <div id="jobDetailModal" class="modal">
         <div class="modal-content">
@@ -1810,257 +670,177 @@
             </div>
         </div>
     </div>
-
     <script>
-        // Data storage for jobs
+        // DATA DUMMY
         let jobs = [
-            {
-                id: 1,
-                title: "Bantuan Pindah Barang Kos",
-                category: "moving",
-                description: "Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.",
-                location: "Kemang, Jakarta",
-                price: 75000,
-                date: "3 jam lalu",
-                status: "open",
-                emergency: false,
-                distance: "1.2 km"
-            },
-            {
-                id: 2,
-                title: "Antar ke Rumah Sakit",
-                category: "transport",
-                description: "Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.",
-                location: "BSD City, Tangerang",
-                price: 120000,
-                date: "1 jam lalu",
-                status: "open",
-                emergency: true,
-                distance: "3.5 km"
-            },
-            {
-                id: 3,
-                title: "Jaga Stand Pameran",
-                category: "event",
-                description: "Butuh helper untuk jaga stand pameran produk teknologi selama 4 jam. Akan ada briefing singkat sebelumnya.",
-                location: "JCC, Jakarta",
-                price: 200000,
-                date: "5 jam lalu",
-                status: "open",
-                emergency: false,
-                distance: "8.2 km"
-            }
+            {id: 1, title: "Bantuan Pindah Barang Kos", category: "moving", description: "Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.", location: "Kemang, Jakarta", price: 75000, date: "3 jam lalu", status: "open", emergency: false, distance: "1.2 km"},
+            {id: 2, title: "Antar ke Rumah Sakit", category: "transport", description: "Butuh antar anggota keluarga ke RS untuk kontrol rutin. Perlu bantuan dari rumah ke RS dan kembali.", location: "BSD City, Tangerang", price: 120000, date: "1 jam lalu", status: "open", emergency: true, distance: "3.5 km"},
+            {id: 3, title: "Jaga Stand Pameran", category: "event", description: "Butuh helper untuk jaga stand pameran produk teknologi selama 4 jam. Akan ada briefing singkat sebelumnya.", location: "JCC, Jakarta", price: 200000, date: "5 jam lalu", status: "open", emergency: false, distance: "8.2 km"},
+            {id: 4, title: "Bantu Kirim Paket ke Klien", category: "delivery", description: "Perlu bantuan kirim paket dokumen ke kantor klien di Sudirman.", location: "Tebet, Jakarta", price: 50000, date: "2 hari lalu", status: "in-progress", emergency: false, distance: "4.0 km"},
+            {id: 5, title: "Selesai - Antar Jemput Anak", category: "transport", description: "Butuh antar jemput anak sekolah selama 1 minggu.", location: "Pondok Indah, Jakarta", price: 350000, date: "5 hari lalu", status: "completed", emergency: false, distance: "2.8 km"},
+            {id: 6, title: "Selesai - Pindahan Rumah", category: "moving", description: "Bantu angkat barang pindahan rumah ke alamat baru.", location: "Depok, Jawa Barat", price: 250000, date: "1 minggu lalu", status: "completed", emergency: false, distance: "7.0 km"},
+            {id: 7, title: "Perbaiki Kran Air Bocor", category: "tools", description: "Kran air bocor di dapur, butuh tukang untuk perbaikan.", location: "Kebayoran Lama, Jakarta", price: 90000, date: "Baru saja", status: "open", emergency: false, distance: "0.8 km"}
         ];
-
-        // Current page state
-        let currentPage = 'beranda';
-
-        // Mobile menu functionality
+        let wallet = [
+            {date:"2025-09-24", desc:"Pembayaran pekerjaan #5", amount: "+Rp 350.000", status:"Sukses"},
+            {date:"2025-09-23", desc:"Top Up", amount: "+Rp 300.000", status:"Sukses"},
+            {date:"2025-09-21", desc:"Pembayaran pekerjaan #6", amount: "+Rp 250.000", status:"Sukses"},
+            {date:"2025-09-20", desc:"Tarik Saldo", amount: "-Rp 200.000", status:"Sukses"},
+            {date:"2025-09-19", desc:"Pembayaran pekerjaan #2", amount: "+Rp 120.000", status:"Sukses"}
+        ];
+        let reviews = [
+            {name:"Budi Santoso", avatar:"BS", rating:5, text:"Pelayanan cepat dan ramah. Terima kasih!", date:"2025-09-10"},
+            {name:"Siti Rahma", avatar:"SR", rating:4, text:"Bekerja dengan baik, tepat waktu.", date:"2025-09-08"},
+            {name:"Hendri", avatar:"H", rating:5, text:"Sangat membantu, recommended!", date:"2025-09-05"},
+            {name:"Dewi", avatar:"D", rating:4, text:"Proses mudah dan hasil memuaskan.", date:"2025-08-30"}
+        ];
+        // ========== Navigasi & Sidebar ==========
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e){
+                e.preventDefault();
+                setActiveMenu(this.dataset.page);
+                // Hide sidebar in mobile
+                if(window.innerWidth<=992) toggleMobileMenu();
+            });
+        });
+        // Bottom navigation
+        document.querySelectorAll('.bottom-nav-item').forEach(link=>{
+            link.addEventListener('click',function(e){
+                e.preventDefault();
+                setActiveMenu(this.dataset.page);
+            });
+        });
+        // Transisi antar halaman
+        function setActiveMenu(pageId){
+            document.querySelectorAll('.sidebar-link').forEach(a=>a.classList.remove('active'));
+            document.querySelectorAll('.bottom-nav-item').forEach(a=>a.classList.remove('active'));
+            document.querySelectorAll('.page-main').forEach(p=>p.style.display='none');
+            document.getElementById(pageId).style.display='block';
+            // Highlight sidebar & bottom nav
+            document.querySelectorAll(`[data-page="${pageId}"]`).forEach(el=>el.classList.add('active'));
+        }
+        // Default halaman utama
+        setActiveMenu('homePage');
+        // Sidebar kategori
+        document.querySelectorAll('.cat-link').forEach(link=>{
+            link.addEventListener('click',function(e){
+                e.preventDefault();
+                document.getElementById('categoryFilter').value=this.dataset.cat;
+                setActiveMenu('homePage');
+                filterJobs();
+            });
+        });
+        // ========== Mobile Menu ==========
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const sidebar = document.getElementById('sidebar');
         const mobileOverlay = document.getElementById('mobileOverlay');
-        
         function toggleMobileMenu() {
             sidebar.classList.toggle('mobile-visible');
             mobileOverlay.style.display = sidebar.classList.contains('mobile-visible') ? 'block' : 'none';
             document.body.style.overflow = sidebar.classList.contains('mobile-visible') ? 'hidden' : 'auto';
         }
-        
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
         mobileOverlay.addEventListener('click', toggleMobileMenu);
-        
-        // Navigation function
-        function navigateTo(page) {
-            // Hide all pages
-            document.querySelectorAll('.page').forEach(p => {
-                p.classList.remove('active');
-            });
-            
-            // Show selected page
-            document.getElementById(page + 'Page').classList.add('active');
-            
-            // Update active menu item
-            document.querySelectorAll('.sidebar-menu a').forEach(link => {
-                link.classList.remove('active');
-            });
-            document.querySelectorAll('.bottom-nav-item').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            // Set active state for menu items
-            const menuItem = document.querySelector(`.sidebar-menu a[onclick="navigateTo('${page}')"]`);
-            if (menuItem) menuItem.classList.add('active');
-            
-            const bottomNavItem = document.querySelector(`.bottom-nav-item[onclick="navigateTo('${page}')"]`);
-            if (bottomNavItem) bottomNavItem.classList.add('active');
-            
-            // Close mobile menu if open
-            if (window.innerWidth <= 992) {
-                toggleMobileMenu();
-            }
-            
-            // Update current page
-            currentPage = page;
-            
-            // Load specific content for the page
-            if (page === 'beranda') {
-                loadJobs();
-            }
-        }
-        
+
         // Close mobile menu when clicking on a menu item
         document.querySelectorAll('.sidebar-menu a').forEach(item => {
-            item.addEventListener('click', (e) => {
-                if (window.innerWidth <= 992) {
-                    toggleMobileMenu();
-                }
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 992) toggleMobileMenu();
             });
         });
-        
-        // Authentication functions
+        // ========== Authentication ==========
         function switchAuthTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            
             document.querySelector(`.auth-tab:nth-child(${tab === 'login' ? 1 : 2})`).classList.add('active');
             document.getElementById(`${tab}Form`).classList.add('active');
         }
-        
-        // Login functionality
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Simulate login
             document.getElementById('authPage').classList.remove('active');
             document.getElementById('dashboardPage').classList.add('active');
-            // Load jobs after login
             loadJobs();
         });
-        
-        // Register functionality
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Simulate registration and login
             document.getElementById('authPage').classList.remove('active');
             document.getElementById('dashboardPage').classList.add('active');
-            // Load jobs after registration
             loadJobs();
         });
-        
-        // Logout functionality
         function logout() {
             document.getElementById('dashboardPage').classList.remove('active');
             document.getElementById('authPage').classList.add('active');
         }
-        
-        // Switch between Requester and Helper views
+        // ========== Role Switch ==========
         document.getElementById('requesterBtn').addEventListener('click', function() {
             document.getElementById('requesterView').style.display = 'block';
             document.getElementById('helperView').style.display = 'none';
             document.getElementById('requesterBtn').classList.add('active');
             document.getElementById('helperBtn').classList.remove('active');
-            // Refresh job list for requester view
             loadRequesterJobs();
         });
-        
         document.getElementById('helperBtn').addEventListener('click', function() {
             document.getElementById('requesterView').style.display = 'none';
             document.getElementById('helperView').style.display = 'block';
             document.getElementById('helperBtn').classList.add('active');
             document.getElementById('requesterBtn').classList.remove('active');
-            // Refresh job list for helper view
             loadHelperJobs();
         });
-        
-        // Modal functions
+        // ========== Modal ==========
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-        
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-        
-        // Close modal when clicking outside
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
         }
-        
-        // Create job form
+        // ========== Beranda (homePage) ==========
         document.getElementById('createJobForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const title = document.getElementById('jobTitle').value;
             const category = document.getElementById('jobCategory').value;
             const description = document.getElementById('jobDescription').value;
             const location = document.getElementById('jobLocation').value;
             let price = parseInt(document.getElementById('jobPrice').value);
             const emergency = document.getElementById('emergencyJob').checked;
-            
-            // Increase price for emergency jobs
-            if (emergency) {
-                price = Math.round(price * 1.25);
-            }
-            
-            // Create new job object
+            if (emergency) price = Math.round(price * 1.25);
             const newJob = {
-                id: jobs.length + 1,
-                title: title,
-                category: category,
-                description: description,
-                location: location,
-                price: price,
-                date: "Baru saja",
-                status: "open",
-                emergency: emergency,
-                distance: "0.5 km" // Default distance for new jobs
+                id: jobs.length + 1, title, category, description, location, price, date: "Baru saja",
+                status: "open", emergency, distance: "0.5 km"
             };
-            
-            // Add to jobs array
             jobs.unshift(newJob);
-            
-            // Update UI
             loadRequesterJobs();
-            
-            // Show success message and close modal
             alert('Permintaan bantuan berhasil dibuat!');
             closeModal('createJobModal');
-            
-            // Reset form
             document.getElementById('createJobForm').reset();
         });
-        
-        // Load jobs for requester view
         function loadRequesterJobs() {
             const jobList = document.getElementById('requesterJobList');
             jobList.innerHTML = '';
-            
-            // Filter jobs by status if needed
-            const statusFilter = document.getElementById('statusFilter').value;
             let filteredJobs = jobs;
-            
-            if (statusFilter !== 'all') {
-                filteredJobs = jobs.filter(job => job.status === statusFilter);
-            }
-            
-            // Update active jobs count
+            const statusFilter = document.getElementById('statusFilter').value;
+            const catFilter = document.getElementById('categoryFilter').value;
+            const sort = document.getElementById('sortFilter').value;
+            if (statusFilter !== 'all') filteredJobs = filteredJobs.filter(job => job.status === statusFilter);
+            if (catFilter !== 'all') filteredJobs = filteredJobs.filter(job => job.category === catFilter);
+            // Sorting
+            if (sort === 'newest') filteredJobs = filteredJobs.slice().reverse();
+            if (sort === 'oldest') filteredJobs = filteredJobs.slice();
+            if (sort === 'price-high') filteredJobs = filteredJobs.slice().sort((a,b)=>b.price-a.price);
+            if (sort === 'price-low') filteredJobs = filteredJobs.slice().sort((a,b)=>a.price-b.price);
             document.getElementById('activeJobsCount').textContent = filteredJobs.length;
-            
             if (filteredJobs.length === 0) {
-                jobList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-inbox"></i>
-                        <h3>Tidak ada permintaan bantuan</h3>
-                        <p>Belum ada permintaan bantuan yang dibuat. Buat permintaan pertama Anda!</p>
-                    </div>
-                `;
+                jobList.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><h3>Tidak ada permintaan bantuan</h3><p>Belum ada permintaan bantuan yang dibuat. Buat permintaan pertama Anda!</p></div>`;
                 return;
             }
-            
             filteredJobs.forEach(job => {
                 const jobCard = document.createElement('div');
                 jobCard.className = `job-card ${job.emergency ? 'emergency' : ''}`;
@@ -2086,26 +866,26 @@
                 jobList.appendChild(jobCard);
             });
         }
-        
-        // Load jobs for helper view
         function loadHelperJobs() {
             const jobList = document.getElementById('helperJobList');
             jobList.innerHTML = '';
-            
-            // Filter only open jobs for helpers
-            const openJobs = jobs.filter(job => job.status === 'open');
-            
+            let openJobs = jobs.filter(job => job.status === 'open');
+            const cat = document.getElementById('helperCategoryFilter').value;
+            const dist = document.getElementById('distanceFilter').value;
+            const sort = document.getElementById('helperSortFilter').value;
+            if (cat !== 'all') openJobs = openJobs.filter(job=>job.category===cat);
+            if (dist!=='all') {
+                let maxDist = parseInt(dist.replace('km',''));
+                openJobs = openJobs.filter(job=>parseFloat(job.distance) <= maxDist);
+            }
+            if (sort==='newest') openJobs=openJobs.slice().reverse();
+            if (sort==='price-high') openJobs=openJobs.slice().sort((a,b)=>b.price-a.price);
+            if (sort==='price-low') openJobs=openJobs.slice().sort((a,b)=>a.price-b.price);
+            if (sort==='distance') openJobs=openJobs.slice().sort((a,b)=>parseFloat(a.distance)-parseFloat(b.distance));
             if (openJobs.length === 0) {
-                jobList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-search"></i>
-                        <h3>Tidak ada pekerjaan tersedia</h3>
-                        <p>Saat ini tidak ada pekerjaan yang tersedia di sekitar Anda.</p>
-                    </div>
-                `;
+                jobList.innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><h3>Tidak ada pekerjaan tersedia</h3><p>Saat ini tidak ada pekerjaan yang tersedia di sekitar Anda.</p></div>`;
                 return;
             }
-            
             openJobs.forEach(job => {
                 const jobCard = document.createElement('div');
                 jobCard.className = `job-card ${job.emergency ? 'emergency' : ''}`;
@@ -2128,13 +908,9 @@
                 jobList.appendChild(jobCard);
             });
         }
-        
-        // View job details
         function viewJobDetail(jobId) {
             const job = jobs.find(j => j.id === jobId);
             if (!job) return;
-            
-            // Populate modal with job details
             document.getElementById('detailJobTitle').textContent = job.title;
             document.getElementById('detailJobCategory').textContent = getCategoryName(job.category);
             document.getElementById('detailJobLocation').textContent = job.location;
@@ -2142,12 +918,7 @@
             document.getElementById('detailJobDescription').textContent = job.description;
             document.getElementById('detailJobDate').textContent = job.date;
             document.getElementById('detailJobStatus').textContent = getStatusName(job.status);
-            
-            // Set emergency badge if applicable
-            const badgeContainer = document.getElementById('detailJobBadge');
-            badgeContainer.innerHTML = job.emergency ? '<div class="emergency-badge">Emergency</div>' : '';
-            
-            // Set appropriate action button
+            document.getElementById('detailJobBadge').innerHTML = job.emergency ? '<div class="emergency-badge">Emergency</div>' : '';
             const actionBtn = document.getElementById('detailActionBtn');
             if (document.getElementById('requesterView').style.display !== 'none') {
                 actionBtn.textContent = 'Edit';
@@ -2156,83 +927,44 @@
                 actionBtn.textContent = 'Ambil Pekerjaan';
                 actionBtn.onclick = function() { takeJob(jobId); };
             }
-            
-            // Show modal
             openModal('jobDetailModal');
         }
-        
-        // Take a job (for helpers)
         function takeJob(jobId) {
             const job = jobs.find(j => j.id === jobId);
             if (!job) return;
-            
             if (confirm(`Apakah Anda yakin ingin mengambil pekerjaan "${job.title}"?`)) {
-                // Update job status
                 job.status = 'in-progress';
-                
-                // Show success message
                 alert(`Anda berhasil mengambil pekerjaan "${job.title}"!`);
-                
-                // Reload job lists
                 loadRequesterJobs();
                 loadHelperJobs();
-                
-                // Close detail modal if open
                 closeModal('jobDetailModal');
+                loadMyJobs();
             }
         }
-        
-        // Edit a job (for requesters)
         function editJob(jobId) {
             const job = jobs.find(j => j.id === jobId);
             if (!job) return;
-            
-            // For now, just show an alert
             alert(`Fitur edit untuk pekerjaan "${job.title}" akan segera tersedia!`);
-            
-            // Close detail modal if open
             closeModal('jobDetailModal');
         }
-        
-        // Filter jobs for requester
-        function filterJobs() {
-            loadRequesterJobs();
-        }
-        
-        // Filter jobs for helper
-        function filterHelperJobs() {
-            loadHelperJobs();
-        }
-        
-        // Helper function to get category name
+        function filterJobs() { loadRequesterJobs(); }
+        function filterHelperJobs() { loadHelperJobs(); }
         function getCategoryName(category) {
-            const categories = {
-                'moving': 'Pindahan',
-                'delivery': 'Pengiriman',
-                'transport': 'Antar Jemput',
-                'event': 'Jaga Acara',
-                'other': 'Lainnya'
-            };
+            const categories = { 'moving': 'Pindahan', 'delivery': 'Pengiriman', 'transport': 'Antar Jemput', 'event': 'Jaga Acara', 'other': 'Lainnya', 'tools':'Perbaikan' };
             return categories[category] || category;
         }
-        
-        // Helper function to get status name
         function getStatusName(status) {
-            const statuses = {
-                'open': 'Terbuka',
-                'in-progress': 'Dalam Proses',
-                'completed': 'Selesai'
-            };
+            const statuses = { 'open': 'Terbuka', 'in-progress': 'Dalam Proses', 'completed': 'Selesai' };
             return statuses[status] || status;
         }
-        
-        // Load jobs when page is ready
         function loadJobs() {
             loadRequesterJobs();
             loadHelperJobs();
+            loadMyJobs();
+            loadWallet();
+            loadReviews();
+            loadHistory();
         }
-        
-        // Handle window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth > 992) {
                 sidebar.classList.remove('mobile-visible');
@@ -2240,13 +972,166 @@
                 document.body.style.overflow = 'auto';
             }
         });
-        
-        // Initialize the dashboard
-        window.onload = function() {
-            // Set active page based on URL hash or default to beranda
-            const hash = window.location.hash.substring(1) || 'beranda';
-            navigateTo(hash);
-        };
+        // ========== Pekerjaan Saya ==========
+        function loadMyJobs() {
+            // Aktif: open & in-progress
+            let active = jobs.filter(j=>j.status==='open' || j.status==='in-progress');
+            let complete = jobs.filter(j=>j.status==='completed');
+            // Filter pencarian
+            let q1 = (document.getElementById('myJobSearch')||{value:""}).value.toLowerCase();
+            let q2 = (document.getElementById('myJobDoneSearch')||{value:""}).value.toLowerCase();
+            if (q1) active = active.filter(j=>j.title.toLowerCase().includes(q1));
+            if (q2) complete = complete.filter(j=>j.title.toLowerCase().includes(q2));
+            // Aktif
+            let activeDiv = document.getElementById('activeJobList');
+            activeDiv.innerHTML = '';
+            if (active.length === 0) activeDiv.innerHTML = `<div class="empty-state"><i class="fas fa-briefcase"></i><h3>Belum ada pekerjaan aktif</h3></div>`;
+            active.forEach(job=>{
+                let card = document.createElement('div');
+                card.className = 'job-card';
+                card.innerHTML = `
+                    <h3>${job.title}</h3>
+                    <div class="job-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${job.location}</span>
+                        <span><i class="far fa-clock"></i> ${job.date}</span>
+                    </div>
+                    <div class="job-price">Rp ${job.price.toLocaleString('id-ID')}</div>
+                    <div class="job-description">${job.description}</div>
+                    <div class="job-tags">
+                        <span class="job-tag">${getCategoryName(job.category)}</span>
+                        <span class="job-tag">${getStatusName(job.status)}</span>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Detail</button>
+                        ${job.status=='open'?`<button class="btn btn-primary" onclick="takeJob(${job.id})">Ambil</button>`:""}
+                        ${job.status=='in-progress'?`<button class="btn btn-success" onclick="completeJob(${job.id})">Selesaikan</button>`:""}
+                    </div>
+                `;
+                activeDiv.appendChild(card);
+            });
+            // Selesai
+            let compDiv = document.getElementById('completedJobList');
+            compDiv.innerHTML = '';
+            if (complete.length === 0) compDiv.innerHTML = `<div class="empty-state"><i class="fas fa-check-circle"></i><h3>Belum ada pekerjaan selesai</h3></div>`;
+            complete.forEach(job=>{
+                let card = document.createElement('div');
+                card.className = 'job-card';
+                card.innerHTML = `
+                    <h3>${job.title}</h3>
+                    <div class="job-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${job.location}</span>
+                        <span><i class="far fa-clock"></i> ${job.date}</span>
+                    </div>
+                    <div class="job-price">Rp ${job.price.toLocaleString('id-ID')}</div>
+                    <div class="job-description">${job.description}</div>
+                    <div class="job-tags">
+                        <span class="job-tag">${getCategoryName(job.category)}</span>
+                        <span class="job-tag">${getStatusName(job.status)}</span>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Detail</button>
+                        <button class="btn btn-primary" onclick="giveRating(${job.id})">Beri Rating</button>
+                    </div>
+                `;
+                compDiv.appendChild(card);
+            });
+        }
+        function filterMyJobs() { loadMyJobs(); }
+        function switchTab(tabId, el){
+            document.querySelectorAll('.tab-page').forEach(tab=>tab.style.display='none');
+            document.getElementById(tabId).style.display='block';
+            document.querySelectorAll('.tabbed-btn').forEach(btn=>btn.classList.remove('active'));
+            el.classList.add('active');
+        }
+        function completeJob(jobId){
+            let job = jobs.find(j=>j.id===jobId);
+            if(!job) return;
+            job.status = 'completed';
+            alert('Pekerjaan telah ditandai selesai!');
+            loadMyJobs();
+            loadRequesterJobs();
+            loadHistory();
+        }
+        function giveRating(jobId){
+            let job = jobs.find(j=>j.id===jobId);
+            if(!job) return;
+            alert('Fitur beri rating untuk "'+job.title+'" akan segera hadir!');
+        }
+        // ========== Dompet ==========
+        function loadWallet(){
+            let e = document.getElementById('walletHistory');
+            e.innerHTML = '';
+            wallet.forEach(wal=>{
+                let row = document.createElement('tr');
+                row.innerHTML = `<td style="padding:8px 6px;">${wal.date}</td><td>${wal.desc}</td><td style="text-align:right;">${wal.amount}</td><td style="text-align:right;font-weight:600;color:${wal.amount.startsWith('+')?'var(--success)':'var(--danger)'}">${wal.status}</td>`;
+                e.appendChild(row);
+            });
+        }
+        // ========== Ulasan ==========
+        function loadReviews(){
+            let e = document.getElementById('reviewList');
+            e.innerHTML = '';
+            reviews.forEach(r=>{
+                let div = document.createElement('div');
+                div.style="display:flex;align-items:flex-start;margin-bottom:18px;";
+                div.innerHTML = `
+                    <div class="avatar" style="margin-right:12px;">${r.avatar}</div>
+                    <div>
+                        <div style="font-weight:600;font-size:1rem;">${r.name} <span style="color:var(--gray);font-size:0.9rem;font-weight:400;">(${r.date})</span></div>
+                        <div style="color:orange;margin-bottom:5px;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+                        <div>${r.text}</div>
+                    </div>
+                `;
+                e.appendChild(div);
+            });
+        }
+        // ========== Riwayat ==========
+        function loadHistory(){
+            let e = document.getElementById('historyList');
+            let q = (document.getElementById('historySearch')||{value:""}).value.toLowerCase();
+            let sort = (document.getElementById('historySort')||{value:'newest'}).value;
+            let hist = jobs.filter(j=>j.status==='completed');
+            if(q) hist = hist.filter(j=>j.title.toLowerCase().includes(q)||j.location.toLowerCase().includes(q));
+            if(sort==='newest') hist=hist.slice().reverse();
+            if(sort==='oldest') hist=hist.slice();
+            if(sort==='price-high') hist=hist.slice().sort((a,b)=>b.price-a.price);
+            if(sort==='price-low') hist=hist.slice().sort((a,b)=>a.price-b.price);
+            e.innerHTML = '';
+            if(hist.length===0){
+                e.innerHTML = `<div class="empty-state"><i class="fas fa-history"></i><h3>Belum ada histori pekerjaan</h3></div>`;
+                return;
+            }
+            hist.forEach(job=>{
+                let card = document.createElement('div');
+                card.className = 'job-card';
+                card.innerHTML = `
+                    <h3>${job.title}</h3>
+                    <div class="job-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${job.location}</span>
+                        <span><i class="far fa-clock"></i> ${job.date}</span>
+                    </div>
+                    <div class="job-price">Rp ${job.price.toLocaleString('id-ID')}</div>
+                    <div class="job-description">${job.description}</div>
+                    <div class="job-tags">
+                        <span class="job-tag">${getCategoryName(job.category)}</span>
+                        <span class="job-tag">Selesai</span>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Detail</button>
+                    </div>
+                `;
+                e.appendChild(card);
+            });
+        }
+        function filterHistory(){ loadHistory(); }
+        // ========== Pengaturan ==========
+        function toggleDarkMode(){
+            let s = document.getElementById('darkModeSwitch').checked;
+            document.body.style.backgroundColor = s ? '#222' : '#f5f5f5';
+            document.body.style.color = s ? '#eee' : '';
+        }
+        // ========== Init ==========
+        loadJobs();
     </script>
 </body>
 </html>
