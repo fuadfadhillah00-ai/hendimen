@@ -62,6 +62,7 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--primary);
+            text-decoration: none;
         }
         
         .logo span {
@@ -164,6 +165,7 @@
             display: flex;
             margin-top: 30px;
             gap: 30px;
+            min-height: calc(100vh - 100px);
         }
         
         .sidebar {
@@ -224,6 +226,20 @@
         .main-content {
             flex: 1;
             width: 100%;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .dashboard-header {
@@ -401,17 +417,258 @@
             font-size: 0.85rem;
         }
         
-        /* Requester Specific Styles */
-        .requester-view .create-job-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        /* Wallet Page Styles */
+        .wallet-balance {
+            background: linear-gradient(135deg, var(--primary), #6a8aff);
+            color: white;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .wallet-balance h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .wallet-balance .balance {
+            font-size: 2.5rem;
+            font-weight: bold;
             margin-bottom: 20px;
         }
         
-        /* Helper Specific Styles */
-        .helper-view .job-card .btn {
-            width: 100%;
+        .wallet-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .transaction-history {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-info h4 {
+            margin-bottom: 5px;
+        }
+        
+        .transaction-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .transaction-amount.positive {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .transaction-amount.negative {
+            color: var(--danger);
+            font-weight: bold;
+        }
+        
+        /* Rating & Reviews Page Styles */
+        .rating-summary {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .rating-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .rating-stars {
+            color: var(--warning);
+            margin-bottom: 15px;
+        }
+        
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .review-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* History Page Styles */
+        .history-filters {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .history-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .history-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .history-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-completed {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status-cancelled {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        /* Settings Page Styles */
+        .settings-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .settings-section h2 {
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-size: 1.3rem;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-info h4 {
+            margin-bottom: 5px;
+        }
+        
+        .setting-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
         }
         
         /* Auth Pages */
@@ -564,15 +821,6 @@
         
         .job-detail-item p {
             font-size: 1rem;
-        }
-        
-        /* Page Styles */
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
         }
         
         /* Empty State */
@@ -755,6 +1003,18 @@
                 flex-direction: column;
             }
             
+            .wallet-balance {
+                padding: 20px;
+            }
+            
+            .wallet-balance .balance {
+                font-size: 2rem;
+            }
+            
+            .wallet-actions {
+                flex-direction: column;
+            }
+            
             .bottom-nav {
                 display: block;
             }
@@ -809,6 +1069,11 @@
             
             .job-meta {
                 flex-direction: column;
+            }
+            
+            .transaction-item, .history-item-header, .review-header {
+                flex-direction: column;
+                gap: 10px;
             }
         }
         
@@ -910,7 +1175,7 @@
                     <button class="mobile-menu-btn" id="mobileMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <div class="logo">Hendi<span>men</span></div>
+                    <a href="#" class="logo" onclick="navigateTo('beranda')">Hendi<span>men</span></a>
                     <div class="user-actions">
                         <div class="role-switch">
                             <button class="role-btn active" id="requesterBtn">Requester</button>
@@ -937,12 +1202,12 @@
                     <div class="sidebar-section">
                         <h3>Menu Utama</h3>
                         <ul class="sidebar-menu">
-                            <li><a href="#" class="active"><i class="fas fa-home"></i> Beranda</a></li>
-                            <li><a href="#"><i class="fas fa-briefcase"></i> Pekerjaan Saya</a></li>
-                            <li><a href="#"><i class="fas fa-wallet"></i> Dompet Saya</a></li>
-                            <li><a href="#"><i class="fas fa-star"></i> Rating & Ulasan</a></li>
-                            <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
-                            <li><a href="#"><i class="fas fa-cog"></i> Pengaturan</a></li>
+                            <li><a href="#" class="active" onclick="navigateTo('beranda')"><i class="fas fa-home"></i> Beranda</a></li>
+                            <li><a href="#" onclick="navigateTo('pekerjaan')"><i class="fas fa-briefcase"></i> Pekerjaan Saya</a></li>
+                            <li><a href="#" onclick="navigateTo('dompet')"><i class="fas fa-wallet"></i> Dompet Saya</a></li>
+                            <li><a href="#" onclick="navigateTo('rating')"><i class="fas fa-star"></i> Rating & Ulasan</a></li>
+                            <li><a href="#" onclick="navigateTo('riwayat')"><i class="fas fa-history"></i> Riwayat</a></li>
+                            <li><a href="#" onclick="navigateTo('pengaturan')"><i class="fas fa-cog"></i> Pengaturan</a></li>
                         </ul>
                     </div>
                     
@@ -961,143 +1226,475 @@
                 
                 <!-- Main Content -->
                 <div class="main-content">
-                    <!-- Requester View -->
-                    <div class="requester-view" id="requesterView">
-                        <div class="dashboard-header">
-                            <h1>Beranda Requester</h1>
-                            <button class="btn btn-primary" onclick="openModal('createJobModal')">
-                                <i class="fas fa-plus"></i> Buat Permintaan Bantuan
-                            </button>
-                        </div>
-                        
-                        <div class="stats-cards">
-                            <div class="stat-card">
-                                <i class="fas fa-bell"></i>
-                                <h3 id="activeJobsCount">0</h3>
-                                <p>Permintaan Aktif</p>
+                    <!-- Beranda Page -->
+                    <div id="berandaPage" class="page active">
+                        <!-- Requester View -->
+                        <div class="requester-view" id="requesterView">
+                            <div class="dashboard-header">
+                                <h1>Beranda Requester</h1>
+                                <button class="btn btn-primary" onclick="openModal('createJobModal')">
+                                    <i class="fas fa-plus"></i> Buat Permintaan Bantuan
+                                </button>
                             </div>
-                            <div class="stat-card">
-                                <i class="fas fa-check-circle"></i>
-                                <h3>12</h3>
-                                <p>Selesai</p>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fas fa-star"></i>
-                                <h3>4.8</h3>
-                                <p>Rating Rata-rata</p>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fas fa-wallet"></i>
-                                <h3>Rp 850K</h3>
-                                <p>Total Dibayarkan</p>
-                            </div>
-                        </div>
-                        
-                        <div class="filters">
-                            <div class="filter-row">
-                                <div class="filter-group">
-                                    <label for="categoryFilter">Kategori</label>
-                                    <select id="categoryFilter" class="filter-select" onchange="filterJobs()">
-                                        <option value="all">Semua Kategori</option>
-                                        <option value="moving">Pindahan</option>
-                                        <option value="delivery">Pengiriman</option>
-                                        <option value="transport">Antar Jemput</option>
-                                        <option value="event">Jaga Acara</option>
-                                    </select>
+                            
+                            <div class="stats-cards">
+                                <div class="stat-card">
+                                    <i class="fas fa-bell"></i>
+                                    <h3 id="activeJobsCount">0</h3>
+                                    <p>Permintaan Aktif</p>
                                 </div>
-                                <div class="filter-group">
-                                    <label for="statusFilter">Status</label>
-                                    <select id="statusFilter" class="filter-select" onchange="filterJobs()">
-                                        <option value="all">Semua Status</option>
-                                        <option value="open">Terbuka</option>
-                                        <option value="in-progress">Dalam Proses</option>
-                                        <option value="completed">Selesai</option>
-                                    </select>
+                                <div class="stat-card">
+                                    <i class="fas fa-check-circle"></i>
+                                    <h3>12</h3>
+                                    <p>Selesai</p>
                                 </div>
-                                <div class="filter-group">
-                                    <label for="sortFilter">Urutkan</label>
-                                    <select id="sortFilter" class="filter-select" onchange="filterJobs()">
-                                        <option value="newest">Terbaru</option>
-                                        <option value="oldest">Terlama</option>
-                                        <option value="price-high">Harga Tertinggi</option>
-                                        <option value="price-low">Harga Terendah</option>
-                                    </select>
+                                <div class="stat-card">
+                                    <i class="fas fa-star"></i>
+                                    <h3>4.8</h3>
+                                    <p>Rating Rata-rata</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fas fa-wallet"></i>
+                                    <h3>Rp 850K</h3>
+                                    <p>Total Dibayarkan</p>
                                 </div>
                             </div>
+                            
+                            <div class="filters">
+                                <div class="filter-row">
+                                    <div class="filter-group">
+                                        <label for="categoryFilter">Kategori</label>
+                                        <select id="categoryFilter" class="filter-select" onchange="filterJobs()">
+                                            <option value="all">Semua Kategori</option>
+                                            <option value="moving">Pindahan</option>
+                                            <option value="delivery">Pengiriman</option>
+                                            <option value="transport">Antar Jemput</option>
+                                            <option value="event">Jaga Acara</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-group">
+                                        <label for="statusFilter">Status</label>
+                                        <select id="statusFilter" class="filter-select" onchange="filterJobs()">
+                                            <option value="all">Semua Status</option>
+                                            <option value="open">Terbuka</option>
+                                            <option value="in-progress">Dalam Proses</option>
+                                            <option value="completed">Selesai</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-group">
+                                        <label for="sortFilter">Urutkan</label>
+                                        <select id="sortFilter" class="filter-select" onchange="filterJobs()">
+                                            <option value="newest">Terbaru</option>
+                                            <option value="oldest">Terlama</option>
+                                            <option value="price-high">Harga Tertinggi</option>
+                                            <option value="price-low">Harga Terendah</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="requesterJobList" class="job-list">
+                                <!-- Job cards will be dynamically added here -->
+                            </div>
                         </div>
                         
-                        <div id="requesterJobList" class="job-list">
-                            <!-- Job cards will be dynamically added here -->
+                        <!-- Helper View -->
+                        <div class="helper-view" id="helperView" style="display: none;">
+                            <div class="dashboard-header">
+                                <h1>Beranda Helper</h1>
+                                <div class="location-info">
+                                    <i class="fas fa-map-marker-alt"></i> Jakarta Selatan
+                                </div>
+                            </div>
+                            
+                            <div class="stats-cards">
+                                <div class="stat-card">
+                                    <i class="fas fa-briefcase"></i>
+                                    <h3>8</h3>
+                                    <p>Pekerjaan Aktif</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fas fa-check-circle"></i>
+                                    <h3>24</h3>
+                                    <p>Selesai</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fas fa-star"></i>
+                                    <h3>4.9</h3>
+                                    <p>Rating Anda</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fas fa-wallet"></i>
+                                    <h3>Rp 2.1JT</h3>
+                                    <p>Pendapatan Bulan Ini</p>
+                                </div>
+                            </div>
+                            
+                            <div class="filters">
+                                <div class="filter-row">
+                                    <div class="filter-group">
+                                        <label for="helperCategoryFilter">Kategori</label>
+                                        <select id="helperCategoryFilter" class="filter-select" onchange="filterHelperJobs()">
+                                            <option value="all">Semua Kategori</option>
+                                            <option value="moving">Pindahan</option>
+                                            <option value="delivery">Pengiriman</option>
+                                            <option value="transport">Antar Jemput</option>
+                                            <option value="event">Jaga Acara</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-group">
+                                        <label for="distanceFilter">Jarak</label>
+                                        <select id="distanceFilter" class="filter-select" onchange="filterHelperJobs()">
+                                            <option value="all">Semua Jarak</option>
+                                            <option value="1km">≤ 1 km</option>
+                                            <option value="5km">≤ 5 km</option>
+                                            <option value="10km">≤ 10 km</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-group">
+                                        <label for="helperSortFilter">Urutkan</label>
+                                        <select id="helperSortFilter" class="filter-select" onchange="filterHelperJobs()">
+                                            <option value="newest">Terbaru</option>
+                                            <option value="price-high">Harga Tertinggi</option>
+                                            <option value="price-low">Harga Terendah</option>
+                                            <option value="distance">Terdekat</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="helperJobList" class="job-list">
+                                <!-- Job cards will be dynamically added here -->
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- Helper View -->
-                    <div class="helper-view" id="helperView" style="display: none;">
+
+                    <!-- Pekerjaan Saya Page -->
+                    <div id="pekerjaanPage" class="page">
                         <div class="dashboard-header">
-                            <h1>Beranda Helper</h1>
-                            <div class="location-info">
-                                <i class="fas fa-map-marker-alt"></i> Jakarta Selatan
-                            </div>
-                        </div>
-                        
-                        <div class="stats-cards">
-                            <div class="stat-card">
-                                <i class="fas fa-briefcase"></i>
-                                <h3>8</h3>
-                                <p>Pekerjaan Aktif</p>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fas fa-check-circle"></i>
-                                <h3>24</h3>
-                                <p>Selesai</p>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fas fa-star"></i>
-                                <h3>4.9</h3>
-                                <p>Rating Anda</p>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fas fa-wallet"></i>
-                                <h3>Rp 2.1JT</h3>
-                                <p>Pendapatan Bulan Ini</p>
-                            </div>
+                            <h1>Pekerjaan Saya</h1>
                         </div>
                         
                         <div class="filters">
                             <div class="filter-row">
                                 <div class="filter-group">
-                                    <label for="helperCategoryFilter">Kategori</label>
-                                    <select id="helperCategoryFilter" class="filter-select" onchange="filterHelperJobs()">
-                                        <option value="all">Semua Kategori</option>
-                                        <option value="moving">Pindahan</option>
-                                        <option value="delivery">Pengiriman</option>
-                                        <option value="transport">Antar Jemput</option>
-                                        <option value="event">Jaga Acara</option>
+                                    <label for="myJobsStatusFilter">Status</label>
+                                    <select id="myJobsStatusFilter" class="filter-select">
+                                        <option value="all">Semua Status</option>
+                                        <option value="active">Aktif</option>
+                                        <option value="completed">Selesai</option>
+                                        <option value="cancelled">Dibatalkan</option>
                                     </select>
                                 </div>
                                 <div class="filter-group">
-                                    <label for="distanceFilter">Jarak</label>
-                                    <select id="distanceFilter" class="filter-select" onchange="filterHelperJobs()">
-                                        <option value="all">Semua Jarak</option>
-                                        <option value="1km">≤ 1 km</option>
-                                        <option value="5km">≤ 5 km</option>
-                                        <option value="10km">≤ 10 km</option>
-                                    </select>
-                                </div>
-                                <div class="filter-group">
-                                    <label for="helperSortFilter">Urutkan</label>
-                                    <select id="helperSortFilter" class="filter-select" onchange="filterHelperJobs()">
+                                    <label for="myJobsSortFilter">Urutkan</label>
+                                    <select id="myJobsSortFilter" class="filter-select">
                                         <option value="newest">Terbaru</option>
-                                        <option value="price-high">Harga Tertinggi</option>
-                                        <option value="price-low">Harga Terendah</option>
-                                        <option value="distance">Terdekat</option>
+                                        <option value="oldest">Terlama</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         
-                        <div id="helperJobList" class="job-list">
-                            <!-- Job cards will be dynamically added here -->
+                        <div class="job-list">
+                            <div class="job-card">
+                                <h3>Bantuan Pindah Barang Kos</h3>
+                                <div class="job-meta">
+                                    <span><i class="fas fa-map-marker-alt"></i> Kemang, Jakarta</span>
+                                    <span><i class="far fa-clock"></i> 2 hari lalu</span>
+                                </div>
+                                <div class="job-price">Rp 75.000</div>
+                                <div class="job-description">
+                                    Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.
+                                </div>
+                                <div class="job-tags">
+                                    <span class="job-tag">Pindahan</span>
+                                    <span class="job-tag">Jakarta Selatan</span>
+                                    <span class="status-completed">Selesai</span>
+                                </div>
+                                <div class="job-actions">
+                                    <button class="btn btn-outline" onclick="viewJobDetail(1)">Lihat Detail</button>
+                                    <button class="btn btn-primary">Beri Rating</button>
+                                </div>
+                            </div>
+                            
+                            <div class="job-card">
+                                <h3>Jaga Stand Pameran</h3>
+                                <div class="job-meta">
+                                    <span><i class="fas fa-map-marker-alt"></i> JCC, Jakarta</span>
+                                    <span><i class="far fa-clock"></i> 5 hari lalu</span>
+                                </div>
+                                <div class="job-price">Rp 200.000</div>
+                                <div class="job-description">
+                                    Butuh helper untuk jaga stand pameran produk teknologi selama 4 jam. Akan ada briefing singkat sebelumnya.
+                                </div>
+                                <div class="job-tags">
+                                    <span class="job-tag">Jaga Acara</span>
+                                    <span class="job-tag">Jakarta Pusat</span>
+                                    <span class="status-pending">Dalam Proses</span>
+                                </div>
+                                <div class="job-actions">
+                                    <button class="btn btn-outline" onclick="viewJobDetail(3)">Lihat Detail</button>
+                                    <button class="btn btn-primary">Lacak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dompet Saya Page -->
+                    <div id="dompetPage" class="page">
+                        <div class="dashboard-header">
+                            <h1>Dompet Saya</h1>
+                        </div>
+                        
+                        <div class="wallet-balance">
+                            <h2>Saldo Tersedia</h2>
+                            <div class="balance">Rp 1.250.000</div>
+                            <div class="wallet-actions">
+                                <button class="btn btn-light"><i class="fas fa-plus"></i> Top Up</button>
+                                <button class="btn btn-light"><i class="fas fa-arrow-up"></i> Tarik Dana</button>
+                                <button class="btn btn-light"><i class="fas fa-exchange-alt"></i> Transfer</button>
+                            </div>
+                        </div>
+                        
+                        <div class="transaction-history">
+                            <h3>Riwayat Transaksi</h3>
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <h4>Pembayaran Helper - Pindah Barang</h4>
+                                    <p>12 Okt 2023, 14:30</p>
+                                </div>
+                                <div class="transaction-amount negative">- Rp 75.000</div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <h4>Top Up Saldo</h4>
+                                    <p>10 Okt 2023, 09:15</p>
+                                </div>
+                                <div class="transaction-amount positive">+ Rp 500.000</div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <h4>Pembayaran Helper - Antar Barang</h4>
+                                    <p>5 Okt 2023, 16:45</p>
+                                </div>
+                                <div class="transaction-amount negative">- Rp 45.000</div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <h4>Pendapatan dari Helper</h4>
+                                    <p>1 Okt 2023, 11:20</p>
+                                </div>
+                                <div class="transaction-amount positive">+ Rp 120.000</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rating & Ulasan Page -->
+                    <div id="ratingPage" class="page">
+                        <div class="dashboard-header">
+                            <h1>Rating & Ulasan</h1>
+                        </div>
+                        
+                        <div class="rating-summary">
+                            <div class="rating-score">4.8</div>
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <p>Berdasarkan 24 ulasan</p>
+                        </div>
+                        
+                        <div class="reviews-list">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-avatar">RS</div>
+                                        <div>
+                                            <h4>Rina Sari</h4>
+                                            <div class="rating-stars">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span>2 hari lalu</span>
+                                </div>
+                                <p>Helper sangat profesional dan cepat tanggap. Pekerjaan selesai tepat waktu dengan hasil memuaskan. Terima kasih!</p>
+                            </div>
+                            
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-avatar">BD</div>
+                                        <div>
+                                            <h4>Budi Darmawan</h4>
+                                            <div class="rating-stars">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span>5 hari lalu</span>
+                                </div>
+                                <p>Pelayanan cukup baik, tetapi agak terlambat 15 menit dari janji. Secara keseluruhan pekerjaan dilakukan dengan baik.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Riwayat Page -->
+                    <div id="riwayatPage" class="page">
+                        <div class="dashboard-header">
+                            <h1>Riwayat Pekerjaan</h1>
+                        </div>
+                        
+                        <div class="history-filters">
+                            <div class="filter-row">
+                                <div class="filter-group">
+                                    <label for="historyTypeFilter">Jenis</label>
+                                    <select id="historyTypeFilter" class="filter-select">
+                                        <option value="all">Semua Jenis</option>
+                                        <option value="requested">Sebagai Requester</option>
+                                        <option value="helped">Sebagai Helper</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="historyPeriodFilter">Periode</label>
+                                    <select id="historyPeriodFilter" class="filter-select">
+                                        <option value="all">Semua Waktu</option>
+                                        <option value="week">Minggu Ini</option>
+                                        <option value="month">Bulan Ini</option>
+                                        <option value="3months">3 Bulan Terakhir</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="history-list">
+                            <div class="history-item">
+                                <div class="history-item-header">
+                                    <h3>Bantuan Pindah Barang Kos</h3>
+                                    <span class="history-status status-completed">Selesai</span>
+                                </div>
+                                <div class="job-meta">
+                                    <span><i class="fas fa-map-marker-alt"></i> Kemang, Jakarta</span>
+                                    <span><i class="far fa-clock"></i> 12 Okt 2023, 14:30</span>
+                                </div>
+                                <div class="job-price">Rp 75.000</div>
+                            </div>
+                            
+                            <div class="history-item">
+                                <div class="history-item-header">
+                                    <h3>Jaga Stand Pameran</h3>
+                                    <span class="history-status status-pending">Dalam Proses</span>
+                                </div>
+                                <div class="job-meta">
+                                    <span><i class="fas fa-map-marker-alt"></i> JCC, Jakarta</span>
+                                    <span><i class="far fa-clock"></i> 10 Okt 2023, 09:00</span>
+                                </div>
+                                <div class="job-price">Rp 200.000</div>
+                            </div>
+                            
+                            <div class="history-item">
+                                <div class="history-item-header">
+                                    <h3>Antar ke Rumah Sakit</h3>
+                                    <span class="history-status status-cancelled">Dibatalkan</span>
+                                </div>
+                                <div class="job-meta">
+                                    <span><i class="fas fa-map-marker-alt"></i> BSD City, Tangerang</span>
+                                    <span><i class="far fa-clock"></i> 5 Okt 2023, 16:45</span>
+                                </div>
+                                <div class="job-price">Rp 120.000</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pengaturan Page -->
+                    <div id="pengaturanPage" class="page">
+                        <div class="dashboard-header">
+                            <h1>Pengaturan</h1>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h2>Akun</h2>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Informasi Profil</h4>
+                                    <p>Kelola informasi profil dan preferensi akun Anda</p>
+                                </div>
+                                <button class="btn btn-outline">Edit</button>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Keamanan</h4>
+                                    <p>Ubah kata sandi dan pengaturan keamanan</p>
+                                </div>
+                                <button class="btn btn-outline">Edit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h2>Notifikasi</h2>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Notifikasi Email</h4>
+                                    <p>Terima pemberitahuan melalui email</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Notifikasi Pekerjaan Baru</h4>
+                                    <p>Dapatkan pemberitahuan ketika ada pekerjaan baru</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Notifikasi Pembayaran</h4>
+                                    <p>Pemberitahuan terkait transaksi pembayaran</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h2>Lainnya</h2>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Bahasa</h4>
+                                    <p>Pilih bahasa yang digunakan di aplikasi</p>
+                                </div>
+                                <select class="filter-select" style="width: auto;">
+                                    <option>Bahasa Indonesia</option>
+                                    <option>English</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Bantuan & Dukungan</h4>
+                                    <p>Pusat bantuan dan kontak dukungan</p>
+                                </div>
+                                <button class="btn btn-outline">Buka</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1107,19 +1704,19 @@
         <!-- Bottom Navigation for Mobile -->
         <div class="bottom-nav">
             <div class="bottom-nav-items">
-                <a href="#" class="bottom-nav-item active">
+                <a href="#" class="bottom-nav-item active" onclick="navigateTo('beranda')">
                     <i class="fas fa-home"></i>
                     <span>Beranda</span>
                 </a>
-                <a href="#" class="bottom-nav-item">
+                <a href="#" class="bottom-nav-item" onclick="navigateTo('pekerjaan')">
                     <i class="fas fa-briefcase"></i>
                     <span>Pekerjaan</span>
                 </a>
-                <a href="#" class="bottom-nav-item">
+                <a href="#" class="bottom-nav-item" onclick="navigateTo('dompet')">
                     <i class="fas fa-wallet"></i>
                     <span>Dompet</span>
                 </a>
-                <a href="#" class="bottom-nav-item">
+                <a href="#" class="bottom-nav-item" onclick="navigateTo('pengaturan')">
                     <i class="fas fa-user"></i>
                     <span>Profil</span>
                 </a>
@@ -1255,6 +1852,9 @@
             }
         ];
 
+        // Current page state
+        let currentPage = 'beranda';
+
         // Mobile menu functionality
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const sidebar = document.getElementById('sidebar');
@@ -1269,9 +1869,48 @@
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
         mobileOverlay.addEventListener('click', toggleMobileMenu);
         
+        // Navigation function
+        function navigateTo(page) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(page + 'Page').classList.add('active');
+            
+            // Update active menu item
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelectorAll('.bottom-nav-item').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Set active state for menu items
+            const menuItem = document.querySelector(`.sidebar-menu a[onclick="navigateTo('${page}')"]`);
+            if (menuItem) menuItem.classList.add('active');
+            
+            const bottomNavItem = document.querySelector(`.bottom-nav-item[onclick="navigateTo('${page}')"]`);
+            if (bottomNavItem) bottomNavItem.classList.add('active');
+            
+            // Close mobile menu if open
+            if (window.innerWidth <= 992) {
+                toggleMobileMenu();
+            }
+            
+            // Update current page
+            currentPage = page;
+            
+            // Load specific content for the page
+            if (page === 'beranda') {
+                loadJobs();
+            }
+        }
+        
         // Close mobile menu when clicking on a menu item
         document.querySelectorAll('.sidebar-menu a').forEach(item => {
-            item.addEventListener('click', () => {
+            item.addEventListener('click', (e) => {
                 if (window.innerWidth <= 992) {
                     toggleMobileMenu();
                 }
@@ -1601,6 +2240,13 @@
                 document.body.style.overflow = 'auto';
             }
         });
+        
+        // Initialize the dashboard
+        window.onload = function() {
+            // Set active page based on URL hash or default to beranda
+            const hash = window.location.hash.substring(1) || 'beranda';
+            navigateTo(hash);
+        };
     </script>
 </body>
 </html>
