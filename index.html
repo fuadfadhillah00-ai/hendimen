@@ -798,7 +798,7 @@
             document.getElementById(`${tab}Form`).classList.add('active');
         }
 
-        // Handle register
+        // Handle register (langsung masuk tanpa cek DB)
         document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             showLoading();
@@ -807,40 +807,26 @@
             let email = document.getElementById('regEmail').value.trim().toLowerCase();
             let phone = document.getElementById('regPhone').value.trim();
             let password = document.getElementById('regPassword').value;
-            let confirm = document.getElementById('regConfirmPassword').value;
             let role = document.getElementById('userType').value;
-            if(password!==confirm){
-                alert('Konfirmasi password tidak sama!');
-                return;
-            }
-            if(usersDB.find(u=>u.email===email)){
-                alert('Email sudah terdaftar.');
-                return;
-            }
             let avatar = name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
             let user = {name, email, phone, password, role, avatar};
-            usersDB.push(user);
-            // Setelah daftar, arahkan ke login
-            switchAuthTab('login');
-            alert('Pendaftaran berhasil. Silakan login!');
+            currentUser = user;
+            afterLogin();
         });
-
-        // Handle login
+        // Handle login (langsung masuk tanpa cek DB)
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             showLoading();
             await showLoading();
             let email = document.getElementById('loginEmail').value.trim().toLowerCase();
             let password = document.getElementById('loginPassword').value;
-            let user = usersDB.find(u=>u.email===email && u.password===password);
-            if(!user){
-                alert('Akun tidak ditemukan/Password salah!');
-                return;
-            }
-            currentUser = user;
+            let name = email.split('@')[0] || email || "User";
+            let avatar = name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
+            let role = "requester";
+            currentUser = {name, email, phone:'', password, role, avatar};
             afterLogin();
         });
-
+       
         // Update profile info after login
         function afterLogin() {
             document.getElementById('authPage').classList.remove('active');
