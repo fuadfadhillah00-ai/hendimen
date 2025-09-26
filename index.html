@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Hendimen</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/cuIWlLe.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -23,8 +24,8 @@
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px;}
         header { background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;}
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 0;}
-        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary);}
-        .logo span { color: var(--secondary);}
+        .logo-img { height: 76px; width: auto; display: block; margin-right: 7px;}
+        .logo-container { display: flex; align-items: center; }
         .mobile-menu-btn { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer;}
         .user-actions { display: flex; align-items: center; gap: 15px;}
         .role-switch { display: flex; background-color: var(--light-gray); border-radius: 30px; padding: 5px;}
@@ -98,6 +99,41 @@
         .job-detail-item { margin-bottom: 15px;}
         .job-detail-item label { font-weight: 600; color: var(--gray); display: block; margin-bottom: 5px;}
         .job-detail-item p { font-size: 1rem;}
+        .loading-backdrop {
+            display: none;
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,.11);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            width: 65px;
+            height: 65px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .topup-methods {
+            display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 18px;
+        }
+        .topup-method {
+            cursor: pointer;
+            background: var(--light-gray);
+            border-radius: 7px;
+            padding: 10px 16px;
+            display: flex; align-items: center; gap: 10px;
+            border: 2px solid transparent;
+            transition: border .2s, background .2s;
+            min-width: 110px;
+        }
+        .topup-method.selected, .topup-method:hover { border: 2px solid var(--primary); background: #e4ebff;}
+        .topup-method img { width: 35px; height: 35px; object-fit: contain;}
+        .topup-va-list { margin-top: 8px; }
+        .topup-va-list select { padding: 8px; border-radius: 4px; border: 1px solid #ccc;}
         .page { display: none;}
         .page.active { display: block;}
         .empty-state { text-align: center; padding: 40px 20px; background-color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);}
@@ -144,10 +180,11 @@
             .modal-content { padding: 20px;}
             .modal-footer { flex-direction: column;}
             .modal-footer .btn { width: 100%; margin-bottom: 10px;}
+            .logo-img { height: 60px;}
         }
         @media (max-width: 480px) {
             .container { padding: 0 10px;}
-            .logo { font-size: 1.3rem;}
+            .logo-img { height: 46px;}
             .stats-cards { grid-template-columns: 1fr;}
             .role-switch { flex-direction: column; background: transparent; gap: 5px;}
             .role-btn { border-radius: 4px; background-color: var(--light-gray);}
@@ -164,6 +201,10 @@
     </style>
 </head>
 <body>
+    <!-- Loading Backdrop -->
+    <div class="loading-backdrop" id="loadingBackdrop">
+        <div class="loading-spinner"></div>
+    </div>
     <!-- Auth Pages -->
     <div id="authPage" class="page active">
         <div class="auth-container">
@@ -172,21 +213,21 @@
                     <div class="auth-tab active" onclick="switchAuthTab('login')">Masuk</div>
                     <div class="auth-tab" onclick="switchAuthTab('register')">Daftar</div>
                 </div>
-                <form id="loginForm" class="auth-form active">
+                <form id="loginForm" class="auth-form active" autocomplete="off">
                     <div class="form-group">
                         <label for="loginEmail">Email atau Nomor Telepon</label>
-                        <input type="text" id="loginEmail" class="form-control" required>
+                        <input type="text" id="loginEmail" class="form-control" required autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="loginPassword">Kata Sandi</label>
-                        <input type="password" id="loginPassword" class="form-control" required>
+                        <input type="password" id="loginPassword" class="form-control" required autocomplete="off">
                     </div>
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Masuk</button>
                     <div class="auth-footer">
                         <a href="#">Lupa kata sandi?</a>
                     </div>
                 </form>
-                <form id="registerForm" class="auth-form">
+                <form id="registerForm" class="auth-form" autocomplete="off">
                     <div class="form-group">
                         <label for="userType">Saya ingin mendaftar sebagai:</label>
                         <select id="userType" class="form-control">
@@ -196,23 +237,23 @@
                     </div>
                     <div class="form-group">
                         <label for="regName">Nama Lengkap</label>
-                        <input type="text" id="regName" class="form-control" required>
+                        <input type="text" id="regName" class="form-control" required autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="regEmail">Email</label>
-                        <input type="email" id="regEmail" class="form-control" required>
+                        <input type="email" id="regEmail" class="form-control" required autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="regPhone">Nomor Telepon</label>
-                        <input type="tel" id="regPhone" class="form-control" required>
+                        <input type="tel" id="regPhone" class="form-control" required autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="regPassword">Kata Sandi</label>
-                        <input type="password" id="regPassword" class="form-control" required>
+                        <input type="password" id="regPassword" class="form-control" required autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="regConfirmPassword">Konfirmasi Kata Sandi</label>
-                        <input type="password" id="regConfirmPassword" class="form-control" required>
+                        <input type="password" id="regConfirmPassword" class="form-control" required autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="regId">Upload KTP/SIM/KTM</label>
@@ -236,15 +277,17 @@
                     <button class="mobile-menu-btn" id="mobileMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <div class="logo">Hendi<span>men</span></div>
+                    <div class="logo-container">
+                        <img src="https://i.imgur.com/cuIWlLe.png" class="logo-img" alt="Hendimen Logo">
+                    </div>
                     <div class="user-actions">
                         <div class="role-switch">
                             <button class="role-btn active" id="requesterBtn">Requester</button>
                             <button class="role-btn" id="helperBtn">Helper</button>
                         </div>
                         <div class="user-profile">
-                            <div class="avatar">AS</div>
-                            <span>Ahmad Surya</span>
+                            <div class="avatar" id="profileAvatar">AS</div>
+                            <span id="profileName">Ahmad Surya</span>
                             <button class="btn btn-outline" onclick="logout()">Keluar</button>
                         </div>
                     </div>
@@ -417,8 +460,8 @@
                         </div>
                         <div style="background:#fff; border-radius:8px; padding:24px 24px 10px 24px;margin-bottom:18px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
                             <div style="font-size:1.2rem;color:var(--gray);margin-bottom:7px;">Saldo Tersedia</div>
-                            <div style="font-size:2.2rem;font-weight:700;color:var(--primary);margin-bottom:15px;">Rp 1.250.000</div>
-                            <button class="btn btn-success" onclick="alert('Fitur top up akan segera hadir!')"><i class="fas fa-plus"></i> Top Up</button>
+                            <div style="font-size:2.2rem;font-weight:700;color:var(--primary);margin-bottom:15px;" id="walletBalance">Rp 1.250.000</div>
+                            <button class="btn btn-success" onclick="openModal('topupModal')"><i class="fas fa-plus"></i> Top Up</button>
                             <button class="btn btn-outline" onclick="alert('Fitur tarik saldo akan segera hadir!')"><i class="fas fa-arrow-down"></i> Tarik Saldo</button>
                         </div>
                         <div style="margin-bottom:10px;font-weight:600;font-size:1.1rem;">Riwayat Transaksi</div>
@@ -501,15 +544,6 @@
                                     <input type="checkbox" id="notifPromo"> Notifikasi promo &amp; update
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Mode Gelap</label>
-                                <label style="position:relative;display:inline-block;width:46px;height:24px;">
-                                    <input type="checkbox" id="darkModeSwitch" onchange="toggleDarkMode()" style="opacity:0;width:0;height:0;">
-                                    <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;border-radius:24px;transition:.4s;">
-                                        <span id="darkModeSlider" style="position:absolute;left:2px;top:2px;width:20px;height:20px;background:white;border-radius:50%;transition:.4s;"></span>
-                                    </span>
-                                </label>
-                            </div>
                         </div>
                         <div style="margin-top:18px;">
                             <button class="btn btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Keluar Akun</button>
@@ -546,6 +580,42 @@
                     <span>Pengaturan</span>
                 </a>
             </div>
+        </div>
+    </div>
+    <!-- Modal Top Up -->
+    <div id="topupModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('topupModal')">&times;</span>
+            <h2>Top Up Saldo</h2>
+            <form id="topupForm">
+                <div class="form-group">
+                    <label>Metode Top Up</label>
+                    <div class="topup-methods">
+                        <div class="topup-method" data-method="dana"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHbelUsAOasaznlczskMkFd2hgtFHaBt_aBw&s" alt="DANA">DANA</div>
+                        <div class="topup-method" data-method="shopeepay"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnQ54gdjaHKfhtVWT3C1n-gLZljKqucGLOeg&s" alt="ShopeePay">ShopeePay</div>
+                        <div class="topup-method" data-method="qris"><img src="https://i.imgur.com/JmfTHcd.png" alt="QRIS">QRIS</div>
+                        <div class="topup-method" data-method="va">Virtual Account</div>
+                    </div>
+                    <div class="topup-va-list" id="topupVALIST" style="display:none;">
+                        <label for="vaBank">Pilih Bank:</label>
+                        <select id="vaBank">
+                            <option value="bca">BCA</option>
+                            <option value="bri">BRI</option>
+                            <option value="bni">BNI</option>
+                            <option value="mandiri">Mandiri</option>
+                            <option value="permata">Permata</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="topupNominal">Nominal Top Up (Rp)</label>
+                    <input type="number" id="topupNominal" class="form-control" required min="10000" step="10000" placeholder="Minimal 10.000">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('topupModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">Lanjutkan Top Up</button>
+                </div>
+            </form>
         </div>
     </div>
     <!-- Create Job Modal -->
@@ -634,6 +704,10 @@
         </div>
     </div>
     <script>
+        // Simulasi database user
+        let usersDB = [];
+        let currentUser = null; // {name, email, phone, password, role, avatar}
+
         // DATA DUMMY
         let jobs = [
             {id: 1, title: "Bantuan Pindah Barang Kos", category: "moving", description: "Butuh bantuan pindah barang dari kosan ke apartemen baru. Barang tidak terlalu banyak, hanya 3 kardus dan 1 tas.", location: "Kemang, Jakarta", price: 75000, date: "3 jam lalu", status: "open", emergency: false, distance: "1.2 km"},
@@ -651,41 +725,47 @@
             {date:"2025-09-20", desc:"Tarik Saldo", amount: "-Rp 200.000", status:"Sukses"},
             {date:"2025-09-19", desc:"Pembayaran pekerjaan #2", amount: "+Rp 120.000", status:"Sukses"}
         ];
+        let walletBalance = 1250000;
         let reviews = [
             {name:"Budi Santoso", avatar:"BS", rating:5, text:"Pelayanan cepat dan ramah. Terima kasih!", date:"2025-09-10"},
             {name:"Siti Rahma", avatar:"SR", rating:4, text:"Bekerja dengan baik, tepat waktu.", date:"2025-09-08"},
             {name:"Hendri", avatar:"H", rating:5, text:"Sangat membantu, recommended!", date:"2025-09-05"},
             {name:"Dewi", avatar:"D", rating:4, text:"Proses mudah dan hasil memuaskan.", date:"2025-08-30"}
         ];
+
+        // ========== Loading Animation ==========
+        function showLoading(ms=1200) {
+            document.getElementById('loadingBackdrop').style.display = 'flex';
+            return new Promise(resolve=>{
+                setTimeout(()=>{
+                    document.getElementById('loadingBackdrop').style.display = 'none';
+                    resolve();
+                }, ms);
+            });
+        }
+
         // ========== Navigasi & Sidebar ==========
-        // Sidebar navigation
         document.querySelectorAll('.sidebar-link').forEach(link => {
             link.addEventListener('click', function(e){
                 e.preventDefault();
                 setActiveMenu(this.dataset.page);
-                // Hide sidebar in mobile
                 if(window.innerWidth<=992) toggleMobileMenu();
             });
         });
-        // Bottom navigation
         document.querySelectorAll('.bottom-nav-item').forEach(link=>{
             link.addEventListener('click',function(e){
                 e.preventDefault();
                 setActiveMenu(this.dataset.page);
             });
         });
-        // Transisi antar halaman
         function setActiveMenu(pageId){
             document.querySelectorAll('.sidebar-link').forEach(a=>a.classList.remove('active'));
             document.querySelectorAll('.bottom-nav-item').forEach(a=>a.classList.remove('active'));
             document.querySelectorAll('.page-main').forEach(p=>p.style.display='none');
             document.getElementById(pageId).style.display='block';
-            // Highlight sidebar & bottom nav
             document.querySelectorAll(`[data-page="${pageId}"]`).forEach(el=>el.classList.add('active'));
         }
-        // Default halaman utama
         setActiveMenu('homePage');
-        // Sidebar kategori
         document.querySelectorAll('.cat-link').forEach(link=>{
             link.addEventListener('click',function(e){
                 e.preventDefault();
@@ -694,7 +774,6 @@
                 filterJobs();
             });
         });
-        // ========== Mobile Menu ==========
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const sidebar = document.getElementById('sidebar');
         const mobileOverlay = document.getElementById('mobileOverlay');
@@ -705,13 +784,12 @@
         }
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
         mobileOverlay.addEventListener('click', toggleMobileMenu);
-
-        // Close mobile menu when clicking on a menu item
         document.querySelectorAll('.sidebar-menu a').forEach(item => {
             item.addEventListener('click', () => {
                 if (window.innerWidth <= 992) toggleMobileMenu();
             });
         });
+
         // ========== Authentication ==========
         function switchAuthTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -719,23 +797,78 @@
             document.querySelector(`.auth-tab:nth-child(${tab === 'login' ? 1 : 2})`).classList.add('active');
             document.getElementById(`${tab}Form`).classList.add('active');
         }
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+
+        // Handle register
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            showLoading();
+            await showLoading();
+            let name = document.getElementById('regName').value.trim();
+            let email = document.getElementById('regEmail').value.trim().toLowerCase();
+            let phone = document.getElementById('regPhone').value.trim();
+            let password = document.getElementById('regPassword').value;
+            let confirm = document.getElementById('regConfirmPassword').value;
+            let role = document.getElementById('userType').value;
+            if(password!==confirm){
+                alert('Konfirmasi password tidak sama!');
+                return;
+            }
+            if(usersDB.find(u=>u.email===email)){
+                alert('Email sudah terdaftar.');
+                return;
+            }
+            let avatar = name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
+            let user = {name, email, phone, password, role, avatar};
+            usersDB.push(user);
+            // Setelah daftar, arahkan ke login
+            switchAuthTab('login');
+            alert('Pendaftaran berhasil. Silakan login!');
+        });
+
+        // Handle login
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            showLoading();
+            await showLoading();
+            let email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            let password = document.getElementById('loginPassword').value;
+            let user = usersDB.find(u=>u.email===email && u.password===password);
+            if(!user){
+                alert('Akun tidak ditemukan/Password salah!');
+                return;
+            }
+            currentUser = user;
+            afterLogin();
+        });
+
+        // Update profile info after login
+        function afterLogin() {
             document.getElementById('authPage').classList.remove('active');
             document.getElementById('dashboardPage').classList.add('active');
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('profileAvatar').textContent = currentUser.avatar;
+            // Set default role view (requester/helper)
+            if(currentUser.role==="requester"){
+                document.getElementById('requesterBtn').classList.add('active');
+                document.getElementById('helperBtn').classList.remove('active');
+                document.getElementById('requesterView').style.display = 'block';
+                document.getElementById('helperView').style.display = 'none';
+            } else {
+                document.getElementById('helperBtn').classList.add('active');
+                document.getElementById('requesterBtn').classList.remove('active');
+                document.getElementById('helperView').style.display = 'block';
+                document.getElementById('requesterView').style.display = 'none';
+            }
             loadJobs();
-        });
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('authPage').classList.remove('active');
-            document.getElementById('dashboardPage').classList.add('active');
-            loadJobs();
-        });
+        }
+
         function logout() {
+            currentUser = null;
             document.getElementById('dashboardPage').classList.remove('active');
             document.getElementById('authPage').classList.add('active');
         }
-        // ========== Role Switch ==========
+
+        // Role Switch
         document.getElementById('requesterBtn').addEventListener('click', function() {
             document.getElementById('requesterView').style.display = 'block';
             document.getElementById('helperView').style.display = 'none';
@@ -750,6 +883,7 @@
             document.getElementById('requesterBtn').classList.remove('active');
             loadHelperJobs();
         });
+
         // ========== Modal ==========
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
@@ -765,6 +899,48 @@
                 document.body.style.overflow = 'auto';
             }
         }
+
+        // ========== Topup ==========
+        let selectedTopupMethod = null;
+        document.querySelectorAll('.topup-method').forEach(el=>{
+            el.onclick = function(){
+                document.querySelectorAll('.topup-method').forEach(m=>m.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedTopupMethod = this.dataset.method;
+                document.getElementById('topupVALIST').style.display = (selectedTopupMethod==='va')?'block':'none';
+            }
+        });
+        document.getElementById('topupForm').addEventListener('submit', async function(e){
+            e.preventDefault();
+            if(!selectedTopupMethod){
+                alert('Pilih metode top up!');
+                return;
+            }
+            let nominal = parseInt(document.getElementById('topupNominal').value);
+            if(isNaN(nominal) || nominal < 10000){
+                alert('Minimal top up Rp 10.000');
+                return;
+            }
+            let desc = "Top Up via ";
+            if(selectedTopupMethod==='va'){
+                let bank = document.getElementById('vaBank').value.toUpperCase();
+                desc += "VA "+bank;
+            } else if(selectedTopupMethod==='dana'){
+                desc += "DANA";
+            } else if(selectedTopupMethod==='shopeepay'){
+                desc += "ShopeePay";
+            } else if(selectedTopupMethod==='qris'){
+                desc += "QRIS";
+            }
+            showLoading();
+            await showLoading();
+            walletBalance += nominal;
+            wallet.unshift({date: (new Date()).toISOString().slice(0,10), desc, amount: "+Rp "+nominal.toLocaleString('id-ID'), status: 'Sukses'});
+            closeModal('topupModal');
+            loadWallet();
+            alert('Top up berhasil! Dana akan segera masuk ke saldo Anda.');
+        });
+
         // ========== Beranda (homePage) ==========
         document.getElementById('createJobForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -785,6 +961,7 @@
             closeModal('createJobModal');
             document.getElementById('createJobForm').reset();
         });
+
         function loadRequesterJobs() {
             const jobList = document.getElementById('requesterJobList');
             jobList.innerHTML = '';
@@ -794,7 +971,6 @@
             const sort = document.getElementById('sortFilter').value;
             if (statusFilter !== 'all') filteredJobs = filteredJobs.filter(job => job.status === statusFilter);
             if (catFilter !== 'all') filteredJobs = filteredJobs.filter(job => job.category === catFilter);
-            // Sorting
             if (sort === 'newest') filteredJobs = filteredJobs.slice().reverse();
             if (sort === 'oldest') filteredJobs = filteredJobs.slice();
             if (sort === 'price-high') filteredJobs = filteredJobs.slice().sort((a,b)=>b.price-a.price);
@@ -821,7 +997,7 @@
                         <span class="job-tag">${job.location.split(',')[0]}</span>
                         ${job.emergency ? '<span class="job-tag">Emergency</span>' : ''}
                     </div>
-                    <div class="job-actions">
+                    <div class="job-actions requester-actions">
                         <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Lihat Detail</button>
                         <button class="btn btn-primary" onclick="editJob(${job.id})">Edit</button>
                     </div>
@@ -886,9 +1062,11 @@
             if (document.getElementById('requesterView').style.display !== 'none') {
                 actionBtn.textContent = 'Edit';
                 actionBtn.onclick = function() { editJob(jobId); };
+                actionBtn.style.display = "inline-block";
             } else {
                 actionBtn.textContent = 'Ambil Pekerjaan';
                 actionBtn.onclick = function() { takeJob(jobId); };
+                actionBtn.style.display = "inline-block";
             }
             openModal('jobDetailModal');
         }
@@ -937,15 +1115,12 @@
         });
         // ========== Pekerjaan Saya ==========
         function loadMyJobs() {
-            // Aktif: open & in-progress
             let active = jobs.filter(j=>j.status==='open' || j.status==='in-progress');
             let complete = jobs.filter(j=>j.status==='completed');
-            // Filter pencarian
             let q1 = (document.getElementById('myJobSearch')||{value:""}).value.toLowerCase();
             let q2 = (document.getElementById('myJobDoneSearch')||{value:""}).value.toLowerCase();
             if (q1) active = active.filter(j=>j.title.toLowerCase().includes(q1));
             if (q2) complete = complete.filter(j=>j.title.toLowerCase().includes(q2));
-            // Aktif
             let activeDiv = document.getElementById('activeJobList');
             activeDiv.innerHTML = '';
             if (active.length === 0) activeDiv.innerHTML = `<div class="empty-state"><i class="fas fa-briefcase"></i><h3>Belum ada pekerjaan aktif</h3></div>`;
@@ -964,15 +1139,13 @@
                         <span class="job-tag">${getCategoryName(job.category)}</span>
                         <span class="job-tag">${getStatusName(job.status)}</span>
                     </div>
-                    <div class="job-actions">
-                        <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Detail</button>
-                        ${job.status=='open'?`<button class="btn btn-primary" onclick="takeJob(${job.id})">Ambil</button>`:""}
-                        ${job.status=='in-progress'?`<button class="btn btn-success" onclick="completeJob(${job.id})">Selesaikan</button>`:""}
+                    <div class="job-actions requester-actions">
+                        <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Lihat Detail</button>
+                        <button class="btn btn-primary" onclick="editJob(${job.id})">Edit</button>
                     </div>
                 `;
                 activeDiv.appendChild(card);
             });
-            // Selesai
             let compDiv = document.getElementById('completedJobList');
             compDiv.innerHTML = '';
             if (complete.length === 0) compDiv.innerHTML = `<div class="empty-state"><i class="fas fa-check-circle"></i><h3>Belum ada pekerjaan selesai</h3></div>`;
@@ -991,8 +1164,8 @@
                         <span class="job-tag">${getCategoryName(job.category)}</span>
                         <span class="job-tag">${getStatusName(job.status)}</span>
                     </div>
-                    <div class="job-actions">
-                        <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Detail</button>
+                    <div class="job-actions requester-actions">
+                        <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Lihat Detail</button>
                         <button class="btn btn-primary" onclick="giveRating(${job.id})">Beri Rating</button>
                     </div>
                 `;
@@ -1022,6 +1195,7 @@
         }
         // ========== Dompet ==========
         function loadWallet(){
+            document.getElementById('walletBalance').textContent = "Rp "+walletBalance.toLocaleString('id-ID');
             let e = document.getElementById('walletHistory');
             e.innerHTML = '';
             wallet.forEach(wal=>{
@@ -1079,20 +1253,14 @@
                         <span class="job-tag">${getCategoryName(job.category)}</span>
                         <span class="job-tag">Selesai</span>
                     </div>
-                    <div class="job-actions">
-                        <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Detail</button>
+                    <div class="job-actions requester-actions">
+                        <button class="btn btn-outline" onclick="viewJobDetail(${job.id})">Lihat Detail</button>
                     </div>
                 `;
                 e.appendChild(card);
             });
         }
         function filterHistory(){ loadHistory(); }
-        // ========== Pengaturan ==========
-        function toggleDarkMode(){
-            let s = document.getElementById('darkModeSwitch').checked;
-            document.body.style.backgroundColor = s ? '#222' : '#f5f5f5';
-            document.body.style.color = s ? '#eee' : '';
-        }
         // ========== Init ==========
         loadJobs();
     </script>
