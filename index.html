@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
-            --primary: #4a6bff;
-            --secondary: #ff6b4a;
-            --light: #f8f9fa;
+            --primary: #2D63A3;
+            --secondary: #DF3B39;
+            --light: #F8F8F7;
             --dark: #212237;
             --success: #3ECF8E;
             --warning: #ffc107;
@@ -20,15 +20,15 @@
             --info: #17a2b8;
             --gray: #6c757d;
             --light-gray: #e9ecef;
-            --shadow-1: 0 4px 24px 0 rgba(80,114,205,0.12);
-            --shadow-2: 0 8px 32px 0 rgba(80,114,205,0.20);
+            --shadow-1: 0 4px 24px 0 rgba(45, 99, 163, 0.12);
+            --shadow-2: 0 8px 32px 0 rgba(45, 99, 163, 0.20);
             --radius-card: 16px;
             --radius-btn: 8px;
             --radius-avatar: 50%;
         }
         .dark-mode {
-            --primary: #5d7bff;
-            --secondary: #ff7d5d;
+            --primary: #3A7BB0;
+            --secondary: #E64C4A;
             --light: #1a1a2e;
             --dark: #f0f0f0;
             --success: #4ed999;
@@ -66,13 +66,13 @@
             transition: all 0.2s cubic-bezier(.68,-0.55,.27,1.55); white-space: nowrap; font-size: 1.01rem; color: var(--gray);
         }
         .role-btn.active {
-            background: linear-gradient(90deg, var(--primary) 70%, #6a8aff 100%);
+            background: linear-gradient(90deg, var(--primary) 70%, #3A7BB0 100%);
             color: #fff; box-shadow: 0 2px 8px #7e9eff44;
             transform: scale(1.07);
         }
         .user-profile { display: flex; align-items: center; gap: 12px;}
         .avatar {
-            width: 48px; height: 48px; border-radius: var(--radius-avatar); background: linear-gradient(135deg, #4a6bff 60%, #6a8aff 100%);
+            width: 48px; height: 48px; border-radius: var(--radius-avatar); background: linear-gradient(135deg, #2D63A3 60%, #3A7BB0 100%);
             color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 18px #b6c2ff22;
             border: 2px solid #fff;
         }
@@ -81,10 +81,10 @@
             letter-spacing: .02em;
         }
         .btn-primary {
-            background: linear-gradient(90deg, var(--primary) 70%, #6a8aff 100%);
-            color: white; box-shadow: 0 2px 12px #7e9eff22; border: 1px solid #4a6bff33;
+            background: linear-gradient(90deg, var(--primary) 70%, #3A7BB0 100%);
+            color: white; box-shadow: 0 2px 12px #7e9eff22; border: 1px solid #2D63A333;
         }
-        .btn-primary:hover { background: linear-gradient(90deg, #3954d6 80%, #506be5 100%);}
+        .btn-primary:hover { background: linear-gradient(90deg, #204d7a 80%, #2d63a3 100%);}
         .btn-success { background: var(--success); color: white; border: 1px solid #30b770;}
         .btn-success:hover { background: #25a86a;}
         .btn-outline { background-color: transparent; border: 2px solid var(--primary); color: var(--primary);}
@@ -131,7 +131,7 @@
         }
         .dashboard-header h1 {
             font-size: 2.1rem; color: var(--primary); font-weight: 800; letter-spacing: .02em;
-            background: linear-gradient(90deg, var(--primary) 70%, #6a8aff 100%);
+            background: linear-gradient(90deg, var(--primary) 70%, #3A7BB0 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .stats-cards {
@@ -152,7 +152,7 @@
             content: "";
             position: absolute; right: -32px; top: -32px;
             width: 80px; height: 80px;
-            background: radial-gradient(circle, #4a6bff11 0%, transparent 75%);
+            background: radial-gradient(circle, #2D63A311 0%, transparent 75%);
             z-index: 0;
         }
         .stat-card i { font-size: 2.5rem; margin-bottom: 10px; color: var(--primary); z-index: 1; position: relative;}
@@ -244,7 +244,7 @@
         .helper-view .job-card .btn { width: 100%;}
         .auth-container {
             display: flex; min-height: 100vh; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, #4a6bff 60%, #6a8aff 100%);
+            background: linear-gradient(135deg, #2D63A3 60%, #3A7BB0 100%);
             padding: 22px;
         }
         .auth-card {
@@ -313,7 +313,7 @@
         }
         .loading-backdrop {
             display: none; position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(70,100,255,.11);
+            background: rgba(45, 99, 163, .11);
             z-index: 2000; align-items: center; justify-content: center;
         }
         .loading-spinner {
@@ -376,7 +376,7 @@
             font-size: 1.07rem; border-bottom: 2.5px solid transparent;
         }
         .tabbed-btn.active {
-            background: linear-gradient(90deg, var(--primary) 70%, #6a8aff 100%);
+            background: linear-gradient(90deg, var(--primary) 70%, #3A7BB0 100%);
             color: #fff; border-bottom: 2.5px solid var(--primary); box-shadow: 0 2px 8px #7e9eff22;
         }
         .notification-badge {
@@ -564,7 +564,6 @@
         .dark-mode .schedule-reminder {
             background: linear-gradient(135deg, #2d2a1a 60%, #252540 100%);
         }
-
         /* NEW: Service Categories */
         .service-categories {
             display: grid;
@@ -598,7 +597,6 @@
             font-size: 0.95rem;
             font-weight: 600;
         }
-
         /* NEW: Chat Interface */
         .chat-container {
             display: flex;
@@ -707,7 +705,6 @@
             justify-content: center;
             cursor: pointer;
         }
-
         /* NEW: Profile Completion */
         .profile-completion {
             background: linear-gradient(135deg, #f0f9ff 60%, #e6f7ff 100%);
@@ -732,7 +729,6 @@
             background: var(--success);
             width: 75%;
         }
-
         /* Responsive Design */
         @media (max-width: 1160px) {
             .dashboard { gap: 22px;}
@@ -987,7 +983,6 @@
                             </div>
                             <div style="font-size:0.85rem; margin-top:4px;">75% lengkap</div>
                         </div>
-
                         <!-- Requester View -->
                         <div class="requester-view" id="requesterView">
                             <div class="dashboard-header">
@@ -2356,7 +2351,6 @@
         document.getElementById('chatInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') sendMessage();
         });
-
         // ========== Init ==========
         loadJobs();
         updateNotificationBadge();
