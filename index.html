@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Hendimen - Solusi Pekerjaan & Bantuan Terpercaya</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/OfcyLGW.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2D63A3">
+    <meta name="description" content="Platform solusi pekerjaan dan bantuan terpercaya. Temukan helper untuk pindahan, perbaikan, antar jemput, dan jaga acara.">
+    
+    <style>
+        /* ================================================================
+           ROOT VARIABLES
+           ================================================================ */
+        :root {
+            --primary: #2D63A3;
+            --primary-dark: #1a4a7a;
+            --primary-light: #3A7BB0;
+            --secondary: #DF3B39;
+            --success: #3ECF8E;
+            --success-dark: #25a86a;
+            --warning: #f59e0b;
+            --danger: #e74c3c;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --gray-lighter: #cbd5e1;
+            --gray-bg: #f1f5f9;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --radius-lg: 20px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --transition: 0.3s ease;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        /* ================================================================
+           RESET & BASE
+           ================================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font);
+            background: linear-gradient(160deg, #f0f4f9 0%, #e8edf5 40%, #f5f7ff 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ================================================================
+           BACKGROUND DECORATION
+           ================================================================ */
+        .bg-sphere {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .sphere-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(45,99,163,0.25);
+            top: -100px;
+            right: -80px;
+            animation: floatMove 20s ease-in-out infinite;
+        }
+        .sphere-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(223,59,57,0.20);
+            bottom: -150px;
+            left: -100px;
+            animation: floatMove 25s ease-in-out infinite reverse;
+        }
+        .sphere-3 {
+            width: 300px;
+            height: 300px;
+            background: rgba(62,207,142,0.15);
+            top: 50%;
+            right: 5%;
+            animation: floatMove 22s ease-in-out infinite 2s;
+        }
+
+        @keyframes floatMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        /* ================================================================
+           CONTAINER
+           ================================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ================================================================
+           LOADING
+           ================================================================ */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading-overlay.show {
+            display: flex;
+        }
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-bg);
+            border-top: 4px solid var(--primary);
+            border-right: 4px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ================================================================
+           NAVBAR
+           ================================================================ */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            gap: 12px;
+            animation: slideDown 0.6s ease;
+            flex-wrap: wrap;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .logo-img {
+            height: 100px;
+            width: auto;
+            transition: transform 0.3s;
+        }
+
+        }
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--gray);
+            padding: 6px 10px;
+            border-radius: 30px;
+            transition: all var(--transition);
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+            background: rgba(45,99,163,0.08);
+        }
+
+        .btn-nav {
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: none;
+            font-family: var(--font);
+        }
+        .btn-nav:active {
+            transform: scale(0.97);
+        }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.9);
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45,99,163,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 2px 12px rgba(45,99,163,0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45,99,163,0.35);
+        }
+
+        /* ================================================================
+           HERO
+           ================================================================ */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 30px 0 20px;
+        }
+
+        .hero-left {
+            text-align: center;
+            animation: fadeUp 0.8s ease;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(45,99,163,0.12), rgba(223,59,57,0.12));
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+            border: 1px solid rgba(45,99,163,0.15);
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(45,99,163,0.2); }
+            50% { box-shadow: 0 0 20px 4px rgba(45,99,163,0.3); }
+        }
+        .hero-badge i {
+            font-size: 0.8rem;
+        }
+
+        .hero-left h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+        .hero-gradient {
+            background: linear-gradient(120deg, var(--primary), var(--secondary), var(--success));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: gradientShift 3s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-desc {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .hero-buttons .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: none;
+            font-family: var(--font);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hero-buttons .btn:active {
+            transform: scale(0.97);
+        }
+
+        .hero-features {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+        }
+        .hero-features span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--gray);
+            background: rgba(255,255,255,0.6);
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+        .hero-features i {
+            color: var(--primary);
+            font-size: 0.85rem;
+        }
+
+        /* ================================================================
+           HERO RIGHT - IMAGE
+           ================================================================ */
+        .hero-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeRight 0.8s ease;
+        }
+        @keyframes fadeRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .hero-image {
+            position: relative;
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(45,99,163,0.08), rgba(223,59,57,0.08));
+            padding: 12px;
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.4s;
+        }
+        .hero-image:hover {
+            transform: scale(1.02);
+        }
+        .hero-image img {
+            width: 100%;
+            border-radius: 24px;
+            display: block;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.10));
+        }
+
+        .floating-card {
+            position: absolute;
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(12px);
+            padding: 8px 14px;
+            border-radius: 40px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            border: 1px solid rgba(45,99,163,0.2);
+            animation: floatCard 3s ease-in-out infinite;
+            white-space: nowrap;
+        }
+        .floating-card i {
+            font-size: 1rem;
+            color: var(--primary);
+        }
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .card-1 {
+            top: -8px;
+            left: -8px;
+            animation-delay: 0s;
+        }
+        .card-2 {
+            bottom: 8px;
+            right: -8px;
+            animation-delay: 1.2s;
+        }
+
+        /* ================================================================
+           SECTION TITLE
+           ================================================================ */
+        .section-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            margin: 8px auto 0;
+            border-radius: 4px;
+        }
+        .section-sub {
+            text-align: center;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            font-size: 0.9rem;
+        }
+
+        /* ================================================================
+           CATEGORY GRID
+           ================================================================ */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+        .category-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 20px 16px;
+            text-align: center;
+            transition: all var(--transition);
+            border: 1px solid rgba(255,255,255,0.6);
+            cursor: pointer;
+        }
+        .category-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 12px 24px -8px rgba(45,99,163,0.2);
+        }
+        .category-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            transition: transform 0.3s;
+        }
+        .category-card:hover .category-icon {
+            transform: scale(1.1);
+            color: var(--secondary);
+        }
+        .category-card h3 {
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+        .category-card p {
+            color: var(--gray);
+            font-size: 0.7rem;
+        }
+
+        /* ================================================================
+           STEPS
+           ================================================================ */
+        .how-steps {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 30px 0 40px;
+        }
+        .step {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 24px 16px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.6);
+            transition: all var(--transition);
+        }
+        .step:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.10);
+        }
+        .step-number {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 800;
+            font-size: 1.2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px auto;
+            box-shadow: 0 6px 16px rgba(45,99,163,0.25);
+        }
+        .step h3 {
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        .step p {
+            color: var(--gray);
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+
+        /* ================================================================
+           TESTIMONIALS
+           ================================================================ */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .testimonial-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.6);
+            transition: all var(--transition);
+            position: relative;
+        }
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            font-size: 3rem;
+            color: rgba(45,99,163,0.08);
+            font-family: serif;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08);
+        }
+        .stars {
+            color: var(--warning);
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+        .testimonial-text {
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .testimonial-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+        }
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .testimonial-user strong {
+            font-size: 0.85rem;
+        }
+        .testimonial-user small {
+            font-size: 0.7rem;
+            color: var(--gray-light);
+            display: block;
+        }
+
+        /* ================================================================
+           CTA
+           ================================================================ */
+        .cta-section {
+            background: linear-gradient(135deg, var(--dark), #0f172a);
+            border-radius: var(--radius-lg);
+            padding: 32px 24px;
+            margin: 30px 0 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(45,99,163,0.15), rgba(223,59,57,0.08), transparent 70%);
+            animation: rotateCTA 20s linear infinite;
+        }
+        @keyframes rotateCTA {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .cta-section h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: white;
+            position: relative;
+        }
+        .cta-section p {
+            font-size: 0.9rem;
+            color: var(--gray-light);
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .cta-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        .cta-buttons .btn {
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: none;
+            font-family: var(--font);
+        }
+        .cta-buttons .btn:active {
+            transform: scale(0.97);
+        }
+        .cta-buttons .btn-cta-primary {
+            background: linear-gradient(135deg, var(--secondary), #c92c2a);
+            color: white;
+            box-shadow: 0 4px 16px rgba(223,59,57,0.35);
+        }
+        .cta-buttons .btn-cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(223,59,57,0.45);
+        }
+        .cta-buttons .btn-cta-outline {
+            background: rgba(255,255,255,0.10);
+            border: 1.5px solid rgba(255,255,255,0.3);
+            color: white;
+        }
+        .cta-buttons .btn-cta-outline:hover {
+            background: rgba(255,255,255,0.20);
+            transform: translateY(-3px);
+        }
+
+        /* ================================================================
+           FOOTER
+           ================================================================ */
+        footer {
+            background: linear-gradient(135deg, var(--dark), #0f172a);
+            color: var(--gray-light);
+            padding: 30px 0 20px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            margin-top: 20px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        .footer-col h4 {
+            color: white;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        .footer-col p,
+        .footer-col a {
+            color: var(--gray-light);
+            text-decoration: none;
+            font-size: 0.8rem;
+            line-height: 2;
+            display: block;
+            transition: color var(--transition);
+        }
+        .footer-col a:hover {
+            color: white;
+        }
+        .footer-col .social-icons {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .footer-col .social-icons i {
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .footer-col .social-icons i:hover {
+            color: white;
+            transform: translateY(-3px);
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+
+        /* ================================================================
+           RESPONSIVE - TABLET
+           ================================================================ */
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 32px;
+            }
+            .logo-text {
+                display: inline-block;
+            }
+            .logo-img {
+                height: 60px;
+            }
+            .nav-links a {
+                font-size: 0.85rem;
+                padding: 8px 16px;
+            }
+            .btn-nav {
+                padding: 10px 24px;
+                font-size: 0.85rem;
+            }
+
+            .hero {
+                flex-direction: row;
+                padding: 50px 0 30px;
+                gap: 50px;
+            }
+            .hero-left {
+                flex: 1;
+                text-align: left;
+            }
+            .hero-left h1 {
+                font-size: 2.5rem;
+            }
+            .hero-desc {
+                margin-left: 0;
+            }
+            .hero-buttons {
+                justify-content: flex-start;
+            }
+            .hero-features {
+                justify-content: flex-start;
+            }
+            .hero-right {
+                flex: 1;
+            }
+            .hero-image {
+                max-width: 100%;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+            .section-title::after {
+                width: 80px;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+            .category-card {
+                padding: 28px 20px;
+            }
+            .category-icon {
+                font-size: 2.5rem;
+            }
+            .category-card h3 {
+                font-size: 1rem;
+            }
+
+            .how-steps {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+            .step {
+                padding: 30px 20px;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+
+            .cta-section {
+                padding: 50px 40px;
+            }
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 40px;
+            }
+        }
+
+        /* ================================================================
+           RESPONSIVE - DESKTOP
+           ================================================================ */
+        @media (min-width: 1024px) {
+            .container {
+                padding: 0 48px;
+            }
+            .hero-left h1 {
+                font-size: 3.2rem;
+            }
+            .category-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+            .floating-card {
+                padding: 12px 20px;
+                font-size: 0.85rem;
+            }
+            .floating-card i {
+                font-size: 1.2rem;
+            }
+            .card-1 {
+                top: -16px;
+                left: -20px;
+            }
+            .card-2 {
+                bottom: 16px;
+                right: -20px;
+            }
+        }
+
+        /* ================================================================
+           RESPONSIVE - MOBILE SMALL
+           ================================================================ */
+        @media (max-width: 400px) {
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .logo-area {
+                justify-content: center;
+            }
+            .nav-links {
+                justify-content: center;
+            }
+            .nav-links a {
+                font-size: 0.65rem;
+                padding: 4px 8px;
+            }
+            .btn-nav {
+                font-size: 0.65rem;
+                padding: 6px 12px;
+            }
+
+            .hero-left h1 {
+                font-size: 1.4rem;
+            }
+            .hero-desc {
+                font-size: 0.85rem;
+            }
+            .hero-buttons .btn {
+                font-size: 0.75rem;
+                padding: 8px 14px;
+            }
+            .floating-card {
+                font-size: 0.6rem;
+                padding: 4px 10px;
+            }
+            .floating-card i {
+                font-size: 0.8rem;
+            }
+
+            .category-grid {
+                gap: 8px;
+            }
+            .category-card {
+                padding: 14px 10px;
+            }
+            .category-icon {
+                font-size: 1.5rem;
+            }
+            .category-card h3 {
+                font-size: 0.7rem;
+            }
+            .category-card p {
+                font-size: 0.6rem;
+            }
+
+            .step {
+                padding: 16px 12px;
+            }
+            .step-number {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            .step h3 {
+                font-size: 0.75rem;
+            }
+            .step p {
+                font-size: 0.65rem;
+            }
+
+            .cta-section {
+                padding: 24px 16px;
+            }
+            .cta-section h2 {
+                font-size: 1.1rem;
+            }
+            .cta-section p {
+                font-size: 0.8rem;
+            }
+            .cta-buttons .btn {
+                font-size: 0.75rem;
+                padding: 10px 16px;
+            }
+        }
+
+        /* ================================================================
+           ACCESSIBILITY
+           ================================================================ */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        button,
+        .btn,
+        .nav-links a {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        @media (max-width: 420px) {
+            button,
+            .btn,
+            .nav-links a {
+                min-height: 40px;
+                min-width: 40px;
+            }
+        }
+
+        /* ================================================================
+           SCROLLBAR
+           ================================================================ */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-lighter);
+            border-radius: 10px;
+        }
+
+        /* ================================================================
+           TOAST
+           ================================================================ */
+        .toast-container {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            width: 92%;
+            max-width: 400px;
+            pointer-events: none;
+        }
+        .toast {
+            pointer-events: auto;
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+            border-left: 4px solid;
+            animation: toastIn 0.3s ease;
+            transition: opacity 0.3s;
+        }
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+        .toast.warning { border-color: var(--warning); }
+        .toast.info { border-color: var(--primary); }
+        .toast .icon { font-size: 1.1rem; flex-shrink: 0; }
+        .toast .msg { flex: 1; font-size: 0.82rem; color: var(--dark); }
+        .toast .close-toast {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: var(--gray-light);
+            padding: 0 4px;
+        }
+
+        @keyframes toastIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Background -->
+    <div class="bg-sphere sphere-1"></div>
+    <div class="bg-sphere sphere-2"></div>
+    <div class="bg-sphere sphere-3"></div>
+
+    <!-- ================================================================
+    MAIN CONTENT
+    ================================================================ -->
+    <div class="container">
+
+        <!-- ===== NAVBAR ===== -->
+        <nav class="navbar">
+            <div class="logo-area">
+                <img src="https://i.imgur.com/cuIWlLe.png" class="logo-img" alt="Hendimen Logo">
+            </div>
+            <div class="nav-links">
+                <button class="btn-nav btn-outline" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Masuk
+                </button>
+                <button class="btn-nav btn-primary" id="registerBtn">
+                    <i class="fas fa-user-plus"></i> Daftar
+                </button>
+            </div>
+        </nav>
+
+        <!-- ===== HERO ===== -->
+        <section class="hero">
+            <div class="hero-left">
+                <div class="hero-badge">
+                    <i class="fas fa-rocket"></i> Platform #1 di Pekanbaru
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h1>
+                    Solusi Cepat & Terpercaya<br>
+                    <span class="hero-gradient">Butuh Bantuan? Ada Hendimen!</span>
+                </h1>
+                <p class="hero-desc">
+                    Temukan helper terbaik untuk pindahan, perbaikan, antar jemput, hingga jaga acara.
+                    Amankan transaksi Anda dengan sistem escrow dan rating terbukti.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" id="heroStartBtn">
+                        <i class="fas fa-briefcase"></i> Mulai Jadi Requester
+                    </button>
+                    <button class="btn btn-outline" id="heroHelperBtn" style="background:rgba(255,255,255,0.9);border:1.5px solid var(--primary);color:var(--primary);">
+                        <i class="fas fa-hands-helping"></i> Daftar Jadi Helper
+                    </button>
+                </div>
+                <div class="hero-features">
+                    <span><i class="fas fa-shield-alt"></i> Aman & Terverifikasi</span>
+                    <span><i class="fas fa-clock"></i> 24/7 Dukungan</span>
+                    <span><i class="fas fa-wallet"></i> Transparansi Biaya</span>
+                    <span><i class="fas fa-star"></i> Rating Terpercaya</span>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-image">
+                    <img src="https://i.imgur.com/z84JYNc.png" alt="Hendimen App" loading="lazy">
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== LAYANAN ===== -->
+        <section id="layanan">
+            <h2 class="section-title">Layanan Populer</h2>
+            <p class="section-sub">Pilih kebutuhan Anda, kami siapkan helper terbaik di sekitar Anda</p>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-icon"><i class="fas fa-truck-moving"></i></div>
+                    <h3>Pindahan</h3>
+                    <p>Rumah, kantor, aman & cepat</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i class="fas fa-boxes"></i></div>
+                    <h3>Pengiriman</h3>
+                    <p>Instant & reguler</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i class="fas fa-car-side"></i></div>
+                    <h3>Antar Jemput</h3>
+                    <p>Bandara, stasiun, kota</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h3>Jaga Acara</h3>
+                    <p>Pernikahan, ulang tahun</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i class="fas fa-wrench"></i></div>
+                    <h3>Perbaikan Rumah</h3>
+                    <p>Listrik, AC, pipa</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i class="fas fa-broom"></i></div>
+                    <h3>Kebersihan</h3>
+                    <p>Rumah, kantor, deep clean</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CARA KERJA ===== -->
+        <section id="cara-kerja">
+            <h2 class="section-title">Cara Kerja Hendimen</h2>
+            <p class="section-sub">Proses sederhana, transaksi aman, dan hasil memuaskan</p>
+            <div class="how-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Buat Permintaan</h3>
+                    <p>Isi detail pekerjaan & tentukan budget</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Helper Menawar</h3>
+                    <p>Helper terverifikasi mengajukan tawaran</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Pilih & Bayar</h3>
+                    <p>Dana escrow aman hingga pekerjaan selesai</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Selesai & Rating</h3>
+                    <p>Ulas dan bantu komunitas berkembang</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== TESTIMONI ===== -->
+        <section id="testimoni">
+            <h2 class="section-title">Apa Kata Mereka?</h2>
+            <p class="section-sub">Ribuan requester dan helper telah merasakan kemudahan Hendimen</p>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <div class="testimonial-text">"Cepat banget cari helper pindahan. Dalam 10 menit dapat 3 tawaran. Harga transparan, barang aman sampai tujuan."</div>
+                    <div class="testimonial-user">
+                        <div class="testimonial-avatar">RD</div>
+                        <div><strong>Rina Dewi</strong><small>Requester</small></div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                    <div class="testimonial-text">"Saya helper freelance, setelah gabung Hendimen pendapatan naik 40%. Sistem escrow bikin klien percaya."</div>
+                    <div class="testimonial-user">
+                        <div class="testimonial-avatar">AM</div>
+                        <div><strong>Agus Maulana</strong><small>Helper</small></div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <div class="testimonial-text">"Fitur rating dan verifikasi identitas sangat membantu. Saya selalu pilih helper dengan rating tinggi."</div>
+                    <div class="testimonial-user">
+                        <div class="testimonial-avatar">SN</div>
+                        <div><strong>Siti Nurhaliza</strong><small>Requester</small></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CTA ===== -->
+        <section class="cta-section">
+            <h2>Siap memulai perjalanan dengan Hendimen?</h2>
+            <p>Bergabunglah dengan ribuan pengguna dan nikmati kemudahan mencari bantuan atau mendapatkan penghasilan tambahan.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-cta-primary" id="ctaRequesterBtn">
+                    <i class="fas fa-user-plus"></i> Daftar Requester
+                </button>
+                <button class="btn btn-cta-outline" id="ctaHelperBtn">
+                    <i class="fas fa-chalkboard-user"></i> Jadi Helper Sekarang
+                </button>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ================================================================
+    FOOTER
+    ================================================================ -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Hendimen</h4>
+                    <p>Platform solusi pekerjaan dan bantuan terpercaya di Indonesia. Memudahkan requester dan helper bertransaksi secara aman.</p>
+                    <div class="social-icons">
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-facebook"></i>
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Layanan</h4>
+                    <a href="#">Pindahan & Logistik</a>
+                    <a href="#">Perbaikan Rumah</a>
+                    <a href="#">Antar Jemput</a>
+                    <a href="#">Event Organizer</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Perusahaan</h4>
+                    <a href="#">Tentang Kami</a>
+                    <a href="#">Karir</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Kebijakan Privasi</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Bantuan</h4>
+                    <a href="#">Pusat Bantuan</a>
+                    <a href="#">Hubungi Kami</a>
+                    <a href="#">Syarat & Ketentuan</a>
+                    <a href="#">FAQ</a>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Hendimen — Butuh Cepat, Dapat Cepat. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================================================================
+    JAVASCRIPT
+    ================================================================ -->
+    <script>
+        // ================================================================
+        // 1. TOAST & LOADING
+        // ================================================================
+
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) overlay.classList.toggle('show', show);
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const existing = container.querySelectorAll('.toast');
+            existing.forEach(t => t.remove());
+
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: '🔔'
+            };
+
+            toast.innerHTML = `
+                <span class="icon">${icons[type] || '🔔'}</span>
+                <span class="msg">${escapeHtml(message)}</span>
+                <button class="close-toast">&times;</button>
+            `;
+
+            container.appendChild(toast);
+
+            const close = toast.querySelector('.close-toast');
+            close.onclick = () => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            };
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // ================================================================
+        // 4. REDIRECT TO AUTH
+        // ================================================================
+
+        function redirectToAuth() {
+            window.location.href = 'auth.html';
+        }
+
+        // ================================================================
+        // 5. CHECK SESSION
+        // ================================================================
+
+        async function checkSession() {
+            try {
+                const response = await fetch('check_session.php');
+                const data = await response.json();
+                if (data.success && data.user) {
+                    if (data.user.role === 'admin') {
+                        window.location.href = 'admin_dashboard.html';
+                    } else {
+                        window.location.href = 'dashboard_mobile.html';
+                    }
+                }
+            } catch (e) {
+                console.log('Not logged in');
+            }
+        }
+
+        // ================================================================
+        // 6. SMOOTH SCROLL
+        // ================================================================
+
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ================================================================
+        // 7. BUTTON EVENTS
+        // ================================================================
+
+        document.getElementById('loginBtn')?.addEventListener('click', redirectToAuth);
+        document.getElementById('registerBtn')?.addEventListener('click', redirectToAuth);
+        document.getElementById('heroStartBtn')?.addEventListener('click', redirectToAuth);
+        document.getElementById('heroHelperBtn')?.addEventListener('click', redirectToAuth);
+        document.getElementById('ctaRequesterBtn')?.addEventListener('click', redirectToAuth);
+        document.getElementById('ctaHelperBtn')?.addEventListener('click', redirectToAuth);
+
+        // ================================================================
+        // 8. INIT
+        // ================================================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📱 Hendimen - Mobile Responsive Landing Page');
+
+            // Load stats
+            loadStats();
+
+            // Check session
+            setTimeout(checkSession, 2000);
+
+            // Auto-refresh stats setiap 60 detik
+            setInterval(loadStats, 60000);
+
+            console.log('✅ Landing page initialized');
+        });
+    </script>
+
+<script>
+    // ================================================================
+    // 🚀 CEK SESSION - REDIRECT KE DASHBOARD JIKA SUDAH LOGIN
+    // ================================================================
+
+    (async function checkSessionAndRedirect() {
+        console.log('📱 Checking session from index.html...');
+
+        try {
+            const response = await fetch('check_session.php', {
+                method: 'GET',
+                cache: 'no-cache',
+                headers: { 
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+
+            const data = await response.json();
+            console.log('🔍 Session data:', data);
+
+            // Jika user sudah login, redirect ke dashboard
+            if (data.success && data.user) {
+                console.log('✅ User sudah login, redirect ke dashboard...');
+
+                // Tentukan redirect berdasarkan role
+                let redirectUrl = 'dashboard_mobile.html';
+                if (data.user.role === 'admin') {
+                    redirectUrl = 'admin_dashboard.html';
+                }
+
+                // Redirect setelah 500ms
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 500);
+            } else {
+                console.log('❌ Belum login, tetap di index.html');
+                
+                // 🔥 PASTIKAN TOMBOL LOGIN/REGISTER TERLIHAT
+                const heroButtons = document.querySelector('.hero-buttons');
+                if (heroButtons) heroButtons.style.display = 'flex';
+                
+                const navLinks = document.querySelector('.nav-links');
+                if (navLinks) navLinks.style.display = 'flex';
+            }
+
+        } catch (error) {
+            console.error('❌ Session check error:', error);
+            // Tetap di index.html, tampilkan tombol login
+            const heroButtons = document.querySelector('.hero-buttons');
+            if (heroButtons) heroButtons.style.display = 'flex';
+        }
+    })();
+
+    // ================================================================
+    // 🔗 FUNGSI REDIRECT KE AUTH.HTML
+    // ================================================================
+
+    function redirectToAuth() {
+        window.location.href = 'auth.html';
+    }
+
+    // ================================================================
+    // 🎯 EVENT LISTENER UNTUK TOMBOL LOGIN/REGISTER
+    // ================================================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Semua tombol yang mengarah ke login/register
+        const buttons = [
+            document.getElementById('loginBtn'),
+            document.getElementById('registerBtn'),
+            document.getElementById('heroStartBtn'),
+            document.getElementById('heroHelperBtn'),
+            document.getElementById('ctaRequesterBtn'),
+            document.getElementById('ctaHelperBtn')
+        ];
+
+        buttons.forEach(btn => {
+            if (btn) {
+                btn.addEventListener('click', redirectToAuth);
+            }
+        });
+
+        console.log('✅ Index.html ready - semua tombol login terhubung');
+    });
+</script>
+
+</body>
+</html>
