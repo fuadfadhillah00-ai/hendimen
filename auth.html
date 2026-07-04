@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Masuk / Daftar - Hendimen</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/OfcyLGW.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ================================================================
+           AUTH FULL PAGE - Hanya Auth Card + Footer
+           ================================================================ */
+
+        :root {
+            --primary: #2D63A3;
+            --primary-dark: #1a4a7a;
+            --primary-light: #3A7BB0;
+            --secondary: #DF3B39;
+            --success: #3ECF8E;
+            --warning: #f59e0b;
+            --danger: #e74c3c;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --gray-lighter: #cbd5e1;
+            --gray-bg: #f1f5f9;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --radius-lg: 20px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --transition: 0.3s ease;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: var(--font);
+            color: var(--dark);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(160deg, #f0f4f9 0%, #e8edf5 40%, #f5f7ff 100%);
+        }
+
+        /* ================================================================
+           MAIN CONTENT - Pusatkan Auth Card
+           ================================================================ */
+        .auth-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 420px;
+            animation: fadeUp 0.5s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== LOGO ===== */
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .auth-logo img {
+            height: 100px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .auth-logo h1 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .auth-logo .tagline {
+            font-size: 0.72rem;
+            color: var(--gray-light);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* ===== AUTH CARD ===== */
+        .auth-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px 26px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            transition: box-shadow var(--transition);
+        }
+
+        .auth-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .auth-card .card-title {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 2px;
+        }
+
+        .auth-card .card-sub {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--gray-light);
+            margin-bottom: 20px;
+        }
+
+        /* ===== TABS ===== */
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0 9px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.88rem;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: all var(--transition);
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            font-family: var(--font);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .auth-tab:active {
+            transform: scale(0.97);
+        }
+
+        .auth-tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .auth-tab i {
+            margin-right: 6px;
+            font-size: 0.8rem;
+        }
+
+        /* ===== FORMS ===== */
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== FORM GROUPS ===== */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .form-group label i {
+            margin-right: 6px;
+            color: var(--primary);
+            width: 18px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            background: var(--light);
+            color: var(--dark);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: var(--font);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(45, 99, 163, 0.10);
+        }
+
+        .form-control::placeholder {
+            color: var(--gray-light);
+        }
+
+        .form-control.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.10);
+        }
+
+        .form-control.file-input {
+            padding: 8px 12px;
+            background: var(--light);
+            cursor: pointer;
+        }
+
+        .form-control.file-input::-webkit-file-upload-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.68rem;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background 0.2s;
+        }
+
+        .form-control.file-input::-webkit-file-upload-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .form-control.file-input::file-selector-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.68rem;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background 0.2s;
+        }
+
+        .form-control.file-input::file-selector-button:hover {
+            background: var(--primary-dark);
+        }
+
+        small {
+            display: block;
+            margin-top: 4px;
+            font-size: 0.68rem;
+            color: var(--gray-light);
+        }
+
+        small i {
+            margin-right: 4px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 11px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: none;
+            font-size: 0.9rem;
+            font-family: var(--font);
+            letter-spacing: 0.01em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 2px 12px rgba(45, 99, 163, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(45, 99, 163, 0.30);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ===== AUTH FOOTER (di dalam card) ===== */
+        .auth-footer {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.78rem;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .auth-footer a:active {
+            opacity: 0.7;
+        }
+
+        .auth-footer .divider {
+            display: inline-block;
+            margin: 0 5px;
+            color: var(--gray-lighter);
+        }
+
+        /* ===== FILE PREVIEW ===== */
+        .file-preview {
+            display: none;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: var(--gray-bg);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            color: var(--gray);
+            border: 1px solid var(--border-color);
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-preview.show {
+            display: flex;
+        }
+
+        .file-preview i {
+            color: var(--success);
+            font-size: 0.95rem;
+        }
+
+        .file-preview .file-name {
+            flex: 1;
+            word-break: break-all;
+            font-size: 0.75rem;
+        }
+
+        .file-preview .remove-file {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0 4px;
+            min-height: 32px;
+            min-width: 32px;
+        }
+
+        /* ================================================================
+           FOOTER PAGE
+           ================================================================ */
+        .auth-footer-page {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-top: 1px solid var(--border-color);
+            padding: 14px 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .auth-footer-page .footer-inner {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            font-size: 0.72rem;
+            color: var(--gray-light);
+        }
+
+        .auth-footer-page .footer-inner a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .auth-footer-page .footer-inner a:hover {
+            color: var(--primary);
+        }
+
+        .auth-footer-page .footer-inner .divider-dot {
+            color: var(--gray-lighter);
+        }
+
+        .auth-footer-page .footer-inner .social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .auth-footer-page .footer-inner .social i {
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            color: var(--gray-light);
+        }
+
+        .auth-footer-page .footer-inner .social i:hover {
+            color: var(--primary);
+        }
+
+        /* ================================================================
+           TOAST & LOADING
+           ================================================================ */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 92%;
+            max-width: 400px;
+            pointer-events: none;
+        }
+
+        .toast {
+            pointer-events: auto;
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+            border-left: 4px solid;
+            animation: toastIn 0.3s ease;
+            transition: opacity 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.warning { border-left-color: var(--warning); }
+        .toast.info { border-left-color: var(--primary); }
+
+        .toast .icon { font-size: 1.1rem; flex-shrink: 0; }
+        .toast .msg { flex: 1; font-size: 0.82rem; color: var(--dark); }
+        .toast .close-toast {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: var(--gray-light);
+            padding: 0 4px;
+        }
+
+        @keyframes toastIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes toastOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-20px); opacity: 0; }
+        }
+
+        .loading-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-backdrop.show {
+            display: flex;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ================================================================
+           RESPONSIVE
+           ================================================================ */
+
+        @media (max-width: 420px) {
+            .auth-main {
+                padding: 16px 12px 12px;
+            }
+
+            .auth-card {
+                padding: 18px 14px 20px;
+                border-radius: var(--radius);
+            }
+
+            .auth-logo img {
+                height: 100px;
+            }
+
+            .auth-logo h1 {
+                font-size: 1.1rem;
+            }
+
+            .auth-logo .tagline {
+                font-size: 0.65rem;
+            }
+
+            .auth-card .card-title {
+                font-size: 1rem;
+            }
+
+            .auth-card .card-sub {
+                font-size: 0.75rem;
+                margin-bottom: 16px;
+            }
+
+            .auth-tab {
+                font-size: 0.78rem;
+                padding: 8px 0 7px;
+            }
+
+            .auth-tab i {
+                font-size: 0.7rem;
+            }
+
+            .form-group {
+                margin-bottom: 12px;
+            }
+
+            .form-control {
+                padding: 9px 12px;
+                font-size: 0.85rem;
+            }
+
+            .btn {
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+
+            .auth-footer {
+                font-size: 0.72rem;
+                margin-top: 14px;
+            }
+
+            .auth-footer-page {
+                padding: 10px 16px;
+            }
+
+            .auth-footer-page .footer-inner {
+                font-size: 0.65rem;
+                gap: 6px 12px;
+            }
+
+            .auth-footer-page .footer-inner .social i {
+                font-size: 0.85rem;
+            }
+
+            .toast {
+                padding: 10px 12px;
+            }
+
+            .toast .msg {
+                font-size: 0.78rem;
+            }
+
+            .toast-container {
+                top: 12px;
+            }
+        }
+
+        @media (min-width: 421px) and (max-width: 768px) {
+            .auth-main {
+                padding: 24px 16px 16px;
+            }
+
+            .auth-card {
+                padding: 24px 20px 22px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .auth-container {
+                max-width: 440px;
+            }
+
+            .auth-card {
+                padding: 32px 28px 28px;
+            }
+        }
+
+        /* ================================================================
+           ACCESSIBILITY
+           ================================================================ */
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .auth-tab,
+        .btn,
+        .file-preview .remove-file {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        @media (max-width: 420px) {
+            .auth-tab,
+            .btn {
+                min-height: 40px;
+                min-width: 40px;
+            }
+        }
+
+        /* Zoom indicator */
+        .zoom-indicator {
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.60);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 4px 12px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 3000;
+            font-size: 0.6rem;
+            color: white;
+            font-weight: 500;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .zoom-indicator i {
+            font-size: 0.65rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Loading Backdrop -->
+    <div class="loading-backdrop" id="loadingBackdrop">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Zoom Indicator -->
+    <div class="zoom-indicator" id="zoomIndicator">
+        <i class="fas fa-search-plus"></i>
+        <span id="zoomValue">100</span>%
+    </div>
+
+    <!-- ================================================================
+    MAIN - Auth Card di Tengah
+    ================================================================ -->
+    <main class="auth-main">
+
+        <div class="auth-container">
+
+<!-- Logo -->
+<div class="auth-logo">
+    <a href="index.html" style="display:inline-block;text-decoration:none;">
+        <img src="https://i.imgur.com/cuIWlLe.png" alt="Hendimen Logo" style="cursor:pointer;">
+    </a>
+    <div class="tagline">Solusi Cepat & Terpercaya, Butuh Bantuan? Ada Hendimen!</div>
+</div>
+
+            <!-- Auth Card -->
+            <div class="auth-card">
+
+                <div class="card-title" id="cardTitle">Selamat Datang Kembali</div>
+                <div class="card-sub" id="cardSub">Masuk ke akun Hendimen Anda</div>
+
+                <!-- Tabs -->
+                <div class="auth-tabs" role="tablist">
+                    <button class="auth-tab active" data-tab="login" role="tab" aria-selected="true">
+                        <i class="fas fa-sign-in-alt"></i> Masuk
+                    </button>
+                    <button class="auth-tab" data-tab="register" role="tab" aria-selected="false">
+                        <i class="fas fa-user-plus"></i> Daftar
+                    </button>
+                </div>
+
+                <!-- ===== LOGIN FORM ===== -->
+                <form id="loginForm" class="auth-form active" autocomplete="off" novalidate>
+                    <div class="form-group">
+                        <label for="loginEmail"><i class="fas fa-envelope"></i> Email atau No. Telepon</label>
+                        <input type="text" id="loginEmail" class="form-control" placeholder="Masukkan email atau no. telepon" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword"><i class="fas fa-lock"></i> Kata Sandi</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Masukkan kata sandi" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Masuk
+                    </button>
+                    <div class="auth-footer">
+                        <a href="#" id="forgotPasswordLink">Lupa kata sandi?</a>
+                        <span class="divider">|</span>
+                        <span>Belum punya akun? <a href="#" id="switchToRegister">Daftar</a></span>
+                    </div>
+                </form>
+
+                <!-- ===== REGISTER FORM ===== -->
+                <form id="registerForm" class="auth-form" autocomplete="off" novalidate>
+                    <div class="form-group">
+                        <label for="regName"><i class="fas fa-user"></i> Nama Lengkap</label>
+                        <input type="text" id="regName" class="form-control" placeholder="Contoh: Budi Santoso" required autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="regEmail" class="form-control" placeholder="email@example.com" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="regPhone"><i class="fas fa-phone"></i> Nomor Telepon</label>
+                        <input type="tel" id="regPhone" class="form-control" placeholder="08123456789" required autocomplete="tel">
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword"><i class="fas fa-lock"></i> Kata Sandi</label>
+                        <input type="password" id="regPassword" class="form-control" placeholder="Minimal 6 karakter" required autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword"><i class="fas fa-check-circle"></i> Konfirmasi Kata Sandi</label>
+                        <input type="password" id="regConfirmPassword" class="form-control" placeholder="Ulangi kata sandi" required autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="regId"><i class="fas fa-id-card"></i> Upload KTP / Identitas</label>
+                        <input type="file" id="regId" class="form-control file-input" accept=".jpg,.jpeg,.png,.pdf">
+                        <small><i class="fas fa-info-circle"></i> Format: JPG, PNG, PDF (Max 5MB). Diperlukan untuk verifikasi.</small>
+                        <div class="file-preview" id="filePreview">
+                            <i class="fas fa-check-circle"></i>
+                            <span class="file-name" id="fileNameDisplay">-</span>
+                            <button type="button" class="remove-file" id="removeFileBtn" aria-label="Hapus file">&times;</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Daftar
+                    </button>
+                    <div class="auth-footer">
+                        Dengan mendaftar, Anda menyetujui <a href="terms.php">Syarat &amp; Ketentuan</a>
+                        <br>
+                        <span>Sudah punya akun? <a href="#" id="switchToLogin">Masuk</a></span>
+                    </div>
+                </form>
+
+            </div><!-- /auth-card -->
+        </div><!-- /auth-container -->
+
+    </main>
+
+    <!-- ================================================================
+    FOOTER PAGE
+    ================================================================ -->
+    <footer class="auth-footer-page">
+        <div class="footer-inner">
+            <span>&copy; 2026 Hendimen</span>
+            <span class="divider-dot">•</span>
+            <a href="terms.php">Syarat &amp; Ketentuan</a>
+            <span class="divider-dot">•</span>
+            <a href="#">Kebijakan Privasi</a>
+            <span class="divider-dot">•</span>
+            <a href="#">Pusat Bantuan</a>
+            <span class="divider-dot">•</span>
+            <div class="social">
+                <i class="fab fa-instagram" aria-label="Instagram"></i>
+                <i class="fab fa-twitter" aria-label="Twitter"></i>
+                <i class="fab fa-facebook" aria-label="Facebook"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================================================================
+    JAVASCRIPT
+    ================================================================ -->
+    <script>
+        // ================================================================
+        // UTILITY
+        // ================================================================
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function showLoading(show) {
+            const loader = document.getElementById('loadingBackdrop');
+            if (loader) loader.classList.toggle('show', show);
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const existing = container.querySelectorAll('.toast');
+            existing.forEach(t => t.remove());
+
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+
+            let icon = type === 'success' ? '✅' :
+                       type === 'error' ? '❌' :
+                       type === 'warning' ? '⚠️' : '🔔';
+
+            toast.innerHTML = `
+                <span class="icon">${icon}</span>
+                <span class="msg">${escapeHtml(message)}</span>
+                <button class="close-toast" aria-label="Tutup notifikasi">&times;</button>
+            `;
+
+            container.appendChild(toast);
+
+            const closeBtn = toast.querySelector('.close-toast');
+            closeBtn.addEventListener('click', function() {
+                toast.style.animation = 'toastOut 0.3s ease';
+                setTimeout(() => toast.remove(), 350);
+            });
+
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.style.animation = 'toastOut 0.3s ease';
+                    setTimeout(() => toast.remove(), 350);
+                }
+            }, 5000);
+        }
+
+        function detectZoom() {
+            let zoom = Math.round(window.devicePixelRatio * 100);
+            const altZoom = Math.round((window.innerWidth / window.screen.width) * 100);
+            let zoomLevel = Math.max(zoom, altZoom);
+            const zoomEl = document.getElementById('zoomValue');
+            if (zoomEl) zoomEl.textContent = zoomLevel;
+        }
+
+        // ================================================================
+        // TAB SWITCHING
+        // ================================================================
+        function switchTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.auth-tab').forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            const activeTab = document.querySelector(`.auth-tab[data-tab="${tab}"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+                activeTab.setAttribute('aria-selected', 'true');
+            }
+
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            const formId = tab === 'login' ? 'loginForm' : 'registerForm';
+            const form = document.getElementById(formId);
+            if (form) form.classList.add('active');
+
+            // Update card title & subtitle
+            const title = document.getElementById('cardTitle');
+            const sub = document.getElementById('cardSub');
+            if (tab === 'login') {
+                title.textContent = 'Selamat Datang Kembali';
+                sub.textContent = 'Masuk ke akun Hendimen Anda';
+            } else {
+                title.textContent = 'Bergabung dengan Hendimen';
+                sub.textContent = 'Daftar dan mulai gunakan layanan kami';
+            }
+
+            // Clear errors
+            document.querySelectorAll('.form-control.error').forEach(el => el.classList.remove('error'));
+        }
+
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                switchTab(this.dataset.tab);
+            });
+        });
+
+        document.getElementById('switchToRegister').addEventListener('click', function(e) {
+            e.preventDefault();
+            switchTab('register');
+        });
+
+        document.getElementById('switchToLogin').addEventListener('click', function(e) {
+            e.preventDefault();
+            switchTab('login');
+        });
+
+        // ================================================================
+        // FILE PREVIEW
+        // ================================================================
+        const fileInput = document.getElementById('regId');
+        const filePreview = document.getElementById('filePreview');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const removeFileBtn = document.getElementById('removeFileBtn');
+
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const sizeKB = (file.size / 1024).toFixed(1);
+                    fileNameDisplay.textContent = file.name + ' (' + sizeKB + ' KB)';
+                    filePreview.classList.add('show');
+                } else {
+                    filePreview.classList.remove('show');
+                }
+            });
+        }
+
+        if (removeFileBtn) {
+            removeFileBtn.addEventListener('click', function() {
+                if (fileInput) {
+                    fileInput.value = '';
+                    filePreview.classList.remove('show');
+                }
+            });
+        }
+
+        // ================================================================
+        // LOGIN
+        // ================================================================
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showToast('Email/No Telepon dan password harus diisi!', 'error');
+                return;
+            }
+
+            showLoading(true);
+
+            document.cookie = "screen_width=" + window.innerWidth + "; path=/";
+            document.cookie = "screen_height=" + window.innerHeight + "; path=/";
+
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('password', password);
+
+            try {
+                const response = await fetch('login.php', { method: 'POST', body: formData });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('Login berhasil! Mengalihkan...', 'success');
+                    sessionStorage.setItem('user', JSON.stringify(result.user));
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('userRole', result.user.role);
+
+                    const redirectUrl = result.redirect || (
+                        result.user.role === 'admin' ? 'admin_dashboard.html' : 'dashboard_mobile.html'
+                    );
+
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 800);
+
+                } else {
+                    showToast(result.message || 'Login gagal', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast('Terjadi kesalahan saat login', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // ================================================================
+        // REGISTER
+        // ================================================================
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const ktpFile = document.getElementById('regId').files[0];
+
+            // ===== VALIDASI =====
+            if (!name) { showToast('Nama lengkap harus diisi!', 'error'); return; }
+            if (name.length < 3) { showToast('Nama lengkap minimal 3 karakter!', 'error'); return; }
+
+            if (!email) { showToast('Email harus diisi!', 'error'); return; }
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) { showToast('Format email tidak valid!', 'error'); return; }
+
+            if (!phone) { showToast('Nomor telepon harus diisi!', 'error'); return; }
+            if (phone.length < 10 || phone.length > 15) {
+                showToast('Nomor telepon harus 10-15 digit!', 'error');
+                return;
+            }
+
+            if (!password) { showToast('Password harus diisi!', 'error'); return; }
+            if (password.length < 6) { showToast('Password minimal 6 karakter!', 'error'); return; }
+
+            if (password !== confirmPassword) {
+                showToast('Password dan konfirmasi password tidak cocok!', 'error');
+                return;
+            }
+
+            if (ktpFile) {
+                const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+                if (!validTypes.includes(ktpFile.type)) {
+                    showToast('File KTP harus JPG, PNG, atau PDF', 'error');
+                    return;
+                }
+                if (ktpFile.size > 5 * 1024 * 1024) {
+                    showToast('Ukuran file KTP maksimal 5MB', 'error');
+                    return;
+                }
+            }
+
+            showLoading(true);
+
+            const formData = new FormData();
+            formData.append('role', 'user');
+            formData.append('nama_lengkap', name);
+            formData.append('email', email);
+            formData.append('no_telepon', phone);
+            formData.append('password', password);
+            formData.append('confirm_password', confirmPassword);
+            if (ktpFile) formData.append('ktp_file', ktpFile);
+
+            try {
+                const response = await fetch('register.php', { method: 'POST', body: formData });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast(result.message || 'Registrasi berhasil! Silakan login.', 'success');
+                    document.getElementById('registerForm').reset();
+                    filePreview.classList.remove('show');
+
+                    switchTab('login');
+                    document.getElementById('loginEmail').value = email;
+                    document.getElementById('loginPassword').value = '';
+
+                } else {
+                    showToast(result.message || 'Registrasi gagal', 'error');
+                }
+            } catch (error) {
+                console.error('Register error:', error);
+                showToast('Terjadi kesalahan saat registrasi', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // ================================================================
+        // FORGOT PASSWORD
+        // ================================================================
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            showToast('🔧 Fitur reset password segera hadir!', 'info');
+        });
+
+        // ================================================================
+        // ZOOM DETECTION
+        // ================================================================
+        window.addEventListener('load', detectZoom);
+        window.addEventListener('resize', detectZoom);
+
+        // ================================================================
+        // CHECK SESSION
+        // ================================================================
+        async function checkExistingSession() {
+            try {
+                const response = await fetch('check_session.php');
+                const data = await response.json();
+                if (data.success && data.user) {
+                    const url = data.user.role === 'admin' ? 'admin_dashboard.html' : 'dashboard_mobile.html';
+                    window.location.href = url;
+                }
+            } catch (e) {
+                console.log('Session check skipped:', e.message);
+            }
+        }
+
+        setTimeout(checkExistingSession, 1000);
+
+        console.log('✅ Auth full page (card + footer) loaded successfully!');
+    </script>
+
+<script>
+    // ================================================================
+    // 🚀 CEK SESSION DI AUTH.HTML
+    // ================================================================
+
+    (async function checkSessionOnAuth() {
+        console.log('📱 Checking session from auth.html...');
+
+        try {
+            const response = await fetch('check_session.php', {
+                method: 'GET',
+                cache: 'no-cache',
+                headers: { 'Cache-Control': 'no-cache' }
+            });
+
+            const data = await response.json();
+
+            // Jika user sudah login, redirect ke dashboard
+            if (data.success && data.user) {
+                console.log('✅ User sudah login, redirect ke dashboard...');
+
+                let redirectUrl = 'dashboard_mobile.html';
+                if (data.user.role === 'admin') {
+                    redirectUrl = 'admin_dashboard.html';
+                }
+
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 500);
+            }
+
+        } catch (error) {
+            console.error('❌ Session check error:', error);
+        }
+    })();
+</script>
+
+</body>
+</html>

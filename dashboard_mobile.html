@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Hendimen - Dashboard Mobile</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/WOMGJ6U.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <meta name="theme-color" content="#2D63A3">
+
+    <!-- CSS Mobile -->
+    <link rel="stylesheet" href="css_mobile.css">
+
+    <style>
+        /* Layout dasar sementara untuk preview */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f7ff; color: #1e293b; padding-bottom: 70px; overflow-x: hidden; }
+        .mobile-container { max-width: 480px; margin: 0 auto; padding: 0 16px; }
+        .page-section { display: none; padding-top: 16px; }
+        .page-section.active { display: block; }
+        .section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; color: #2D63A3; }
+
+        /* Header */
+        .mobile-header { position: sticky; top: 0; z-index: 100; background: white; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; }
+        .mobile-header .logo { height: 40px; }
+        .header-actions { display: flex; align-items: center; gap: 16px; }
+        .notif-icon { position: relative; font-size: 1.3rem; color: #2D63A3; cursor: pointer; }
+        .notif-badge { position: absolute; top: -6px; right: -8px; background: #e74c3c; color: white; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 50%; min-width: 18px; text-align: center; display: none; }
+        .avatar-sm { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #2D63A3, #3A7BB0); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .hamburger { font-size: 1.5rem; color: #2D63A3; cursor: pointer; background: none; border: none; padding: 4px; }
+
+        /* Drawer */
+        .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; display: none; }
+        .drawer-overlay.open { display: block; }
+        .drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: white; z-index: 300; transition: left 0.3s cubic-bezier(.4,0,.2,1); box-shadow: 4px 0 20px rgba(0,0,0,0.1); overflow-y: auto; padding: 20px 16px; }
+        .drawer.open { left: 0; }
+        .drawer-header { display: flex; align-items: center; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid #e2e8f0; margin-bottom: 16px; }
+        .drawer-header .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #2D63A3, #3A7BB0); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; }
+        .drawer-header .user-info { flex: 1; }
+        .drawer-header .user-info .name { font-weight: 700; font-size: 1rem; }
+        .drawer-header .user-info .role { font-size: 0.8rem; color: #64748b; }
+        .drawer-menu { list-style: none; }
+        .drawer-menu li { margin-bottom: 4px; }
+        .drawer-menu a { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 10px; color: #1e293b; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+        .drawer-menu a.active { background: #eef2ff; color: #2D63A3; font-weight: 600; }
+        .drawer-menu a i { width: 22px; text-align: center; }
+        .drawer-menu .divider { height: 1px; background: #e2e8f0; margin: 12px 0; }
+        .drawer-close { background: none; border: none; font-size: 1.5rem; color: #64748b; cursor: pointer; padding: 4px 8px; }
+
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 6px 0 env(safe-area-inset-bottom, 6px); z-index: 150; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .bottom-nav .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 12px; border: none; background: none; color: #94a3b8; font-size: 0.6rem; font-weight: 500; cursor: pointer; transition: color 0.2s; min-width: 48px; }
+        .bottom-nav .nav-item i { font-size: 1.2rem; }
+        .bottom-nav .nav-item.active { color: #2D63A3; }
+        .bottom-nav .nav-item .badge { position: absolute; top: -2px; right: -6px; background: #e74c3c; color: white; font-size: 0.5rem; font-weight: 700; padding: 1px 5px; border-radius: 50%; min-width: 16px; text-align: center; }
+        .bottom-nav .nav-item .badge-wrap { position: relative; }
+
+        /* Role Switch */
+        .role-switch-mobile { display: flex; background: #f1f4fa; border-radius: 40px; padding: 4px; margin-bottom: 16px; }
+        .role-switch-mobile .role-btn { flex: 1; padding: 10px; border: none; border-radius: 30px; background: transparent; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; color: #64748b; }
+        .role-switch-mobile .role-btn.active { background: linear-gradient(90deg, #2D63A3, #3A7BB0); color: white; box-shadow: 0 2px 8px rgba(45,99,163,0.3); }
+
+        /* Cards */
+        .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
+        .stat-card { background: white; border-radius: 14px; padding: 16px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; }
+        .stat-card i { font-size: 1.5rem; color: #2D63A3; margin-bottom: 4px; }
+        .stat-card h3 { font-size: 1.4rem; font-weight: 700; }
+        .stat-card p { font-size: 0.75rem; color: #64748b; }
+
+        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+        .filter-row select { flex: 1; min-width: 100px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px; background: white; font-size: 0.8rem; font-weight: 500; }
+
+        .search-box { position: relative; margin-bottom: 12px; }
+        .search-box input { width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; background: white; }
+        .search-box i { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+        /* Job Card */
+        .job-list { display: flex; flex-direction: column; gap: 12px; }
+        .job-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; }
+        .job-card .card-img { width: 100%; aspect-ratio: 16/10; object-fit: cover; background: #f1f5f9; }
+        .job-card .card-body { padding: 14px; }
+        .job-card .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+        .job-card .card-price { font-weight: 800; color: #e53935; font-size: 1rem; }
+        .job-card .card-meta { font-size: 0.75rem; color: #64748b; display: flex; gap: 12px; flex-wrap: wrap; margin: 4px 0; }
+        .job-card .card-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+        .job-card .card-actions .btn { flex: 1; min-width: 60px; padding: 8px 12px; border: none; border-radius: 8px; font-weight: 600; font-size: 0.75rem; cursor: pointer; text-align: center; }
+        .job-card .card-actions .btn-primary { background: #2D63A3; color: white; }
+        .job-card .card-actions .btn-success { background: #3ECF8E; color: white; }
+        .job-card .card-actions .btn-outline { background: transparent; border: 1.5px solid #2D63A3; color: #2D63A3; }
+        .job-card .card-actions .btn-danger { background: #e74c3c; color: white; }
+        .job-card .card-actions .btn-ghost { background: transparent; border: 1px solid #e2e8f0; color: #64748b; }
+
+        .emergency-badge { display: inline-block; background: #e74c3c; color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.6rem; font-weight: 700; }
+
+        /* Tabs */
+        .tabbed-menu { display: flex; gap: 4px; background: #f1f5f9; border-radius: 12px; padding: 4px; margin-bottom: 16px; overflow-x: auto; flex-wrap: nowrap; }
+        .tabbed-menu .tab-btn { flex: 1; min-width: 70px; padding: 10px 8px; border: none; border-radius: 10px; background: transparent; font-weight: 600; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; color: #64748b; white-space: nowrap; }
+        .tabbed-menu .tab-btn.active { background: white; color: #2D63A3; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .tabbed-menu .tab-btn .tab-badge { display: inline-block; background: #e74c3c; color: white; font-size: 0.5rem; padding: 1px 6px; border-radius: 10px; margin-left: 4px; }
+
+        .tab-page { display: none; }
+        .tab-page.active { display: block; }
+
+        /* Chat */
+        .chat-container { display: flex; flex-direction: column; height: 70vh; background: white; border-radius: 14px; overflow: hidden; border: 1px solid #e2e8f0; }
+        .chat-sidebar { overflow-y: auto; flex: 1; }
+        .chat-list-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; cursor: pointer; }
+        .chat-list-item.active { background: #eef2ff; }
+        .chat-list-item .chat-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #2D63A3, #3A7BB0); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+        .chat-list-item .chat-info { flex: 1; min-width: 0; }
+        .chat-list-item .chat-info .name { font-weight: 600; font-size: 0.9rem; }
+        .chat-list-item .chat-info .last-msg { font-size: 0.75rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .chat-list-item .chat-info .time { font-size: 0.65rem; color: #94a3b8; }
+        .chat-list-item .unread-badge { background: #e74c3c; color: white; font-size: 0.6rem; padding: 2px 7px; border-radius: 12px; font-weight: 700; }
+
+        .chat-main { display: flex; flex-direction: column; height: 100%; }
+        .chat-header { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; font-weight: 600; display: flex; align-items: center; gap: 10px; background: white; }
+        .chat-header .back { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #2D63A3; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 6px; background: #f8fafc; }
+        .chat-messages .msg { max-width: 80%; padding: 10px 14px; border-radius: 14px; font-size: 0.85rem; word-wrap: break-word; }
+        .chat-messages .msg.sent { background: #2D63A3; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-messages .msg.received { background: white; color: #1e293b; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+        .chat-messages .msg .time { font-size: 0.6rem; opacity: 0.7; margin-top: 4px; display: block; }
+        .chat-messages .msg-date { text-align: center; font-size: 0.65rem; color: #94a3b8; margin: 8px 0; }
+
+        .chat-input-area { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid #e2e8f0; background: white; }
+        .chat-input-area input { flex: 1; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 24px; font-size: 0.85rem; background: #f8fafc; }
+        .chat-input-area input:disabled { background: #f1f5f9; opacity: 0.6; }
+        .chat-input-area .send-btn { width: 44px; height: 44px; border-radius: 50%; background: #2D63A3; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .chat-input-area .send-btn:disabled { opacity: 0.5; }
+        .chat-input-area .upload-btn { width: 44px; height: 44px; border-radius: 50%; background: #3ECF8E; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+        /* Wallet */
+        .wallet-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+        .wallet-card { background: white; border-radius: 14px; padding: 18px; border: 1px solid #e2e8f0; }
+        .wallet-card .label { font-size: 0.75rem; color: #64748b; }
+        .wallet-card .amount { font-size: 1.6rem; font-weight: 800; }
+        .wallet-card .amount.requester { color: #2D63A3; }
+        .wallet-card .amount.helper { color: #3ECF8E; }
+        .wallet-card .btn { width: 100%; margin-top: 10px; padding: 10px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
+
+        .history-table { width: 100%; font-size: 0.75rem; border-collapse: collapse; }
+        .history-table th { text-align: left; padding: 8px 4px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-weight: 600; }
+        .history-table td { padding: 8px 4px; border-bottom: 1px solid #f1f5f9; }
+        .history-table .positive { color: #3ECF8E; }
+        .history-table .negative { color: #e74c3c; }
+
+        /* Modals */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; align-items: flex-end; justify-content: center; padding: 20px; }
+        .modal-overlay.open { display: flex; }
+        .modal-content { background: white; border-radius: 20px 20px 0 0; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 24px 20px 20px; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-content .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .modal-content .modal-header h2 { font-size: 1.2rem; font-weight: 700; color: #2D63A3; }
+        .modal-content .modal-header .close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b; }
+        .modal-content .form-group { margin-bottom: 16px; }
+        .modal-content .form-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #1e293b; }
+        .modal-content .form-group input, .modal-content .form-group select, .modal-content .form-group textarea { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; background: white; }
+        .modal-content .form-group textarea { min-height: 80px; resize: vertical; }
+        .modal-content .btn-group { display: flex; gap: 10px; margin-top: 16px; }
+        .modal-content .btn-group .btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; text-align: center; }
+
+        .btn-primary { background: #2D63A3; color: white; }
+        .btn-success { background: #3ECF8E; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-outline { background: transparent; border: 1.5px solid #2D63A3; color: #2D63A3; }
+        .btn-ghost { background: transparent; border: 1px solid #e2e8f0; color: #64748b; }
+
+        /* Rating Stars */
+        .stars-container { display: flex; gap: 8px; justify-content: center; margin: 12px 0; }
+        .stars-container .star { font-size: 2rem; color: #d1d5db; cursor: pointer; transition: color 0.15s; }
+        .stars-container .star.lit { color: #f59e0b; }
+        .rating-label { text-align: center; font-size: 0.85rem; color: #92400e; opacity: 0.6; }
+
+        /* Dark Mode */
+        body.dark-mode { background: #0f0f23; color: #f0f0f0; }
+        body.dark-mode .mobile-header { background: #1a1a2e; border-bottom-color: #3d3d5c; }
+        body.dark-mode .bottom-nav { background: #1a1a2e; border-top-color: #3d3d5c; }
+        body.dark-mode .bottom-nav .nav-item { color: #64748b; }
+        body.dark-mode .bottom-nav .nav-item.active { color: #3A7BB0; }
+        body.dark-mode .drawer { background: #1a1a2e; }
+        body.dark-mode .drawer-menu a { color: #f0f0f0; }
+        body.dark-mode .drawer-menu a.active { background: #2d3560; color: #3A7BB0; }
+        body.dark-mode .stat-card { background: #252540; border-color: #3d3d5c; }
+        body.dark-mode .job-card { background: #252540; border-color: #3d3d5c; }
+        body.dark-mode .wallet-card { background: #252540; border-color: #3d3d5c; }
+        body.dark-mode .modal-content { background: #1a1a2e; }
+        body.dark-mode .chat-container { background: #1a1a2e; border-color: #3d3d5c; }
+        body.dark-mode .chat-messages { background: #141428; }
+        body.dark-mode .chat-messages .msg.received { background: #2d2d44; color: #f0f0f0; }
+        body.dark-mode .chat-header { background: #1a1a2e; border-bottom-color: #3d3d5c; }
+        body.dark-mode .chat-input-area { background: #1a1a2e; border-top-color: #3d3d5c; }
+        body.dark-mode .chat-input-area input { background: #2d2d44; border-color: #3d3d5c; color: #f0f0f0; }
+        body.dark-mode .search-box input { background: #252540; border-color: #3d3d5c; color: #f0f0f0; }
+        body.dark-mode .filter-row select { background: #252540; border-color: #3d3d5c; color: #f0f0f0; }
+        body.dark-mode .tabbed-menu { background: #2d2d44; }
+        body.dark-mode .tabbed-menu .tab-btn { color: #94a3b8; }
+        body.dark-mode .tabbed-menu .tab-btn.active { background: #252540; color: #3A7BB0; }
+        body.dark-mode .role-switch-mobile { background: #2d2d44; }
+        body.dark-mode .role-switch-mobile .role-btn { color: #94a3b8; }
+        body.dark-mode .role-switch-mobile .role-btn.active { background: #2D63A3; color: white; }
+        body.dark-mode .modal-content .form-group input,
+        body.dark-mode .modal-content .form-group select,
+        body.dark-mode .modal-content .form-group textarea { background: #2d2d44; border-color: #3d3d5c; color: #f0f0f0; }
+        body.dark-mode .history-table td { border-bottom-color: #3d3d5c; }
+
+        /* Utility */
+        .text-center { text-align: center; }
+        .mt-8 { margin-top: 8px; }
+        .mt-12 { margin-top: 12px; }
+        .mt-16 { margin-top: 16px; }
+        .mb-12 { margin-bottom: 12px; }
+        .mb-16 { margin-bottom: 16px; }
+        .gap-8 { gap: 8px; }
+        .hidden { display: none !important; }
+
+        /* Toast */
+        .toast-container { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); z-index: 600; width: 90%; max-width: 400px; }
+        .toast { background: white; border-radius: 14px; padding: 14px 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 12px; margin-bottom: 8px; border-left: 4px solid; animation: toastIn 0.3s ease; }
+        .toast.success { border-color: #3ECF8E; }
+        .toast.error { border-color: #e74c3c; }
+        .toast.warning { border-color: #f59e0b; }
+        .toast.info { border-color: #2D63A3; }
+        .toast .icon { font-size: 1.2rem; }
+        .toast .msg { flex: 1; font-size: 0.85rem; }
+        .toast .close-toast { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #94a3b8; }
+        @keyframes toastIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Loading */
+        .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 999; align-items: center; justify-content: center; }
+        .loading-overlay.show { display: flex; }
+        .loading-spinner { width: 48px; height: 48px; border: 4px solid #f3f3f3; border-top: 4px solid #2D63A3; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Empty state */
+        .empty-state { text-align: center; padding: 40px 20px; color: #64748b; }
+        .empty-state i { font-size: 2.5rem; color: #cbd5e1; margin-bottom: 12px; display: block; }
+        .empty-state h3 { font-size: 1rem; font-weight: 600; color: #1e293b; margin-bottom: 4px; }
+        .empty-state p { font-size: 0.85rem; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        /* Wallet visibility */
+        body.requester-mode .wallet-helper { display: none !important; }
+        body.helper-mode .wallet-requester { display: none !important; }
+        .wallet-helper, .wallet-requester { transition: display 0.2s; }
+
+        /* Drawer dark mode toggle */
+        .drawer-dark-toggle { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 10px; cursor: pointer; background: none; border: none; width: 100%; font-weight: 500; font-size: 0.95rem; color: #1e293b; }
+        .drawer-dark-toggle i { width: 22px; text-align: center; }
+        body.dark-mode .drawer-dark-toggle { color: #f0f0f0; }
+
+        /* Profile completion */
+        .profile-completion { background: #eef2ff; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; }
+        .profile-completion .bar { height: 6px; background: #d1d5db; border-radius: 10px; margin-top: 8px; overflow: hidden; }
+        .profile-completion .bar .fill { height: 100%; background: #3ECF8E; border-radius: 10px; width: 75%; }
+        body.dark-mode .profile-completion { background: #1a2d3d; }
+
+        /* Schedule reminder */
+        .schedule-reminder { background: #fef9e6; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; font-size: 0.85rem; }
+        body.dark-mode .schedule-reminder { background: #2d2a1a; }
+
+        .verification-badge { display: inline-flex; align-items: center; background: #3ECF8E; color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.65rem; font-weight: 600; }
+        .badge-success { background: #3ECF8E; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; }
+        .badge-warning { background: #f59e0b; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; }
+
+        /* QRIS section */
+        .qris-section { display: none; text-align: center; padding: 16px; background: #f8fafc; border-radius: 12px; border: 2px solid #2D63A3; margin-top: 12px; }
+        .qris-section img { max-width: 180px; width: 100%; border-radius: 12px; margin: 8px auto; }
+
+        /* Location preview */
+        .location-preview { display: none; padding: 10px 12px; background: #eef2ff; border-radius: 8px; margin-top: 8px; font-size: 0.85rem; }
+        .location-preview .remove-loc { background: none; border: none; color: #e74c3c; cursor: pointer; float: right; }
+
+        .image-preview { display: none; margin-top: 8px; }
+        .image-preview img { max-width: 100%; max-height: 120px; border-radius: 8px; }
+        .image-preview .remove-img { background: #e74c3c; color: white; border: none; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; margin-top: 4px; }
+
+        .acc-proof-img { width: 100%; max-height: 160px; object-fit: cover; border-radius: 8px; margin: 8px 0; cursor: pointer; border: 1px solid #dbeafe; }
+        .acc-reject-note { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 8px 12px; font-size: 0.75rem; color: #dc2626; margin-bottom: 8px; }
+
+        /* Menu lainnya di drawer */
+        .drawer-menu .menu-label { font-size: 0.65rem; text-transform: uppercase; color: #94a3b8; padding: 12px 14px 4px; font-weight: 600; letter-spacing: 0.5px; }
+
+        /* ===== TAMBAHAN UNTUK SISTEM NEGOSIASI ===== */
+        .offer-count-badge { display: inline-block; background: #3b82f6; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.6rem; font-weight: 700; margin-left: 4px; }
+        .lowest-offer-text { font-size: 0.7rem; color: #059669; font-weight: 600; }
+        .status-badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.6rem; font-weight: 600; }
+        .status-badge-open { background: #dbeafe; color: #1d4ed8; }
+        .status-badge-offered { background: #dbeafe; color: #2563eb; }
+        .status-badge-selected { background: #e0e7ff; color: #4f46e5; }
+        .status-badge-paid { background: #d1fae5; color: #059669; }
+        .status-badge-in-progress { background: #fef3c7; color: #d97706; }
+        .status-badge-pending-acc { background: #fef3c7; color: #d97706; }
+        .status-badge-perbaikan { background: #fee2e2; color: #dc2626; }
+        .status-badge-completed { background: #d1fae5; color: #059669; }
+        .status-badge-cancelled { background: #f3f4f6; color: #6b7280; }
+
+        /* Offer card in modal */
+        .offer-card { background: var(--card-bg); border-radius: 12px; padding: 14px; margin-bottom: 10px; border: 1px solid var(--border-color); }
+        .offer-card.selected { border: 2px solid #10b981; border-left: 4px solid #10b981; }
+        .offer-card .offer-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .offer-card .offer-price { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+        .offer-card .offer-message { font-size: 0.8rem; color: var(--gray); margin-top: 6px; padding: 6px 10px; background: var(--gray-bg); border-radius: 8px; }
+        .offer-card .offer-meta { font-size: 0.65rem; color: var(--gray-light); margin-top: 6px; }
+
+        .payment-summary { background: #f8fafc; border-radius: 12px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+        .payment-summary .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.85rem; }
+        .payment-summary .row.total { border-top: 2px solid #2D63A3; padding-top: 8px; margin-top: 4px; font-weight: 700; font-size: 1rem; color: #2D63A3; }
+        .payment-summary .row.emergency { color: #dc3545; }
+        .payment-balance { padding: 10px; border-radius: 8px; margin-bottom: 12px; text-align: center; font-weight: 600; }
+        .payment-balance.sufficient { background: #dcfce7; color: #166534; }
+        .payment-balance.insufficient { background: #fee2e2; color: #dc2626; }
+
+        /* Budget Range Display */
+        .budget-display { background: #f8faff; border-radius: 14px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+        .budget-display .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.85rem; }
+        .budget-display .row.border-top { border-top: 1px solid #e2e8f0; margin-top: 4px; padding-top: 8px; }
+        .budget-display .info { font-size: 0.7rem; color: #64748b; margin-top: 8px; padding: 6px; background: #f1f5f9; border-radius: 6px; text-align: center; }
+        
+/* Tambahan untuk tombol di modal offers */
+#offersList .btn-success {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#offersList .btn-success:hover {
+    background: #059669;
+    transform: scale(1.02);
+}
+
+#offersList .btn-ghost {
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+#offersList .btn-ghost:hover {
+    background: #f1f5f9;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ===== HEADER ===== -->
+    <header class="mobile-header">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <img src="https://i.imgur.com/cuIWlLe.png" class="logo" alt="Hendimen">
+        <div class="header-actions">
+            <div class="notif-icon" id="notifBellMobile">
+                <i class="fas fa-bell"></i>
+                <span class="notif-badge" id="notifBadgeMobile">0</span>
+            </div>
+            <div class="avatar-sm" id="avatarHeader">U</div>
+        </div>
+    </header>
+
+    <!-- ===== DRAWER ===== -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <nav class="drawer" id="drawer">
+        <div class="drawer-header">
+            <div class="avatar" id="drawerAvatar"></div>
+            <div class="user-info">
+                <div class="name" id="drawerName"></div>
+                <div class="role" id="drawerRole">Requester</div>
+            </div>
+            <button class="drawer-close" id="drawerClose">&times;</button>
+        </div>
+        <ul class="drawer-menu">
+            <li><a href="#" class="active" data-page="home"><i class="fas fa-home"></i> Beranda</a></li>
+            <li><a href="#" data-page="jobs"><i class="fas fa-briefcase"></i> Pekerjaan Saya</a></li>
+            <li><a href="#" data-page="messages"><i class="fas fa-comments"></i> Pesan</a></li>
+            <li><a href="#" data-page="wallet"><i class="fas fa-wallet"></i> Dompet Saya</a></li>
+            <li><a href="#" data-page="rating"><i class="fas fa-star"></i> Rating &amp; Ulasan</a></li>
+            <li><a href="#" data-page="history"><i class="fas fa-history"></i> Riwayat</a></li>
+            <li><a href="#" data-page="settings"><i class="fas fa-cog"></i> Pengaturan</a></li>
+            <li class="divider"></li>
+            <li>
+                <button class="drawer-dark-toggle" id="drawerDarkToggle">
+                    <i class="fas fa-moon"></i> <span id="darkToggleLabel">Mode Gelap</span>
+                </button>
+            </li>
+            <li><a href="#" id="drawerLogout"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===== BOTTOM NAV ===== -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item active" data-page="home">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </button>
+        <button class="nav-item" data-page="jobs">
+            <i class="fas fa-briefcase"></i>
+            <span>Pekerjaan</span>
+        </button>
+        <button class="nav-item" data-page="messages">
+            <span class="badge-wrap">
+                <i class="fas fa-comments"></i>
+                <span class="badge" id="chatBadgeBottom">0</span>
+            </span>
+            <span>Pesan</span>
+        </button>
+        <button class="nav-item" data-page="wallet">
+            <i class="fas fa-wallet"></i>
+            <span>Dompet</span>
+        </button>
+        <button class="nav-item" data-page="settings">
+            <i class="fas fa-ellipsis-h"></i>
+            <span>Lainnya</span>
+        </button>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="mobile-container">
+
+        <!-- ============================================================ -->
+        <!-- SECTION: HOME -->
+        <!-- ============================================================ -->
+        <section id="page-home" class="page-section active">
+
+            <!-- Profile Completion -->
+            <div class="profile-completion">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div><strong><i class="fas fa-user-check"></i> Lengkapi Profil</strong></div>
+                    <span style="font-size:0.75rem;font-weight:600;color:#2D63A3;">75%</span>
+                </div>
+                <div class="bar"><div class="fill"></div></div>
+            </div>
+
+            <!-- Role Switch -->
+            <div class="role-switch-mobile">
+                <button class="role-btn active" id="roleRequesterMobile">Requester</button>
+                <button class="role-btn" id="roleHelperMobile">Helper</button>
+            </div>
+
+            <!-- REQUESTER VIEW -->
+            <div id="requesterViewMobile">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                    <h2 class="section-title" style="font-size:1.1rem;margin:0;">Beranda Requester</h2>
+                    <button class="btn btn-primary" style="padding:8px 14px;font-size:0.75rem;border-radius:30px;" id="createJobBtnMobile">
+                        <i class="fas fa-plus"></i> Buat
+                    </button>
+                </div>
+
+                <div class="schedule-reminder">
+                    <i class="fas fa-clock"></i> Anda memiliki <span id="reminderActiveCount">0</span> pekerjaan aktif
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-card"><i class="fas fa-bell"></i><h3 id="activeJobsCount">0</h3><p>Permintaan Aktif</p></div>
+                    <div class="stat-card"><i class="fas fa-check-circle"></i><h3 id="requesterCompletedCount">0</h3><p>Selesai</p></div>
+                    <div class="stat-card"><i class="fas fa-star"></i><h3 id="requesterRating">0.0</h3><p>Rating</p></div>
+                    <div class="stat-card"><i class="fas fa-wallet"></i><h3 id="requesterSpent">Rp 0</h3><p>Total Dibayar</p></div>
+                </div>
+
+                <div class="search-box">
+                    <input type="text" id="homeSearchMobile" placeholder="Cari pekerjaan...">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="filter-row">
+                    <select id="categoryFilterMobile">
+                        <option value="all">Semua Kategori</option>
+                        <option value="moving">🚚 Pindahan</option>
+                        <option value="delivery">📦 Pengiriman</option>
+                        <option value="transport">🚗 Antar Jemput</option>
+                        <option value="event">🎉 Jaga Acara</option>
+                        <option value="perbaikan">🔧 Perbaikan</option>
+                        <option value="kebersihan">🧹 Kebersihan</option>
+                    </select>
+                    <select id="statusFilterMobile">
+                        <option value="all">Semua Status</option>
+                        <option value="open">📢 Terbuka</option>
+                        <option value="offered">📩 Ada Tawaran</option>
+                        <option value="selected">🎯 Menunggu Bayar</option>
+                        <option value="in-progress">🔄 Dalam Proses</option>
+                        <option value="completed">✅ Selesai</option>
+                    </select>
+                    <select id="sortFilterMobile">
+                        <option value="newest">📅 Terbaru</option>
+                        <option value="oldest">📅 Terlama</option>
+                        <option value="price-high">💰 Tertinggi</option>
+                        <option value="price-low">💰 Terendah</option>
+                    </select>
+                </div>
+
+                <div id="requesterJobListMobile" class="job-list"></div>
+            </div>
+
+            <!-- HELPER VIEW -->
+            <div id="helperViewMobile" style="display:none;">
+                <h2 class="section-title" style="font-size:1.1rem;">Beranda Helper</h2>
+
+                <div class="schedule-reminder">
+                    <i class="fas fa-calendar-day"></i> Anda memiliki <span id="helperReminderCount">0</span> pekerjaan aktif hari ini
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-card"><i class="fas fa-briefcase"></i><h3 id="helperActiveJobsCount">0</h3><p>Pekerjaan Aktif</p></div>
+                    <div class="stat-card"><i class="fas fa-check-circle"></i><h3 id="helperCompletedJobsCount">0</h3><p>Selesai</p></div>
+                    <div class="stat-card"><i class="fas fa-star"></i><h3 id="berandaRatingHelper">0.0</h3><p>Rating Anda</p></div>
+                    <div class="stat-card"><i class="fas fa-wallet"></i><h3 id="berandaPendapatanHelper">Rp 0</h3><p>Pendapatan Bulan Ini</p></div>
+                </div>
+
+                <div class="search-box">
+                    <input type="text" id="helperSearchMobile" placeholder="Cari pekerjaan...">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="filter-row">
+                    <select id="helperCategoryFilterMobile">
+                        <option value="all">Semua Kategori</option>
+                        <option value="moving">🚚 Pindahan</option>
+                        <option value="delivery">📦 Pengiriman</option>
+                        <option value="transport">🚗 Antar Jemput</option>
+                        <option value="event">🎉 Jaga Acara</option>
+                        <option value="perbaikan">🔧 Perbaikan</option>
+                        <option value="kebersihan">🧹 Kebersihan</option>
+                    </select>
+                    <select id="distanceFilterMobile">
+                        <option value="all">Semua Jarak</option>
+                        <option value="1km">≤ 1 km</option>
+                        <option value="5km">≤ 5 km</option>
+                        <option value="10km">≤ 10 km</option>
+                    </select>
+                    <select id="helperSortFilterMobile">
+                        <option value="newest">📅 Terbaru</option>
+                        <option value="price-high">💰 Tertinggi</option>
+                        <option value="price-low">💰 Terendah</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom:12px;">
+                    <h3 style="font-size:0.95rem;font-weight:700;color:#2D63A3;"><i class="fas fa-search"></i> Pekerjaan Tersedia</h3>
+                    <div id="helperJobListMobile" class="job-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- SECTION: JOBS (Pekerjaan Saya) -->
+        <!-- ============================================================ -->
+        <section id="page-jobs" class="page-section">
+            <h2 class="section-title">Pekerjaan Saya</h2>
+
+            <div class="tabbed-menu">
+                <button class="tab-btn active" data-tab="activeJobsTabMobile">Aktif</button>
+                <button class="tab-btn" data-tab="completedJobsTabMobile">Selesai</button>
+                <button class="tab-btn" data-tab="favoriteJobsTabMobile">Favorit</button>
+                <button class="tab-btn" data-tab="pendingAccTabMobile">ACC <span class="tab-badge" id="badgePendingAccMobile" style="display:none;">0</span></button>
+                <button class="tab-btn" data-tab="perbaikanTabMobile">Perbaikan <span class="tab-badge" id="badgePerbaikanMobile" style="display:none;">0</span></button>
+            </div>
+
+            <div id="activeJobsTabMobile" class="tab-page active"><div id="activeJobListMobile" class="job-list"></div></div>
+            <div id="completedJobsTabMobile" class="tab-page"><div id="completedJobListMobile" class="job-list"></div></div>
+            <div id="favoriteJobsTabMobile" class="tab-page"><div id="favoriteJobListMobile" class="job-list"></div></div>
+            <div id="pendingAccTabMobile" class="tab-page">
+                <div style="background:#eff6ff;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.8rem;color:#1d4ed8;border:1px solid #bfdbfe;">
+                    <i class="fas fa-info-circle"></i> Tinjau bukti dari Helper, lalu ACC atau Reject.
+                </div>
+                <div id="pendingAccJobListMobile" class="job-list"></div>
+            </div>
+            <div id="perbaikanTabMobile" class="tab-page">
+                <div style="background:#fff7ed;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.8rem;color:#92400e;border:1px solid #fdba74;">
+                    <i class="fas fa-exclamation-triangle"></i> Upload ulang bukti yang sudah diperbaiki.
+                </div>
+                <div id="perbaikanJobListMobile" class="job-list"></div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- SECTION: MESSAGES -->
+        <!-- ============================================================ -->
+        <section id="page-messages" class="page-section">
+            <h2 class="section-title"><i class="fas fa-comments"></i> Pesan</h2>
+
+            <div class="chat-container" id="chatContainer">
+                <!-- Sidebar (daftar percakapan) -->
+                <div class="chat-sidebar" id="chatSidebar">
+                    <div style="padding:10px 14px;border-bottom:1px solid #e2e8f0;">
+                        <input type="text" id="chatSearchMobile" placeholder="Cari percakapan..." style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:30px;font-size:0.8rem;background:#f8fafc;">
+                    </div>
+                    <div id="chatConversationsListMobile">
+                        <div class="empty-state" style="padding:30px 16px;">
+                            <i class="fas fa-inbox"></i>
+                            <h3>Belum ada percakapan</h3>
+                            <p>Pilih pekerjaan untuk mulai chat</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Main (ditampilkan saat percakapan dipilih) -->
+                <div class="chat-main" id="chatMainMobile" style="display:none;">
+                    <div class="chat-header">
+                        <button class="back" id="chatBackMobile"><i class="fas fa-arrow-left"></i></button>
+                        <div>
+                            <div style="font-weight:700;font-size:0.9rem;" id="chatPartnerName">Nama</div>
+                            <div style="font-size:0.7rem;color:#64748b;" id="chatPartnerRole">Requester</div>
+                        </div>
+                        <div style="margin-left:auto;font-size:0.7rem;color:#3ECF8E;"><span class="status-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3ECF8E;margin-right:4px;"></span>Online</div>
+                    </div>
+                    <div class="chat-messages" id="chatMessagesMobile">
+                        <div class="empty-state"><i class="fas fa-comment-slash"></i><h3>Mulai percakapan</h3></div>
+                    </div>
+                    <div class="chat-input-area">
+                        <button class="upload-btn" id="chatUploadMobile" disabled><i class="fas fa-cloud-upload-alt"></i></button>
+                        <input type="text" id="chatInputMobile" placeholder="Ketik pesan..." disabled>
+                        <button class="send-btn" id="chatSendMobile" disabled><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- SECTION: WALLET -->
+        <!-- ============================================================ -->
+        <section id="page-wallet" class="page-section">
+            <h2 class="section-title"><i class="fas fa-wallet"></i> Dompet Saya</h2>
+
+            <div class="wallet-grid">
+                <!-- Requester Wallet -->
+                <div class="wallet-card wallet-requester" id="walletRequesterCardMobile">
+                    <div class="label"><i class="fas fa-user-tie"></i> Wallet Requester</div>
+                    <div class="amount requester" id="walletRequesterPageMobile">Rp 0</div>
+                    <button class="btn btn-primary" id="topupBtnMobile"><i class="fas fa-plus-circle"></i> Top Up</button>
+                </div>
+
+                <!-- Helper Wallet -->
+                <div class="wallet-card wallet-helper" id="walletHelperCardMobile" style="display:none;">
+                    <div class="label"><i class="fas fa-hands-helping"></i> Wallet Helper</div>
+                    <div class="amount helper" id="walletHelperPageMobile">Rp 0</div>
+                    <button class="btn btn-success" id="withdrawBtnMobile"><i class="fas fa-arrow-down"></i> Tarik Saldo</button>
+                </div>
+            </div>
+
+            <div style="margin-bottom:8px;font-weight:700;font-size:0.9rem;">
+                <i class="fas fa-history" style="color:#2D63A3;"></i> Riwayat Transaksi
+                <span id="historyRoleHintMobile" style="font-size:0.7rem;font-weight:400;color:#64748b;">(Requester)</span>
+            </div>
+            <div style="background:white;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;">
+                <div style="overflow-x:auto;">
+                    <table class="history-table">
+                        <thead><tr><th>Tanggal</th><th>Deskripsi</th><th>Jumlah</th><th>Status</th></tr></thead>
+                        <tbody id="walletHistoryMobile">
+                            <tr><td colspan="4" style="text-align:center;padding:30px;color:#94a3b8;">Belum ada transaksi</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- SECTION: RATING -->
+        <!-- ============================================================ -->
+        <section id="page-rating" class="page-section">
+            <h2 class="section-title"><i class="fas fa-star"></i> Rating &amp; Ulasan</h2>
+            
+            <!-- Statistik Rating -->
+            <div class="stat-grid" style="margin-bottom:16px;">
+                <div class="stat-card">
+                    <i class="fas fa-star"></i>
+                    <h3 id="ratingAvgMobile">0.0</h3>
+                    <p>Rating Rata-rata</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <h3 id="ratingTotalMobile">0</h3>
+                    <p>Total Ulasan</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-thumbs-up"></i>
+                    <h3 id="ratingSatisfactionMobile">0%</h3>
+                    <p>Kepuasan Pengguna</p>
+                </div>
+            </div>
+            
+            <!-- Daftar Ulasan -->
+            <div style="background:var(--card-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--border-color);">
+                <div style="font-weight:600;font-size:0.9rem;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+                    <i class="fas fa-comment" style="color:var(--primary);"></i> Ulasan Pengguna
+                    <span id="ratingCountBadge" style="font-size:0.7rem;color:var(--gray-light);margin-left:auto;">0 ulasan</span>
+                </div>
+                <div id="reviewListMobile">
+                    <div class="empty-state" style="padding:30px 16px;">
+                        <i class="fas fa-star" style="font-size:2rem;color:var(--gray-lighter);"></i>
+                        <h3 style="font-size:1rem;margin-top:8px;">Belum ada ulasan</h3>
+                        <p style="font-size:0.8rem;color:var(--gray);">Belum ada ulasan dari pengguna lain</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- SECTION: HISTORY -->
+        <!-- ============================================================ -->
+        <section id="page-history" class="page-section">
+            <h2 class="section-title"><i class="fas fa-history"></i> Riwayat Pekerjaan</h2>
+            <div class="search-box">
+                <input type="text" id="historySearchMobile" placeholder="Cari judul atau lokasi...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="filter-row">
+                <select id="historySortMobile">
+                    <option value="newest">📅 Terbaru</option>
+                    <option value="oldest">📅 Terlama</option>
+                    <option value="price-high">💰 Tertinggi</option>
+                    <option value="price-low">💰 Terendah</option>
+                </select>
+            </div>
+            <div id="historyListMobile" class="job-list"></div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- SECTION: SETTINGS -->
+        <!-- ============================================================ -->
+        <section id="page-settings" class="page-section">
+            <h2 class="section-title"><i class="fas fa-cog"></i> Pengaturan</h2>
+
+            <div style="background:white;border-radius:14px;padding:16px;border:1px solid #e2e8f0;">
+
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="font-weight:600;font-size:0.85rem;">Notifikasi Browser</label>
+                    <button class="btn btn-primary" id="enableNotifMobile" style="width:100%;padding:10px;border-radius:10px;font-size:0.85rem;">
+                        <i class="fas fa-bell"></i> Aktifkan Notifikasi
+                    </button>
+                    <span id="notifStatusMobile" style="display:block;margin-top:6px;font-size:0.75rem;color:#64748b;"></span>
+                    <small style="display:block;margin-top:4px;font-size:0.7rem;color:#94a3b8;">Dapatkan pemberitahuan pesan dan update pekerjaan</small>
+                </div>
+
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="font-weight:600;font-size:0.85rem;">Mode Tampilan</label>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span style="font-size:0.85rem;">Mode Gelap</span>
+                        <label class="switch" style="position:relative;display:inline-block;width:44px;height:24px;">
+                            <input type="checkbox" id="darkModeToggleMobile">
+                            <span style="position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:24px;transition:0.3s;"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline" id="logoutBtnMobile" style="width:100%;padding:12px;border-radius:10px;font-size:0.9rem;">
+                    <i class="fas fa-sign-out-alt"></i> Keluar Akun
+                </button>
+            </div>
+        </section>
+
+    </div><!-- /mobile-container -->
+
+    <!-- ============================================================ -->
+    <!-- MODALS -->
+    <!-- ============================================================ -->
+
+    <!-- MODAL: Create Job (DENGAN BUDGET RANGE) -->
+    <div class="modal-overlay" id="createJobModalMobile">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-clipboard-list"></i> Buat Permintaan</h2>
+                <button class="close" data-modal="createJobModalMobile">&times;</button>
+            </div>
+            <div style="background:#eef2ff;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:0.85rem;">
+                <strong>Saldo Requester: <span id="modalWalletBalanceMobile">Rp 0</span></strong>
+                <span style="background:#2D63A3;color:white;padding:2px 10px;border-radius:20px;font-size:0.65rem;margin-left:8px;">Admin Rp 2.500</span>
+                <div style="margin-top:6px;font-size:0.8rem;"><i class="fas fa-hands-helping"></i> Wallet Helper: <span id="modalWalletHelperMobile">Rp 0</span></div>
+            </div>
+            <form id="createJobFormMobile">
+                <div class="form-group"><label>Judul Pekerjaan <span style="color:red;">*</span></label><input type="text" id="jobTitleMobile" placeholder="Contoh: Perbaikan AC" required></div>
+                <div class="form-group"><label>Kategori <span style="color:red;">*</span></label>
+                    <select id="jobCategoryMobile" required>
+                        <option value="">Pilih Kategori</option>
+                        <option value="perbaikan">🔧 Perbaikan & Servis</option>
+                        <option value="kebersihan">🧹 Kebersihan</option>
+                        <option value="pindahan">📦 Jasa Pindahan</option>
+                        <option value="tukang">🏗️ Tukang Bangunan</option>
+                        <option value="design">🎨 Design & Kreatif</option>
+                        <option value="lainnya">📝 Lainnya</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Deskripsi <span style="color:red;">*</span></label><textarea id="jobDescriptionMobile" placeholder="Jelaskan detail pekerjaan..." required></textarea></div>
+                <div class="form-group"><label>Alamat <span style="color:red;">*</span></label>
+                    <input type="text" id="jobLocationMobile" placeholder="Contoh: Jl. Sudirman No. 123" required>
+                    <input type="hidden" id="jobLatitudeMobile" value="-6.2088">
+                    <input type="hidden" id="jobLongitudeMobile" value="106.8456">
+                    <button type="button" class="btn btn-primary" id="simpleLocationBtnMobile" style="margin-top:8px;padding:8px 14px;font-size:0.75rem;border-radius:30px;"><i class="fas fa-location-dot"></i> Pakai Lokasi Saya</button>
+                    <div class="location-preview" id="simpleLocationPreviewMobile"><span id="simpleLocationTextMobile"></span><button class="remove-loc" type="button" id="removeLocationMobile">&times;</button></div>
+                </div>
+                <div class="form-group"><label>Foto Pekerjaan (Opsional)</label><input type="file" id="jobImageMobile" accept="image/*"><div class="image-preview" id="imagePreviewMobile"><img id="previewImgMobile"><button class="remove-img" type="button" id="removeImageMobile">Hapus</button></div></div>
+
+                <!-- ================================================================ -->
+                <!-- BUDGET RANGE - GANTI INDICATOR -->
+                <!-- ================================================================ -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Budget Minimum <span style="color:red;">*</span></label>
+                        <input type="text" id="budgetMinMobile" placeholder="Minimal Rp 10.000" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Budget Maksimum <span style="color:red;">*</span></label>
+                        <input type="text" id="budgetMaxMobile" placeholder="Maksimal" required>
+                    </div>
+                </div>
+
+                <!-- Emergency Checkbox -->
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                    <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;padding:4px 0;">
+                        <input type="checkbox" id="emergencyJobMobile"> 
+                        <span style="font-weight:600;color:#dc3545;">🚨 Emergency (+Rp 10.000)</span>
+                    </label>
+                </div>
+
+                <!-- Budget Range Display -->
+                <div class="budget-display">
+                    <div class="row"><span>Budget Minimum</span><strong id="budgetMinDisplayMobile">Rp 0</strong></div>
+                    <div class="row border-top"><span>Budget Maksimum</span><strong id="budgetMaxDisplayMobile">Rp 0</strong></div>
+                    <div class="row border-top"><span>Emergency</span><strong id="emergencyDisplayMobile" style="color:#64748b;">Tidak</strong></div>
+                    <div class="info"><i class="fas fa-info-circle"></i> Masukkan rentang budget yang Anda siapkan. Helper akan menawar harga deal di dalam rentang ini.</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;font-weight:700;border-radius:12px;">
+                    <i class="fas fa-paper-plane"></i> Posting Permintaan
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL: OFFER (Helper menawar) - BARU UNTUK SISTEM NEGOSIASI -->
+    <!-- ============================================================ -->
+    <div class="modal-overlay" id="offerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-gavel"></i> Buat Tawaran</h2>
+                <button class="close" data-modal="offerModal">&times;</button>
+            </div>
+            <div style="background:#eff6ff;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:0.85rem;">
+                <div style="font-weight:700;" id="offerJobTitle">-</div>
+                <div style="font-size:0.75rem;color:#64748b;" id="offerJobEstimate">Budget: Rp 0</div>
+                <div style="font-size:0.7rem;color:#3b82f6;margin-top:4px;">
+                    <i class="fas fa-info-circle"></i> Anda hanya bisa menawar SEKALI.
+                </div>
+            </div>
+            <input type="hidden" id="offerJobId">
+            <form id="offerForm">
+                <div class="form-group">
+                    <label>Harga Tawaran <span style="color:red;">*</span></label>
+                    <input type="text" id="offerPrice" placeholder="Contoh: 100000" required>
+                    <small style="display:block;margin-top:4px;color:#64748b;">Minimal Rp 10.000</small>
+                </div>
+                <div class="form-group">
+                    <label>Pesan (Opsional)</label>
+                    <textarea id="offerMessage" placeholder="Contoh: Saya bisa mulai hari ini..." rows="3"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" id="submitOfferBtn" style="width:100%;padding:14px;border-radius:12px;font-weight:700;">
+                    <i class="fas fa-paper-plane"></i> Kirim Tawaran
+                </button>
+            </form>
+        </div>
+    </div>
+
+<!-- MODAL: OFFERS LIST (Lihat semua tawaran) -->
+<div class="modal-overlay" id="offersModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-list"></i> <span id="offersModalTitle">Tawaran</span></h2>
+            <button class="close" data-modal="offersModal">&times;</button>
+        </div>
+        <input type="hidden" id="offersModalJobId">
+        <div style="font-size:0.8rem;color:var(--gray);margin-bottom:12px;" id="offersModalStatus">Status: -</div>
+        <div style="background:#fef9e6;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:0.75rem;color:#92400e;border:1px solid #fde68a;">
+            <i class="fas fa-info-circle"></i> Tawaran diurutkan dari harga termurah. Pilih satu tawaran untuk deal!
+        </div>
+        <!-- 🔥 CONTAINER UNTUK DAFTAR TAWARAN -->
+        <div id="offersList">
+            <div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Memuat tawaran...</div>
+        </div>
+        <button class="btn btn-ghost" onclick="refreshOffers()" style="width:100%;padding:10px;border-radius:10px;font-size:0.8rem;margin-top:8px;">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+    </div>
+</div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL: PAYMENT (Requester bayar setelah deal) - BARU -->
+    <!-- ============================================================ -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#059669,#10b981);margin:-24px -20px 16px;padding:16px 20px;border-radius:20px 20px 0 0;color:white;">
+                <h2 style="color:white;font-size:1rem;"><i class="fas fa-credit-card"></i> Konfirmasi Pembayaran</h2>
+                <button class="close" data-modal="paymentModal" style="color:white;">&times;</button>
+            </div>
+            <input type="hidden" id="paymentJobId">
+            <div style="font-weight:700;font-size:1rem;margin-bottom:12px;" id="paymentJobTitle">-</div>
+            
+            <div class="payment-summary">
+                <div class="row"><span>Harga Deal</span><span id="paymentDealPrice">Rp 0</span></div>
+                <div class="row"><span>Service Fee (5%)</span><span id="paymentServiceFee">Rp 0</span></div>
+                <div class="row"><span>Admin Fee</span><span id="paymentAdminFee">Rp 2.500</span></div>
+                <div class="row emergency" id="paymentEmergencyRow" style="display:none;"><span>Emergency Fee</span><span id="paymentEmergencyFee">Rp 10.000</span></div>
+                <div class="row total"><span>Total Dibayar</span><span id="paymentTotal">Rp 0</span></div>
+            </div>
+            
+            <div class="payment-balance" id="paymentBalance">Saldo: Rp 0</div>
+            
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px;margin-bottom:16px;font-size:0.8rem;color:#166534;">
+                <i class="fas fa-check-circle"></i> Dana akan masuk ke escrow dan ditransfer ke Helper setelah Anda ACC bukti pekerjaan.
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-ghost" data-modal="paymentModal">Batal</button>
+                <button class="btn btn-success" id="paymentPayBtn" style="flex:2;">
+                    <i class="fas fa-check"></i> Bayar Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Job Detail -->
+    <div class="modal-overlay" id="jobDetailModalMobile">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="detailJobTitleMobile">Judul</h2><button class="close" data-modal="jobDetailModalMobile">&times;</button></div>
+            <div id="detailJobBadgeMobile"></div>
+            <div class="form-group"><label>Kategori</label><p id="detailJobCategoryMobile">-</p></div>
+            <div class="form-group"><label>Lokasi</label><p id="detailJobLocationMobile">-</p></div>
+            <div class="form-group"><label>Upah</label><p id="detailJobPriceMobile" style="font-weight:700;color:#3ECF8E;">-</p></div>
+            <div class="form-group"><label>Deskripsi</label><p id="detailJobDescriptionMobile">-</p></div>
+            <div class="form-group"><label>Dibuat</label><p id="detailJobDateMobile">-</p></div>
+            <div class="form-group"><label>Status</label><p id="detailJobStatusMobile">-</p></div>
+            <div class="btn-group">
+                <button class="btn btn-ghost" data-modal="jobDetailModalMobile">Tutup</button>
+                <button class="btn btn-primary" id="detailActionBtnMobile">Aksi</button>
+                <button class="btn btn-outline" id="detailFavoriteBtnMobile"><i class="far fa-heart"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Topup -->
+    <div class="modal-overlay" id="topupModalMobile">
+        <div class="modal-content">
+            <div class="modal-header"><h2><i class="fas fa-plus-circle"></i> Top Up</h2><button class="close" data-modal="topupModalMobile">&times;</button></div>
+            <form id="topupFormMobile">
+                <div class="form-group"><label>Nominal Top Up</label><input type="text" id="topupNominalMobile" placeholder="Minimal Rp 10.000" required></div>
+                <div style="background:#f8fafc;border-radius:12px;padding:12px;border:1px solid #e2e8f0;margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.85rem;"><span>Nominal</span><span id="summaryNominalMobile">Rp 0</span></div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.85rem;"><span>Biaya Admin</span><span style="color:#dc2626;">+ Rp 2.500</span></div>
+                    <div style="border-top:1px dashed #cbd5e1;margin:8px 0;"></div>
+                    <div style="display:flex;justify-content:space-between;font-weight:700;"><span>Total Dibayar</span><span id="totalPaymentAmountMobile" style="color:#2D63A3;">Rp 0</span></div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding-top:6px;border-top:1px solid #e2e8f0;"><span style="color:#16a34a;">Saldo Diterima</span><span id="topupReceivedAmountMobile" style="color:#16a34a;font-weight:700;">Rp 0</span></div>
+                </div>
+                <div class="qris-section" id="qrisSectionMobile">
+                    <p style="font-weight:700;color:#2D63A3;"><i class="fas fa-qrcode"></i> Scan QRIS untuk Bayar</p>
+                    <img id="qrisImageMobile" src="qris2.jpeg" alt="QRIS">
+                    <div id="totalPaymentDisplayMobile" style="font-weight:700;">Total Dibayar: Rp 0</div>
+                    <div id="topupStatusMessageMobile" style="margin-top:8px;font-size:0.8rem;"></div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;border-radius:12px;font-weight:700;" id="topupPayBtnMobile">
+                    <i class="fas fa-paper-plane"></i> Request Top Up
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Withdraw -->
+    <div class="modal-overlay" id="withdrawModalMobile">
+        <div class="modal-content">
+            <div class="modal-header"><h2><i class="fas fa-arrow-down"></i> Tarik Saldo</h2><button class="close" data-modal="withdrawModalMobile">&times;</button></div>
+            <div style="background:#e6f7e6;border-radius:12px;padding:12px;margin-bottom:16px;text-align:center;">
+                <div style="font-size:0.75rem;color:#64748b;">Saldo Tersedia</div>
+                <div style="font-size:1.6rem;font-weight:800;color:#1a6b3c;" id="helperBalanceWithdrawMobile">Rp 0</div>
+            </div>
+            <form id="withdrawFormMobile">
+                <div class="form-group"><label>Bank Tujuan</label>
+                    <select id="withdrawBankMobile" required>
+                        <option value="">— Pilih Bank —</option>
+                        <option value="BCA">BCA</option>
+                        <option value="BRI">BRI</option>
+                        <option value="BNI">BNI</option>
+                        <option value="Mandiri">Bank Mandiri</option>
+                        <option value="BSI">Bank Syariah Indonesia</option>
+                        <option value="Permata">Bank Permata</option>
+                        <option value="CIMB">CIMB Niaga</option>
+                        <option value="Danamon">Bank Danamon</option>
+                        <option value="Maybank">Maybank</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Nomor Rekening</label><input type="text" id="withdrawAccountNumberMobile" placeholder="Contoh: 1234567890" required></div>
+                <div class="form-group"><label>Nama Pemilik</label><input type="text" id="withdrawAccountNameMobile" placeholder="Sesuai rekening" required></div>
+                <div class="form-group"><label>Nominal Penarikan</label><input type="text" id="withdrawNominalMobile" placeholder="Minimal Rp 50.000" required></div>
+                <div style="background:#f0faf4;border:1px solid #c3e6cb;border-radius:12px;padding:12px;margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.85rem;"><span>Nominal</span><span id="withdrawSummaryNominalMobile">Rp 0</span></div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.85rem;"><span>Biaya Admin</span><span style="color:#e74c3c;">- Rp 2.500</span></div>
+                    <div style="border-top:1px dashed #c3e6cb;margin:8px 0;"></div>
+                    <div style="display:flex;justify-content:space-between;font-weight:700;"><span>Diterima</span><span id="withdrawNetAmountMobile" style="color:#1a6b3c;">Rp 0</span></div>
+                </div>
+                <button type="submit" class="btn btn-success" style="width:100%;padding:14px;border-radius:12px;font-weight:700;">
+                    <i class="fas fa-paper-plane"></i> Ajukan Penarikan
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Rating -->
+    <div class="modal-overlay" id="ratingModalMobile">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="ratingModalTitleMobile">Beri Rating</h2><button class="close" data-modal="ratingModalMobile">&times;</button></div>
+            <input type="hidden" id="ratingJobIdMobile">
+            <div style="text-align:center;margin-bottom:16px;">
+                <div style="font-size:0.85rem;color:#64748b;">Seberapa puas Anda?</div>
+                <div class="stars-container" id="starContainerMobile">
+                    <span class="star" data-val="1">★</span>
+                    <span class="star" data-val="2">★</span>
+                    <span class="star" data-val="3">★</span>
+                    <span class="star" data-val="4">★</span>
+                    <span class="star" data-val="5">★</span>
+                </div>
+                <div style="display:none;"><input type="radio" name="ratingMobile" id="r1m" value="1"><input type="radio" name="ratingMobile" id="r2m" value="2"><input type="radio" name="ratingMobile" id="r3m" value="3"><input type="radio" name="ratingMobile" id="r4m" value="4"><input type="radio" name="ratingMobile" id="r5m" value="5"></div>
+                <div id="ratingLabelMobile" style="font-size:0.8rem;color:#92400e;opacity:0.6;">Pilih bintang</div>
+            </div>
+            <div class="form-group"><label>Ulasan (opsional)</label><textarea id="reviewTextMobile" placeholder="Ceritakan pengalaman Anda..." rows="3"></textarea></div>
+            <div class="btn-group">
+                <button class="btn btn-ghost" data-modal="ratingModalMobile">Lewati</button>
+                <button class="btn btn-primary" id="submitRatingMobile"><i class="fas fa-paper-plane"></i> Kirim Rating</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL: ACC -->
+    <div class="modal-overlay" id="accModalMobile">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#059669,#10b981);margin:-24px -20px 16px;padding:16px 20px;border-radius:20px 20px 0 0;color:white;">
+                <h2 style="color:white;font-size:1rem;"><i class="fas fa-check-circle"></i> Konfirmasi ACC</h2>
+                <button class="close" data-modal="accModalMobile" style="color:white;">&times;</button>
+            </div>
+            <input type="hidden" id="accJobIdMobile">
+            <div style="background:#ecfdf5;border:1px solid #6ee7b7;border-radius:10px;padding:12px;margin-bottom:16px;font-size:0.85rem;color:#065f46;">
+                <i class="fas fa-info-circle"></i> 
+                <strong>Setujui pekerjaan ini?</strong>
+                <div style="margin-top:6px;font-size:0.8rem;">
+                    Dana akan ditransfer ke Helper setelah Anda ACC.
+                </div>
+            </div>
+            
+            <div id="accJobInfoMobile" style="background:#f8fafc;border-radius:10px;padding:12px;margin-bottom:16px;font-size:0.85rem;border:1px solid #e2e8f0;">
+                <div style="display:flex;justify-content:space-between;padding:4px 0;">
+                    <span style="color:#64748b;">Pekerjaan</span>
+                    <strong id="accJobTitleMobile">-</strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:4px 0;">
+                    <span style="color:#64748b;">Helper</span>
+                    <strong id="accHelperNameMobile">-</strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:4px 0;border-top:1px dashed #e2e8f0;margin-top:4px;padding-top:8px;">
+                    <span style="color:#64748b;">Total</span>
+                    <strong id="accTotalPriceMobile" style="color:#059669;">Rp 0</strong>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-ghost" data-modal="accModalMobile">Batal</button>
+                <button class="btn btn-success" id="submitAccMobile" style="flex:2;">
+                    <i class="fas fa-check"></i> Ya, ACC
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL: Reject -->
+    <div class="modal-overlay" id="rejectModalMobile">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#b91c1c,#ef4444);margin:-24px -20px 16px;padding:16px 20px;border-radius:20px 20px 0 0;color:white;">
+                <h2 style="color:white;font-size:1rem;"><i class="fas fa-times-circle"></i> Tolak Bukti</h2>
+                <button class="close" data-modal="rejectModalMobile" style="color:white;">&times;</button>
+            </div>
+            <input type="hidden" id="rejectJobIdMobile">
+            <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:10px;padding:10px;font-size:0.8rem;color:#b91c1c;margin-bottom:16px;">
+                <i class="fas fa-exclamation-circle"></i> Helper akan diminta upload ulang bukti.
+            </div>
+            <div class="form-group"><label>Alasan Penolakan <span style="color:red;">*</span></label><textarea id="rejectAlasanMobile" placeholder="Jelaskan mengapa bukti ditolak..." rows="4" required></textarea></div>
+            <div class="btn-group">
+                <button class="btn btn-ghost" data-modal="rejectModalMobile">Batal</button>
+                <button class="btn btn-danger" id="submitRejectMobile"><i class="fas fa-times"></i> Tolak</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Report -->
+    <div class="modal-overlay" id="reportModalMobile">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#475569,#64748b);margin:-24px -20px 16px;padding:16px 20px;border-radius:20px 20px 0 0;color:white;">
+                <h2 style="color:white;font-size:1rem;"><i class="fas fa-flag"></i> Laporkan Masalah</h2>
+                <button class="close" data-modal="reportModalMobile" style="color:white;">&times;</button>
+            </div>
+            <input type="hidden" id="reportJobIdMobile">
+            <div style="background:#fef9c3;border:1px solid #fde68a;border-radius:10px;padding:10px;font-size:0.8rem;color:#92400e;margin-bottom:16px;">
+                <i class="fas fa-shield-alt"></i> Laporan rahasia, ditinjau dalam 1x24 jam.
+            </div>
+            <div class="form-group"><label>Deskripsi Masalah <span style="color:red;">*</span></label><textarea id="reportPesanMobile" placeholder="Ceritakan masalah secara detail..." rows="4" required></textarea></div>
+            <div class="btn-group">
+                <button class="btn btn-ghost" data-modal="reportModalMobile">Batal</button>
+                <button class="btn btn-primary" id="submitReportMobile"><i class="fas fa-paper-plane"></i> Kirim</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Upload Bukti -->
+    <div class="modal-overlay" id="uploadBuktiModalMobile">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#2D63A3,#3A7BB0);margin:-24px -20px 16px;padding:16px 20px;border-radius:20px 20px 0 0;color:white;">
+                <h2 style="color:white;font-size:1rem;"><i class="fas fa-cloud-upload-alt"></i> Upload Bukti</h2>
+                <button class="close" data-modal="uploadBuktiModalMobile" style="color:white;">&times;</button>
+            </div>
+            <input type="hidden" id="uploadBuktiJobIdMobile">
+            <div style="background:#f0f7ff;padding:10px 14px;border-radius:10px;margin-bottom:16px;font-size:0.85rem;">
+                <i class="fas fa-briefcase" style="color:#2D63A3;"></i> <span id="uploadBuktiJobTitleMobile">-</span>
+            </div>
+            <div id="uploadBuktiRejectInfoMobile" style="display:none;background:#fff3cd;border-left:4px solid #ffc107;padding:10px 14px;border-radius:8px;margin-bottom:16px;font-size:0.8rem;color:#856404;">
+                <strong><i class="fas fa-exclamation-triangle"></i> Pekerjaan Ditolak</strong>
+                <div>Alasan: <span id="uploadBuktiRejectReasonMobile"></span></div>
+            </div>
+            <div class="form-group">
+                <label>Foto Bukti Pengerjaan <span style="color:red;">*</span></label>
+                <div id="uploadBuktiDropZoneMobile" style="border:2px dashed #cbd5e1;border-radius:12px;padding:30px 20px;text-align:center;cursor:pointer;background:#f8fafc;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size:2rem;color:#94a3b8;"></i>
+                    <p style="margin:4px 0;font-size:0.85rem;color:#64748b;">Klik untuk pilih gambar</p>
+                    <small style="color:#94a3b8;">JPG, PNG (Max 5MB)</small>
+                </div>
+                <input type="file" id="uploadBuktiFileMobile" accept=".jpg,.jpeg,.png" style="display:none;" required>
+                <div id="uploadBuktiPreviewMobile" style="display:none;margin-top:12px;position:relative;">
+                    <img id="uploadBuktiPreviewImgMobile" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;border:1px solid #e2e8f0;">
+                    <button type="button" id="clearBuktiPreviewMobile" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:1rem;">&times;</button>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="submitBuktiMobile" style="width:100%;padding:14px;border-radius:12px;font-weight:700;">
+                <i class="fas fa-paper-plane"></i> Kirim Bukti
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- JavaScript Mobile -->
+    <script src="javascript_mobile.js"></script>
+
+    <!-- Notifikasi helper -->
+    <script>
+        // NotifHelper mini untuk mobile
+        window.notifHelper = {
+            show: function(title, message, type = 'info') {
+                // Browser notification
+                if (Notification.permission === 'granted') {
+                    new Notification(title, { body: message, icon: '/favicon.ico' });
+                }
+                // Toast
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = 'toast ' + type;
+                let icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : '🔔';
+                toast.innerHTML = `<span class="icon">${icon}</span><span class="msg"><strong>${title}</strong> ${message}</span><button class="close-toast">&times;</button>`;
+                container.appendChild(toast);
+                const close = toast.querySelector('.close-toast');
+                close.onclick = () => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); };
+                setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 5000);
+            }
+        };
+        console.log('✅ notifHelper mobile ready');
+    </script>
+
+</body>
+</html>

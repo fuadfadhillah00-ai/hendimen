@@ -1,0 +1,64 @@
+[26-Jun-2026 19:41:42 Asia/Jakarta] === admin_process_topup.php ===
+[26-Jun-2026 19:41:42 Asia/Jakarta] SESSION user_id: 40
+[26-Jun-2026 19:41:42 Asia/Jakarta] POST: Array
+(
+    [request_id] => 56
+    [action] => reject
+    [reason] => ga bayar
+)
+
+[26-Jun-2026 19:41:42 Asia/Jakarta] Processing: request_id=56, action=reject
+[26-Jun-2026 19:41:42 Asia/Jakarta] Request found: user_id=45, nominal=10000, status=pending
+[26-Jun-2026 19:41:42 Asia/Jakarta] Processing REJECT for request #56
+[26-Jun-2026 19:41:42 Asia/Jakarta] Reason: ga bayar
+[26-Jun-2026 19:41:42 Asia/Jakarta] FATAL ERROR: The number of elements in the type definition string must match the number of bind variables
+[26-Jun-2026 19:41:42 Asia/Jakarta] Stack trace: #0 /home/u352984455/domains/hendimen.my.id/public_html/admin_process_topup.php(174): mysqli_stmt->bind_param()
+#1 {main}
+[26-Jun-2026 19:50:37 Asia/Jakarta] === admin_process_topup.php ===
+[26-Jun-2026 19:50:37 Asia/Jakarta] SESSION user_id: 40
+[26-Jun-2026 19:50:37 Asia/Jakarta] POST: Array
+(
+    [request_id] => 56
+    [action] => reject
+    [reason] => gabayar
+)
+
+[26-Jun-2026 19:50:37 Asia/Jakarta] Processing: request_id=56, action=reject
+[26-Jun-2026 19:50:37 Asia/Jakarta] Request found: user_id=45, nominal=10000, status=pending
+[26-Jun-2026 19:50:37 Asia/Jakarta] Processing REJECT for request #56
+[26-Jun-2026 19:50:37 Asia/Jakarta] Reason: gabayar
+[26-Jun-2026 19:50:37 Asia/Jakarta] FATAL ERROR: The number of elements in the type definition string must match the number of bind variables
+[26-Jun-2026 19:50:37 Asia/Jakarta] Stack trace: #0 /home/u352984455/domains/hendimen.my.id/public_html/admin_process_topup.php(174): mysqli_stmt->bind_param()
+#1 {main}
+[26-Jun-2026 19:53:33 Asia/Jakarta] === admin_process_topup.php ===
+[26-Jun-2026 19:53:33 Asia/Jakarta] SESSION user_id: 40
+[26-Jun-2026 19:53:33 Asia/Jakarta] POST: Array
+(
+    [request_id] => 56
+    [action] => reject
+    [reason] => gabayar
+)
+
+[26-Jun-2026 19:53:33 Asia/Jakarta] Processing: request_id=56, action=reject
+[26-Jun-2026 19:53:33 Asia/Jakarta] Request found: user_id=45, nominal=10000, status=pending
+[26-Jun-2026 19:53:33 Asia/Jakarta] Processing REJECT for request #56
+[26-Jun-2026 19:53:33 Asia/Jakarta] Reason: gabayar
+[26-Jun-2026 19:53:33 Asia/Jakarta] FATAL ERROR: The number of elements in the type definition string must match the number of bind variables
+[26-Jun-2026 19:53:33 Asia/Jakarta] Stack trace: #0 /home/u352984455/domains/hendimen.my.id/public_html/admin_process_topup.php(179): mysqli_stmt->bind_param()
+#1 {main}
+[26-Jun-2026 20:00:30 Asia/Jakarta] === admin_process_topup.php ===
+[26-Jun-2026 20:00:30 Asia/Jakarta] SESSION user_id: 40
+[26-Jun-2026 20:00:30 Asia/Jakarta] POST: Array
+(
+    [request_id] => 56
+    [action] => reject
+    [reason] => gabayar
+)
+
+[26-Jun-2026 20:00:30 Asia/Jakarta] Processing: request_id=56, action=reject
+[26-Jun-2026 20:00:30 Asia/Jakarta] Request found: user_id=45, nominal=10000, status=pending
+[26-Jun-2026 20:00:30 Asia/Jakarta] Processing REJECT for request #56
+[26-Jun-2026 20:00:30 Asia/Jakarta] Reason: gabayar
+[26-Jun-2026 20:00:30 Asia/Jakarta] Status updated to rejected
+[26-Jun-2026 20:00:30 Asia/Jakarta] Notification sent to user 45
+[26-Jun-2026 20:00:30 Asia/Jakarta] Transaction committed successfully

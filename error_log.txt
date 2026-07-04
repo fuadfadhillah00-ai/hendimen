@@ -1,0 +1,107 @@
+[30-Jun-2026 13:34:16 Asia/Jakarta] job inserted, id: 484, budget_min: 10000, budget_max: 50000
+[30-Jun-2026 13:34:16 Asia/Jakarta] ✅ Access token berhasil didapatkan
+[30-Jun-2026 13:34:16 Asia/Jakarta] ✅ FCM terkirim ke: eJxzeNUUSxqXJkqqJ4PF...
+[30-Jun-2026 13:34:16 Asia/Jakarta] 📤 FCM broadcast: 1 sukses, 0 gagal
+[30-Jun-2026 13:34:16 Asia/Jakarta] 📤 FCM broadcast untuk job #484: 1 sukses, 0 gagal
+[30-Jun-2026 13:34:16 Asia/Jakarta] ❌ WhatsApp notifikasi gagal: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /send-notification</pre>
+</body>
+</html>
+
+[30-Jun-2026 13:58:25 Asia/Jakarta] job inserted, id: 485, budget_min: 10000, budget_max: 50000
+[30-Jun-2026 13:58:25 Asia/Jakarta] ✅ Access token berhasil didapatkan
+[30-Jun-2026 13:58:25 Asia/Jakarta] ✅ FCM terkirim ke: eJxzeNUUSxqXJkqqJ4PF...
+[30-Jun-2026 13:58:25 Asia/Jakarta] ✅ Access token berhasil didapatkan
+[30-Jun-2026 13:58:25 Asia/Jakarta] ✅ FCM terkirim ke: fMnNYT2VStaX2u9Aq3Hd...
+[30-Jun-2026 13:58:25 Asia/Jakarta] 📤 FCM broadcast: 2 sukses, 0 gagal
+[30-Jun-2026 13:58:25 Asia/Jakarta] 📤 FCM broadcast untuk job #485: 2 sukses, 0 gagal
+[30-Jun-2026 13:58:25 Asia/Jakarta] ❌ WhatsApp notifikasi gagal: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /send-notification</pre>
+</body>
+</html>
+
+[02-Jul-2026 18:16:41 Asia/Jakarta] save_job.php Exception: User ID tidak valid
+[02-Jul-2026 18:16:54 Asia/Jakarta] save_job.php Exception: User ID tidak valid
+[04-Jul-2026 11:04:42 Asia/Jakarta] job inserted, id: 486, budget_min: 10000, budget_max: 50000
+[04-Jul-2026 11:04:42 Asia/Jakarta] ✅ Access token berhasil didapatkan
+[04-Jul-2026 11:04:42 Asia/Jakarta] ✅ FCM terkirim ke: eJxzeNUUSxqXJkqqJ4PF...
+[04-Jul-2026 11:04:42 Asia/Jakarta] ✅ Access token berhasil didapatkan
+[04-Jul-2026 11:04:43 Asia/Jakarta] ✅ FCM terkirim ke: fMnNYT2VStaX2u9Aq3Hd...
+[04-Jul-2026 11:04:43 Asia/Jakarta] 📤 FCM broadcast: 2 sukses, 0 gagal
+[04-Jul-2026 11:04:43 Asia/Jakarta] 📤 FCM broadcast untuk job #486: 2 sukses, 0 gagal
+[04-Jul-2026 11:04:43 Asia/Jakarta] ❌ WhatsApp notifikasi gagal: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /send-notification</pre>
+</body>
+</html>
+
+[05-Jul-2026 00:32:13 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:32:54 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:36:14 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:37:23 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference in /home/u352984455/domains/hendimen.my.id/public_html/withdraw.php line 137
+[05-Jul-2026 00:39:04 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:40:30 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:41:21 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:42:21 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:42:47 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:45:09 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:47:26 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:49:20 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 00:56:49 Asia/Jakarta] Withdraw error (Error): mysqli_stmt::bind_param(): Argument #4 could not be passed by reference
+[05-Jul-2026 02:56:04 Asia/Jakarta] update_job.php - action: pay, job_id: 486, user_id: 44
+[05-Jul-2026 02:56:34 Asia/Jakarta] update_job.php - action: start, job_id: 486, user_id: 29
+[05-Jul-2026 02:57:07 Asia/Jakarta] update_job.php - action: reject, job_id: 486, user_id: 44
+[05-Jul-2026 02:57:26 Asia/Jakarta] update_job.php - action: acc, job_id: 486, user_id: 44
+[05-Jul-2026 02:57:33 Asia/Jakarta] update_job.php - action: rate, job_id: 486, user_id: 44
+[05-Jul-2026 02:58:34 Asia/Jakarta] job inserted, id: 487, budget_min: 100000, budget_max: 400000
+[05-Jul-2026 02:58:34 Asia/Jakarta] ✅ Access token berhasil didapatkan
+[05-Jul-2026 02:58:34 Asia/Jakarta] ✅ FCM terkirim ke: fMnNYT2VStaX2u9Aq3Hd...
+[05-Jul-2026 02:58:34 Asia/Jakarta] 📤 FCM broadcast: 1 sukses, 0 gagal
+[05-Jul-2026 02:58:34 Asia/Jakarta] 📤 FCM broadcast untuk job #487: 1 sukses, 0 gagal
+[05-Jul-2026 02:58:34 Asia/Jakarta] ❌ WhatsApp notifikasi gagal: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /send-notification</pre>
+</body>
+</html>
+
+[05-Jul-2026 03:02:35 Asia/Jakarta] job inserted, id: 488, budget_min: 100000, budget_max: 400000
+[05-Jul-2026 03:02:35 Asia/Jakarta] ✅ Access token berhasil didapatkan
+[05-Jul-2026 03:02:36 Asia/Jakarta] ✅ FCM terkirim ke: eJxzeNUUSxqXJkqqJ4PF...
+[05-Jul-2026 03:02:36 Asia/Jakarta] ✅ Access token berhasil didapatkan
+[05-Jul-2026 03:02:36 Asia/Jakarta] ✅ FCM terkirim ke: fMnNYT2VStaX2u9Aq3Hd...
+[05-Jul-2026 03:02:36 Asia/Jakarta] 📤 FCM broadcast: 2 sukses, 0 gagal
+[05-Jul-2026 03:02:36 Asia/Jakarta] 📤 FCM broadcast untuk job #488: 2 sukses, 0 gagal
+[05-Jul-2026 03:02:36 Asia/Jakarta] ❌ WhatsApp notifikasi gagal: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /send-notification</pre>
+</body>
+</html>
+
+[05-Jul-2026 03:03:50 Asia/Jakarta] update_job.php - action: pay, job_id: 488, user_id: 44
