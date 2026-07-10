@@ -1,5 +1,5 @@
 <?php
-// send_message.php - FULL: Kirim pesan chat termasuk lokasi
+// send_message.php - FULL: Kirim pesan chat termasuk lokasi (FIXED)
 
 while (ob_get_level()) ob_end_clean();
 error_reporting(0);
@@ -51,56 +51,47 @@ $receiver_id = isset($_POST['receiver_id']) ? intval($_POST['receiver_id']) : 0;
 $message = isset($_POST['message']) ? trim($_POST['message']) : '';
 $sender_role = isset($_POST['sender_role']) ? $_POST['sender_role'] : '';
 $type = isset($_POST['type']) ? $_POST['type'] : 'text';
+$is_location = isset($_POST['is_location']) ? intval($_POST['is_location']) : 0;
 
 // 🔥 DATA LOKASI (jika ada)
 $location_name = isset($_POST['location_name']) ? trim($_POST['location_name']) : '';
 $location_address = isset($_POST['location_address']) ? trim($_POST['location_address']) : '';
 $location_lat = isset($_POST['location_lat']) ? floatval($_POST['location_lat']) : null;
 $location_lng = isset($_POST['location_lng']) ? floatval($_POST['location_lng']) : null;
-$is_location = isset($_POST['is_location']) ? intval($_POST['is_location']) : 0;
 
 // ================================================================
-// 🔥🔥🔥 FORCE: PERBAIKI DATA LOKASI DI SISI SERVER
+// 🔥🔥🔥 PERBAIKI: PASTIKAN TYPE LOKASI
 // ================================================================
 
 if ($is_location == 1 || $type === 'location') {
     $type = 'location';
     
-    // 🔥 1. PASTIKAN KOORDINAT VALID
+    // 🔥 PASTIKAN KOORDINAT VALID
     if ($location_lat === null || $location_lng === null || $location_lat == 0 || $location_lng == 0) {
         sendJsonResponse(['success' => false, 'message' => 'Data lokasi tidak valid (koordinat 0)']);
     }
     
-    // 🔥 2. BUAT location_data (NAMA LOKASI)
-    // Jika location_name kosong atau '0' atau 'Lokasi Saya' atau hanya koordinat, buat dari koordinat
+    // 🔥 BUAT location_data (NAMA LOKASI)
     $clean_name = trim($location_name);
     if (empty($clean_name) || $clean_name === '0' || $clean_name === 'Lokasi Saya' || is_numeric($clean_name)) {
-        // Cek apakah location_name berupa koordinat (ada koma)
-        if (strpos($clean_name, ',') !== false) {
-            // Ini koordinat, kita buat nama yang lebih baik
-            $location_data = '📍 ' . $location_lat . ', ' . $location_lng;
-        } else {
-            $location_data = '📍 ' . $location_lat . ', ' . $location_lng;
-        }
+        $location_data = '📍 ' . $location_lat . ', ' . $location_lng;
     } else {
         $location_data = $location_name;
     }
     
-    // 🔥 3. BUAT location_address (ALAMAT LENGKAP)
+    // 🔥 BUAT location_address (ALAMAT LENGKAP)
     $clean_address = trim($location_address);
     if (empty($clean_address) || $clean_address === '0' || $clean_address === '') {
-        // Buat dari koordinat
         $loc_address = $location_lat . ', ' . $location_lng;
     } else {
         $loc_address = $location_address;
     }
     
-    // 🔥 4. BUAT MESSAGE (TAMPILAN DI CHAT)
+    // 🔥 BUAT MESSAGE (TAMPILAN DI CHAT)
     if (empty($message) || $message === '📍 ' . $location_name) {
         $message = '📍 ' . $location_data;
     }
     
-    // 🔥 5. KOORDINAT
     $lat = $location_lat;
     $lng = $location_lng;
     
@@ -164,13 +155,14 @@ $conn->begin_transaction();
 
 try {
     // ================================================================
-    // 🔥 BUAT VARIABLE BANTUAN UNTUK BIND_PARAM
+    // 🔥 VARIABLE UNTUK BIND_PARAM
     // ================================================================
     $is_read_value = 0;
     $location_data_value = $location_data;
     $lat_value = $lat;
     $lng_value = $lng;
     $loc_address_value = $loc_address;
+    $message_text = $message;
 
     // ================================================================
     // 🔥 INSERT MESSAGE
@@ -189,7 +181,7 @@ try {
         $job_id,              // i
         $sender_id,           // i
         $receiver_id,         // i
-        $message,             // s
+        $message_text,        // s
         $type,                // s
         $is_read_value,       // i
         $location_data_value, // s
@@ -215,7 +207,7 @@ try {
     $helper_id = $job['helper_id'] ?: 0;
     $requester_id = $job['user_id'];
     
-    $stmt->bind_param("iiis", $job_id, $helper_id, $requester_id, $message);
+    $stmt->bind_param("iiis", $job_id, $helper_id, $requester_id, $message_text);
     $stmt->execute();
     $stmt->close();
 
@@ -271,12 +263,29 @@ try {
     sendFCMToUser($receiver_id, $fcm_title, $fcm_body, $fcm_data);
 
     // ================================================================
+    // 🔥 NOTIFIKASI KE DATABASE (untuk badge)
+    // ================================================================
+    $notif_stmt = $conn->prepare("
+        INSERT INTO notifications (user_id, message, type, job_id, is_read, created_at) 
+        VALUES (?, ?, 'chat', ?, 0, NOW())
+    ");
+    
+    $notif_msg = "💬 " . $sender_name . ": " . (strlen($message) > 80 ? substr($message, 0, 80) . '...' : $message);
+    if ($type === 'location') {
+        $notif_msg = "📍 " . $sender_name . " membagikan lokasi";
+    }
+    
+    $notif_stmt->bind_param("isi", $receiver_id, $notif_msg, $job_id);
+    $notif_stmt->execute();
+    $notif_stmt->close();
+
+    // ================================================================
     // COMMIT
     // ================================================================
     $conn->commit();
 
     // ================================================================
-    // RESPONSE
+    // 🔥 RESPONSE DENGAN DATA LENGKAP
     // ================================================================
     $responseData = [
         'id' => $message_id,

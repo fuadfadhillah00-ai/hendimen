@@ -4198,7 +4198,7 @@ function renderConversationList(conversations) {
 }
 
 // ================================================================
-// 🔥 OPEN CHAT - DENGAN POLLING 2 DETIK
+// 🔥 OPEN CHAT - DENGAN UI FIX
 // ================================================================
 
 async function openChatMobile(jobId, otherName, otherId, jobTitle) {
@@ -4230,6 +4230,14 @@ async function openChatMobile(jobId, otherName, otherId, jobTitle) {
     // Switch to chat main view
     document.getElementById('chatSidebar').style.display = 'none';
     document.getElementById('chatMainMobile').style.display = 'flex';
+    
+    // 🔥 PASTIKAN CHAT MAIN TIDAK OVERFLOW
+    const chatMain = document.getElementById('chatMainMobile');
+    if (chatMain) {
+        chatMain.style.width = '100%';
+        chatMain.style.maxWidth = '100%';
+        chatMain.style.overflow = 'hidden';
+    }
 
     // Tampilkan nama dan avatar
     const partnerName = otherName || 'User';
@@ -4276,25 +4284,86 @@ async function openChatMobile(jobId, otherName, otherId, jobTitle) {
 
     // Clear messages
     const messagesEl = document.getElementById('chatMessagesMobile');
-    messagesEl.innerHTML = `<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><h3>Memuat...</h3></div>`;
+    if (messagesEl) {
+        messagesEl.innerHTML = `<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><h3>Memuat...</h3></div>`;
+        messagesEl.style.width = '100%';
+        messagesEl.style.boxSizing = 'border-box';
+    }
 
-    // Enable input
-    document.getElementById('chatInputMobile').disabled = false;
-    document.getElementById('chatSendMobile').disabled = false;
-    document.getElementById('chatLocationMobile').disabled = false;
-    document.getElementById('chatInputMobile').placeholder = 'Ketik pesan...';
+    // 🔥 ENABLE INPUT DAN TOMBOL - DENGAN STYLE LENGKAP
+    const input = document.getElementById('chatInputMobile');
+    const sendBtn = document.getElementById('chatSendMobile');
+    const locBtn = document.getElementById('chatLocationMobile');
+    const uploadBtn = document.getElementById('chatUploadMobile');
+    
+    if (input) {
+        input.disabled = false;
+        input.placeholder = 'Ketik pesan...';
+        input.style.flex = '1';
+        input.style.minWidth = '0';
+        input.style.padding = '10px 14px';
+        input.style.borderRadius = '24px';
+        input.style.fontSize = '0.85rem';
+        input.style.background = 'var(--gray-bg)';
+        input.style.width = '100%';
+        input.style.maxWidth = '100%';
+        input.style.boxSizing = 'border-box';
+    }
+    if (sendBtn) {
+        sendBtn.disabled = false;
+        sendBtn.style.flexShrink = '0';
+        sendBtn.style.width = '44px';
+        sendBtn.style.height = '44px';
+        sendBtn.style.minWidth = '44px';
+        sendBtn.style.minHeight = '44px';
+        sendBtn.style.borderRadius = '50%';
+        sendBtn.style.background = 'var(--primary)';
+    }
+    if (locBtn) {
+        locBtn.disabled = false;
+        locBtn.style.flexShrink = '0';
+        locBtn.style.width = '40px';
+        locBtn.style.height = '40px';
+        locBtn.style.minWidth = '40px';
+        locBtn.style.minHeight = '40px';
+        locBtn.style.borderRadius = '50%';
+        locBtn.style.background = '#3b82f6';
+    }
 
-    // Upload button
+    // Upload button - hanya untuk helper yang sedang mengerjakan job
     const job = jobs.find(j => j.id == jobId);
     const isHelperWorker = (currentUser?.role === 'helper' || currentUser?.role === 'user') && job?.helper_id === currentUser?.id;
     const isActiveJob = job && (job.status === 'paid' || job.status === 'in-progress' || job.status === 'ongoing');
-    document.getElementById('chatUploadMobile').disabled = !(isActiveJob && isHelperWorker);
+    
+    if (uploadBtn) {
+        uploadBtn.disabled = !(isActiveJob && isHelperWorker);
+        uploadBtn.style.flexShrink = '0';
+        uploadBtn.style.width = '40px';
+        uploadBtn.style.height = '40px';
+        uploadBtn.style.minWidth = '40px';
+        uploadBtn.style.minHeight = '40px';
+        uploadBtn.style.borderRadius = '50%';
+        uploadBtn.style.background = 'var(--success)';
+    }
+
+    // 🔥 PASTIKAN CHAT INPUT AREA TIDAK OVERFLOW
+    const inputArea = document.querySelector('.chat-input-area');
+    if (inputArea) {
+        inputArea.style.display = 'flex';
+        inputArea.style.flexWrap = 'nowrap';
+        inputArea.style.gap = '6px';
+        inputArea.style.padding = '8px 10px';
+        inputArea.style.width = '100%';
+        inputArea.style.maxWidth = '100%';
+        inputArea.style.boxSizing = 'border-box';
+        inputArea.style.overflow = 'hidden';
+    }
 
     // Load messages
     await loadMessagesMobile(jobId, otherId);
 
     // ================================================================
-    // 🔥🔥🔥 POLLING SETIAP 2 DETIK (INSTAN)
+    // 🔥 POLLING SETIAP 2 DETIK
     // ================================================================
     if (chatState.pollingInterval) {
         clearInterval(chatState.pollingInterval);
@@ -4303,9 +4372,13 @@ async function openChatMobile(jobId, otherName, otherId, jobTitle) {
         if (chatState.currentConversation) {
             pollNewMessagesMobile(jobId, otherId);
         }
-    }, 2000); // ← 2 DETIK, BUKAN 3 DETIK
+    }, 2000);
 
-    setTimeout(() => document.getElementById('chatInputMobile').focus(), 300);
+    setTimeout(() => {
+        if (input) input.focus();
+    }, 300);
+    
+    console.log('✅ Chat opened with UI fix');
 }
 
 // ================================================================
@@ -4370,7 +4443,7 @@ async function loadMessagesMobile(jobId, otherId) {
 }
 
 // ================================================================
-// 🔥 SEND MESSAGE - LANGSUNG TAMPIL TANPA RELOAD
+// 🔥 PERBAIKAN: SEND MESSAGE - LANGSUNG TAMPIL TANPA RELOAD
 // ================================================================
 
 async function sendMessageMobile() {
@@ -4386,17 +4459,21 @@ async function sendMessageMobile() {
     console.log('📤 Sending message:', {
         job_id: chatState.currentConversation.job_id,
         sender_id: currentUser.id,
-        receiver_id: chatState.currentConversation.other_id,
-        sender_role: currentUser.role
+        receiver_id: chatState.currentConversation.other_id
     });
 
     input.value = '';
     const sendBtn = document.getElementById('chatSendMobile');
     sendBtn.disabled = true;
 
+    // ================================================================
+    // 🔥 BUAT ID SEMENTARA UNIK
+    // ================================================================
+    const tempId = 'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+    
     // 🔥 TAMPILKAN PESAN SEMENTARA (OPTIMISTIC)
     const tempMsg = {
-        id: Date.now(),
+        id: tempId,
         sender_id: currentUser.id,
         receiver_id: chatState.currentConversation.other_id,
         message: msg,
@@ -4404,9 +4481,12 @@ async function sendMessageMobile() {
         created_at: new Date().toISOString(),
         time_only: formatMsgTime(new Date().toISOString()),
         date_only: formatMsgDate(new Date().toISOString()),
-        type: 'text'
+        type: 'text',
+        is_temp: true  // 🔥 TANDAI SEBAGAI PESAN SEMENTARA
     };
-    appendMessagesMobile([tempMsg]);
+    
+    // 🔥 APPEND PESAN SEMENTARA
+    appendMessageDirect(tempMsg);
 
     try {
         const fd = new FormData();
@@ -4422,7 +4502,10 @@ async function sendMessageMobile() {
         console.log('📥 Send message response:', data);
 
         if (data.success) {
-            // 🔥 UPDATE PESAN DENGAN ID DARI SERVER
+            // 🔥 HAPUS PESAN SEMENTARA
+            removeTempMessage(tempId);
+            
+            // 🔥 TAMPILKAN PESAN ASLI DARI SERVER
             const newMsg = {
                 id: data.data.id,
                 sender_id: currentUser.id,
@@ -4435,32 +4518,322 @@ async function sendMessageMobile() {
                 type: data.data.type || 'text'
             };
             
-            // 🔥 HAPUS PESAN SEMENTARA
-            const tempEl = document.querySelector(`.msg[data-id="${tempMsg.id}"]`);
-            if (tempEl) tempEl.remove();
+            // 🔥 APPEND PESAN ASLI
+            appendMessageDirect(newMsg);
             
-            // 🔥 TAMPILKAN PESAN ASLI
-            appendMessagesMobile([newMsg]);
-            chatState.lastMessageId = Math.max(chatState.lastMessageId, data.data.id || 0);
+            // 🔥 UPDATE LAST MESSAGE ID
+            if (data.data.id) {
+                chatState.lastMessageId = Math.max(chatState.lastMessageId, data.data.id);
+            }
+            
+            // 🔥 UPDATE CONVERSATIONS
             loadConversationsMobile();
         } else {
             // 🔥 HAPUS PESAN SEMENTARA JIKA GAGAL
-            const tempEl = document.querySelector(`.msg[data-id="${tempMsg.id}"]`);
-            if (tempEl) tempEl.remove();
+            removeTempMessage(tempId);
             showNotification('Gagal kirim: ' + data.message, 'error');
             input.value = msg;
         }
     } catch (e) {
         console.error('sendMessageMobile error:', e);
-        const tempEl = document.querySelector(`.msg[data-id="${tempMsg.id}"]`);
-        if (tempEl) tempEl.remove();
-        showNotification('Gagal mengirim pesan', 'error');
+        removeTempMessage(tempId);
+        showNotification('Gagal mengirim pesan: ' + e.message, 'error');
         input.value = msg;
     } finally {
         sendBtn.disabled = false;
         input.focus();
     }
 }
+
+// ================================================================
+// 🔥 FUNGSI APPEND PESAN LANGSUNG (TANPA POLLING)
+// ================================================================
+
+function appendMessageDirect(msg) {
+    const el = document.getElementById('chatMessagesMobile');
+    if (!el) return;
+
+    console.log('📝 appendMessageDirect:', msg);
+
+    // 🔥 HAPUS EMPTY STATE
+    const emptyState = el.querySelector('.empty-state');
+    if (emptyState) emptyState.remove();
+
+    // 🔥 CEK APAKAH PESAN SUDAH ADA (HINDARI DUPLIKAT)
+    const existingMsg = el.querySelector(`.msg[data-id="${msg.id}"]`);
+    if (existingMsg) {
+        console.log('⚠️ Message already exists, skipping');
+        return;
+    }
+
+    // 🔥 TAMBAHKAN DATE SEPARATOR JIKA PERLU
+    const dateStr = msg.date_only || formatMsgDate(msg.created_at);
+    const lastDateSep = el.querySelector('.msg-date:last-of-type');
+    if (!lastDateSep || lastDateSep.textContent !== dateStr) {
+        const sep = document.createElement('div');
+        sep.className = 'msg-date';
+        sep.textContent = dateStr;
+        el.appendChild(sep);
+    }
+
+    // 🔥 BUAT ELEMEN PESAN
+    const isMe = msg.is_me || msg.sender_id == currentUser.id;
+    const cls = isMe ? 'sent' : 'received';
+    const time = msg.time_only || formatMsgTime(msg.created_at);
+    const partnerName = chatState.currentConversation?.other_name || 'Partner';
+
+    // 🔥 DETEKSI LOKASI
+    const isLocation = msg.type === 'location' || 
+                       msg.is_location === 1 || 
+                       msg.is_location === '1';
+
+    let messageHtml = '';
+    let senderNameHtml = '';
+
+    if (!isMe) {
+        senderNameHtml = `
+            <div style="font-size:0.65rem;font-weight:600;color:var(--primary);margin-bottom:2px;margin-left:4px;">
+                ${escapeHtml(partnerName)}
+            </div>
+        `;
+    }
+
+    if (isLocation) {
+        // 🔥 RENDER LOKASI
+        let lat = parseFloat(msg.latitude) || parseFloat(msg.location_lat) || 0;
+        let lng = parseFloat(msg.longitude) || parseFloat(msg.location_lng) || 0;
+        let name = msg.location_data || msg.location_name || '';
+        let address = msg.location_address || '';
+
+        if (!name || name === '0' || name === '') {
+            name = address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        }
+        if (!address || address === '0' || address === '') {
+            address = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        }
+
+        const mapsUrl = `https://maps.google.com/maps?q=${lat},${lng}`;
+        const isSent = cls === 'sent';
+        const bgColor = isSent ? '#1a4a7a' : '#eff6ff';
+        const borderColor = isSent ? '#3b82f6' : '#93c5fd';
+        const textColor = isSent ? '#ffffff' : '#1e293b';
+        const subTextColor = isSent ? '#93c5fd' : '#64748b';
+        const coordColor = isSent ? '#60a5fa' : '#94a3b8';
+        const iconColor = isSent ? '#60a5fa' : '#3b82f6';
+
+        messageHtml = `
+            <div style="display:flex !important;align-items:center !important;gap:10px !important;background:${bgColor} !important;border:1px solid ${borderColor} !important;border-radius:12px !important;padding:10px 14px !important;margin:4px 0 !important;cursor:pointer !important;width:100% !important;min-width:200px !important;max-width:100% !important;box-sizing:border-box !important;overflow:hidden !important;"
+                 onclick="window.open('${mapsUrl}', '_blank')">
+                <div style="flex-shrink:0 !important;width:32px !important;height:32px !important;display:flex !important;align-items:center !important;justify-content:center !important;">
+                    <i class="fas fa-map-marker-alt" style="color:${iconColor} !important;font-size:1.2rem !important;"></i>
+                </div>
+                <div style="flex:1 !important;min-width:0 !important;overflow:hidden !important;">
+                    <div style="font-weight:600 !important;font-size:0.85rem !important;color:${textColor} !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">${escapeHtml(name)}</div>
+                    <div style="font-size:0.7rem !important;color:${subTextColor} !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">${escapeHtml(address)}</div>
+                    ${lat && lng ? `<div style="font-size:0.6rem !important;color:${coordColor} !important;margin-top:2px !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">📍 ${lat.toFixed(6)}, ${lng.toFixed(6)}</div>` : ''}
+                </div>
+                <div style="flex-shrink:0 !important;padding-left:8px !important;">
+                    <i class="fas fa-external-link-alt" style="color:${iconColor} !important;font-size:0.9rem !important;"></i>
+                </div>
+            </div>
+        `;
+    } else {
+        messageHtml = escapeHtml(msg.message);
+    }
+
+    const div = document.createElement('div');
+    div.className = `msg ${cls}`;
+    div.dataset.id = msg.id;
+    div.style.cssText = `
+        max-width:82%;
+        padding:9px 14px;
+        border-radius:14px;
+        font-size:0.82rem;
+        word-wrap:break-word;
+        line-height:1.4;
+        ${cls === 'sent' ? 'background:var(--primary);color:#ffffff !important;align-self:flex-end;border-bottom-right-radius:4px;' : 'background:var(--card-bg);color:var(--dark) !important;align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--border-color);'}
+    `;
+    div.innerHTML = `
+        ${senderNameHtml}
+        ${messageHtml}
+        <span class="time" style="font-size:0.55rem;opacity:0.7;margin-top:3px;display:block;${cls === 'sent' ? 'color:rgba(255,255,255,0.7);' : 'color:var(--gray-light);'}">${time}</span>
+    `;
+
+    el.appendChild(div);
+    el.scrollTop = el.scrollHeight;
+
+    // 🔥 SIMPAN ID TERAKHIR
+    if (msg.id && typeof msg.id === 'number' && msg.id > chatState.lastMessageId) {
+        chatState.lastMessageId = msg.id;
+    }
+}
+
+// ================================================================
+// 🔥 FUNGSI HAPUS PESAN SEMENTARA
+// ================================================================
+
+function removeTempMessage(tempId) {
+    const el = document.getElementById('chatMessagesMobile');
+    if (!el) return;
+    
+    const tempMsg = el.querySelector(`.msg[data-id="${tempId}"]`);
+    if (tempMsg) {
+        tempMsg.remove();
+        console.log('🗑️ Temp message removed:', tempId);
+    }
+}
+
+// ================================================================
+// 🔥 OVERRIDE APPEND MESSAGES DARI POLLING
+// ================================================================
+
+// Simpan fungsi asli jika ada
+const originalAppendMessages = window.appendMessagesMobile || function() {};
+
+// Override dengan versi yang lebih baik
+window.appendMessagesMobile = function(messages) {
+    if (!messages || messages.length === 0) return;
+    
+    console.log('📥 appendMessagesMobile (polling):', messages.length);
+    
+    const el = document.getElementById('chatMessagesMobile');
+    if (!el) return;
+
+    // 🔥 HAPUS EMPTY STATE
+    const emptyState = el.querySelector('.empty-state');
+    if (emptyState) emptyState.remove();
+
+    messages.forEach(msg => {
+        // 🔥 SKIP PESAN YANG SUDAH ADA
+        const existing = el.querySelector(`.msg[data-id="${msg.id}"]`);
+        if (existing) return;
+        
+        // 🔥 SKIP PESAN SEMENTARA
+        if (msg.is_temp) return;
+        
+        // 🔥 SKIP PESAN YANG SUDAH LAMA (ID <= lastMessageId)
+        if (typeof msg.id === 'number' && msg.id <= chatState.lastMessageId) return;
+
+        // 🔥 TAMBAHKAN DATE SEPARATOR
+        const dateStr = msg.date_only || formatMsgDate(msg.created_at);
+        const lastDateSep = el.querySelector('.msg-date:last-of-type');
+        if (!lastDateSep || lastDateSep.textContent !== dateStr) {
+            const sep = document.createElement('div');
+            sep.className = 'msg-date';
+            sep.textContent = dateStr;
+            el.appendChild(sep);
+        }
+
+        // 🔥 BUAT ELEMEN PESAN
+        const isMe = msg.is_me || msg.sender_id == currentUser.id;
+        const cls = isMe ? 'sent' : 'received';
+        const time = msg.time_only || formatMsgTime(msg.created_at);
+        const partnerName = chatState.currentConversation?.other_name || 'Partner';
+
+        const isLocation = msg.type === 'location' || 
+                           msg.is_location === 1 || 
+                           msg.is_location === '1';
+
+        let messageHtml = '';
+        let senderNameHtml = '';
+
+        if (!isMe) {
+            senderNameHtml = `
+                <div style="font-size:0.65rem;font-weight:600;color:var(--primary);margin-bottom:2px;margin-left:4px;">
+                    ${escapeHtml(partnerName)}
+                </div>
+            `;
+        }
+
+        if (isLocation) {
+            let lat = parseFloat(msg.latitude) || parseFloat(msg.location_lat) || 0;
+            let lng = parseFloat(msg.longitude) || parseFloat(msg.location_lng) || 0;
+            let name = msg.location_data || msg.location_name || '';
+            let address = msg.location_address || '';
+
+            if (!name || name === '0' || name === '') {
+                name = address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            }
+            if (!address || address === '0' || address === '') {
+                address = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            }
+
+            const mapsUrl = `https://maps.google.com/maps?q=${lat},${lng}`;
+            const isSent = cls === 'sent';
+            const bgColor = isSent ? '#1a4a7a' : '#eff6ff';
+            const borderColor = isSent ? '#3b82f6' : '#93c5fd';
+            const textColor = isSent ? '#ffffff' : '#1e293b';
+            const subTextColor = isSent ? '#93c5fd' : '#64748b';
+            const coordColor = isSent ? '#60a5fa' : '#94a3b8';
+            const iconColor = isSent ? '#60a5fa' : '#3b82f6';
+
+            messageHtml = `
+                <div style="display:flex !important;align-items:center !important;gap:10px !important;background:${bgColor} !important;border:1px solid ${borderColor} !important;border-radius:12px !important;padding:10px 14px !important;margin:4px 0 !important;cursor:pointer !important;width:100% !important;min-width:200px !important;max-width:100% !important;box-sizing:border-box !important;overflow:hidden !important;"
+                     onclick="window.open('${mapsUrl}', '_blank')">
+                    <div style="flex-shrink:0 !important;width:32px !important;height:32px !important;display:flex !important;align-items:center !important;justify-content:center !important;">
+                        <i class="fas fa-map-marker-alt" style="color:${iconColor} !important;font-size:1.2rem !important;"></i>
+                    </div>
+                    <div style="flex:1 !important;min-width:0 !important;overflow:hidden !important;">
+                        <div style="font-weight:600 !important;font-size:0.85rem !important;color:${textColor} !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">${escapeHtml(name)}</div>
+                        <div style="font-size:0.7rem !important;color:${subTextColor} !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">${escapeHtml(address)}</div>
+                        ${lat && lng ? `<div style="font-size:0.6rem !important;color:${coordColor} !important;margin-top:2px !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">📍 ${lat.toFixed(6)}, ${lng.toFixed(6)}</div>` : ''}
+                    </div>
+                    <div style="flex-shrink:0 !important;padding-left:8px !important;">
+                        <i class="fas fa-external-link-alt" style="color:${iconColor} !important;font-size:0.9rem !important;"></i>
+                    </div>
+                </div>
+            `;
+        } else {
+            messageHtml = escapeHtml(msg.message);
+        }
+
+        const div = document.createElement('div');
+        div.className = `msg ${cls}`;
+        div.dataset.id = msg.id;
+        div.style.cssText = `
+            max-width:82%;
+            padding:9px 14px;
+            border-radius:14px;
+            font-size:0.82rem;
+            word-wrap:break-word;
+            line-height:1.4;
+            ${cls === 'sent' ? 'background:var(--primary);color:#ffffff !important;align-self:flex-end;border-bottom-right-radius:4px;' : 'background:var(--card-bg);color:var(--dark) !important;align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--border-color);'}
+        `;
+        div.innerHTML = `
+            ${senderNameHtml}
+            ${messageHtml}
+            <span class="time" style="font-size:0.55rem;opacity:0.7;margin-top:3px;display:block;${cls === 'sent' ? 'color:rgba(255,255,255,0.7);' : 'color:var(--gray-light);'}">${time}</span>
+        `;
+
+        el.appendChild(div);
+
+        // 🔥 UPDATE LAST MESSAGE ID
+        if (typeof msg.id === 'number' && msg.id > chatState.lastMessageId) {
+            chatState.lastMessageId = msg.id;
+        }
+
+        // 🔥 NOTIFIKASI UNTUK PESAN DITERIMA
+        if (!isMe && typeof msg.id === 'number' && !chatState.notifiedIds.has(msg.id)) {
+            chatState.notifiedIds.add(msg.id);
+            const name = chatState.currentConversation?.other_name || 'Pesan';
+            showNotification(`${name}: ${msg.message.substring(0, 60)}`, 'info');
+        }
+    });
+
+    el.scrollTop = el.scrollHeight;
+    console.log('✅ Messages appended successfully');
+};
+
+// ================================================================
+// 🔥 EXPOSE KE GLOBAL
+// ================================================================
+
+window.sendMessageMobile = sendMessageMobile;
+window.appendMessageDirect = appendMessageDirect;
+window.removeTempMessage = removeTempMessage;
+window.appendMessagesMobile = window.appendMessagesMobile;
+
+console.log('✅ Chat send message fix applied!');
 
 document.getElementById('chatSendMobile').addEventListener('click', sendMessageMobile);
 document.getElementById('chatInputMobile').addEventListener('keypress', function(e) {
