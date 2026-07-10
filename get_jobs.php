@@ -1,6 +1,5 @@
 <?php
-// get_jobs.php - UPDATE dengan status pekerjaan baru (open, offered, selected, etc)
-// PERBAIKAN: Error handling yang baik
+// get_jobs.php - UPDATE dengan foto profil requester & helper
 
 error_reporting(0);
 ini_set('display_errors', 0);
@@ -54,7 +53,7 @@ $type = isset($_GET['type']) ? $_GET['type'] : 'all';
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
 
 // ================================================================
-// BANGUN QUERY
+// BANGUN QUERY - DENGAN PROFILE_IMAGE
 // ================================================================
 $query = "SELECT 
     j.id,
@@ -74,7 +73,9 @@ $query = "SELECT
     j.budget_min,
     j.budget_max,
     u.nama_lengkap as requester_name,
+    u.profile_image as requester_profile_image,
     h.nama_lengkap as helper_name,
+    h.profile_image as helper_profile_image,
     DATE_FORMAT(j.created_at, '%d/%m/%Y') as date_formatted
 FROM jobs j
 LEFT JOIN users u ON j.user_id = u.id
@@ -145,7 +146,9 @@ if ($result && $result->num_rows > 0) {
             'date' => $row['date_formatted'] ?? date('d/m/Y'),
             'created_at' => $row['created_at'] ?? date('Y-m-d H:i:s'),
             'requester_name' => $row['requester_name'] ?? 'Anonymous',
+            'requester_profile_image' => $row['requester_profile_image'] ?? null,
             'helper_name' => $row['helper_name'] ?? null,
+            'helper_profile_image' => $row['helper_profile_image'] ?? null,
             'image_path' => $row['image_path'] ?? null,
             'completion_image' => $row['completion_image'] ?? null,
             'reject_reason' => $row['reject_reason'] ?? null,

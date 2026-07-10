@@ -12,6 +12,141 @@ function debugLog(...args) {
     }
 }
 
+// ================================================================
+// 🔥🔥🔥 FORCE: FUNGSI DISPLAY MESSAGES YANG BENAR (DI PAKSA)
+// ================================================================
+
+// Override global fungsi displayMessagesMobile
+window.displayMessagesMobile = function(messages) {
+    const el = document.getElementById('chatMessagesMobile');
+    if (!el) {
+        console.error('❌ chatMessagesMobile element not found');
+        return;
+    }
+
+    console.log('📝 Displaying messages:', messages.length);
+
+    if (!messages || messages.length === 0) {
+        el.innerHTML = `<div class="empty-state"><i class="fas fa-comment-slash"></i><h3>Belum ada pesan</h3><p>Mulai percakapan sekarang!</p></div>`;
+        return;
+    }
+
+    let html = '';
+    let lastDate = '';
+    
+    const partnerName = chatState.currentConversation?.other_name || 'Partner';
+
+    messages.forEach(msg => {
+        const dateStr = msg.date_only || formatMsgDate(msg.created_at);
+        if (dateStr && dateStr !== lastDate) {
+            html += `<div class="msg-date">${escapeHtml(dateStr)}</div>`;
+            lastDate = dateStr;
+        }
+
+        const isMe = msg.is_me || msg.sender_id == currentUser.id;
+        const cls = isMe ? 'sent' : 'received';
+        const time = msg.time_only || formatMsgTime(msg.created_at);
+        
+        // ================================================================
+        // 🔥🔥🔥 DETEKSI PESAN LOKASI (PAKSA)
+        // ================================================================
+        const isLocation = msg.type === 'location' || 
+                           msg.is_location === 1 || 
+                           msg.is_location === '1' ||
+                           (msg.message && msg.message.startsWith('📍'));
+
+        let messageHtml = '';
+
+        if (isLocation) {
+            console.log('📍 LOCATION DETECTED!', msg);
+
+            let lat = parseFloat(msg.latitude) || 0;
+            let lng = parseFloat(msg.longitude) || 0;
+            let name = msg.location_data || '';
+            let address = msg.location_address || '';
+
+            // Fallback
+            if ((!lat || !lng) && msg.message) {
+                const match = msg.message.match(/q=([0-9.-]+),([0-9.-]+)/);
+                if (match) {
+                    lat = parseFloat(match[1]);
+                    lng = parseFloat(match[2]);
+                }
+            }
+
+            if (!name && msg.message) {
+                const nameMatch = msg.message.replace(/^📍\s*/, '').trim();
+                if (nameMatch && !nameMatch.includes('http')) {
+                    name = nameMatch;
+                }
+            }
+
+            if (!name) name = '📍 Lokasi';
+            if (!address) address = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            if (!lat || !lng) {
+                lat = 0;
+                lng = 0;
+            }
+
+            const mapsUrl = `https://maps.google.com/maps?q=${lat},${lng}`;
+            
+            const isSent = cls === 'sent';
+            const bgColor = isSent ? '#1a4a7a' : '#eff6ff';
+            const borderColor = isSent ? '#3b82f6' : '#93c5fd';
+            const textColor = isSent ? '#ffffff' : '#1e293b';
+            const subTextColor = isSent ? '#93c5fd' : '#64748b';
+            const coordColor = isSent ? '#60a5fa' : '#94a3b8';
+            const iconColor = isSent ? '#60a5fa' : '#3b82f6';
+
+            // 🔥 KARTU LOKASI YANG BISA DIKLIK
+            messageHtml = `
+                <div style="display:flex !important;align-items:center !important;gap:10px !important;background:${bgColor} !important;border:1px solid ${borderColor} !important;border-radius:12px !important;padding:10px 14px !important;margin:4px 0 !important;cursor:pointer !important;width:100% !important;min-width:200px !important;max-width:100% !important;box-sizing:border-box !important;overflow:hidden !important;"
+                     onclick="window.open('${mapsUrl}', '_blank')">
+                    <div style="flex-shrink:0 !important;width:32px !important;height:32px !important;display:flex !important;align-items:center !important;justify-content:center !important;">
+                        <i class="fas fa-map-marker-alt" style="color:${iconColor} !important;font-size:1.2rem !important;"></i>
+                    </div>
+                    <div style="flex:1 !important;min-width:0 !important;overflow:hidden !important;">
+                        <div style="font-weight:600 !important;font-size:0.85rem !important;color:${textColor} !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">${escapeHtml(name)}</div>
+                        <div style="font-size:0.7rem !important;color:${subTextColor} !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">${escapeHtml(address)}</div>
+                        ${lat && lng ? `<div style="font-size:0.6rem !important;color:${coordColor} !important;margin-top:2px !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">📍 ${lat.toFixed(6)}, ${lng.toFixed(6)}</div>` : ''}
+                    </div>
+                    <div style="flex-shrink:0 !important;padding-left:8px !important;">
+                        <i class="fas fa-external-link-alt" style="color:${iconColor} !important;font-size:0.9rem !important;"></i>
+                    </div>
+                </div>
+            `;
+        } else {
+            messageHtml = escapeHtml(msg.message);
+        }
+
+        // NAMA PENGIRIM UNTUK PESAN DITERIMA
+        let senderNameHtml = '';
+        if (!isMe) {
+            senderNameHtml = `
+                <div style="font-size:0.65rem;font-weight:600;color:var(--primary);margin-bottom:2px;margin-left:4px;">
+                    ${escapeHtml(partnerName)}
+                </div>
+            `;
+        }
+
+        html += `
+            <div class="msg ${cls}" data-id="${msg.id}" style="max-width:82%;padding:9px 14px;border-radius:14px;font-size:0.82rem;word-wrap:break-word;line-height:1.4;${cls === 'sent' ? 'background:var(--primary);color:#ffffff !important;align-self:flex-end;border-bottom-right-radius:4px;' : 'background:var(--card-bg);color:var(--dark) !important;align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--border-color);'}">
+                ${senderNameHtml}
+                ${messageHtml}
+                <span class="time" style="font-size:0.55rem;opacity:0.7;margin-top:3px;display:block;${cls === 'sent' ? 'color:rgba(255,255,255,0.7);' : 'color:var(--gray-light);'}">${time}</span>
+            </div>
+        `;
+    });
+
+    el.innerHTML = html;
+    el.scrollTop = el.scrollHeight;
+    
+    console.log('✅ FORCED: Messages displayed with location cards!');
+};
+
+// 🔥 PAKSA: Simpan ke global
+window.displayMessagesMobile = window.displayMessagesMobile;
+
 // ===== GLOBAL STATE =====
 
 let currentUser = null;
@@ -211,18 +346,31 @@ function closeModal(modalId) {
     }
 }
 
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('modal-overlay')) {
-        e.target.classList.remove('open');
-        document.body.style.overflow = '';
-    }
-});
+// ================================================================
+// MODAL CLOSE - GLOBAL
+// ================================================================
 
 document.addEventListener('click', function(e) {
+    // 🔥 Tutup modal dengan data-modal
     const closeBtn = e.target.closest('.close[data-modal]');
     if (closeBtn) {
         const modalId = closeBtn.dataset.modal;
         closeModal(modalId);
+        return;
+    }
+    
+    // 🔥 Tutup modal dengan tombol batal (btn-ghost dengan data-modal)
+    const cancelBtn = e.target.closest('.btn-ghost[data-modal]');
+    if (cancelBtn) {
+        const modalId = cancelBtn.dataset.modal;
+        closeModal(modalId);
+        return;
+    }
+    
+    // 🔥 Tutup modal dengan klik di luar modal
+    if (e.target.classList.contains('modal-overlay')) {
+        e.target.classList.remove('open');
+        document.body.style.overflow = '';
     }
 });
 
@@ -395,7 +543,6 @@ async function afterLogin() {
         updateNotificationBadge();
         await syncRatingToBeranda();
         startNotificationPolling(); // 🔥 Mulai polling dengan reset
-        initDarkMode();
         updateBerandaHistory();
         loadReviews();
         
@@ -410,7 +557,6 @@ async function afterLogin() {
             }
         }, 500);
         
-        setTimeout(requestNotificationPermission, 3000);
     } catch (e) {
         console.error('Error loading data:', e);
     }
@@ -421,16 +567,147 @@ async function afterLogin() {
 function updateUserUI() {
     const name = currentUser.name || currentUser.nama_lengkap || 'User';
     const initials = currentUser.avatar || name.charAt(0).toUpperCase();
+    const profileImage = currentUser.profile_image || null;
 
+    // ================================================================
+    // HEADER AVATAR
+    // ================================================================
     const avatarHeader = document.getElementById('avatarHeader');
-    if (avatarHeader) avatarHeader.textContent = initials;
+    if (avatarHeader) {
+        if (profileImage) {
+            avatarHeader.innerHTML = '';
+            avatarHeader.style.background = 'transparent';
+            avatarHeader.style.border = '2px solid var(--primary)';
+            const img = document.createElement('img');
+            img.src = profileImage + '?t=' + Date.now();
+            img.style.cssText = 'width:100%;height:100%;border-radius:50%;object-fit:cover;';
+            img.onerror = function() {
+                avatarHeader.innerHTML = initials;
+                avatarHeader.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-light))';
+                avatarHeader.style.border = 'none';
+            };
+            avatarHeader.appendChild(img);
+        } else {
+            avatarHeader.textContent = initials;
+            avatarHeader.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-light))';
+            avatarHeader.style.border = 'none';
+        }
+    }
 
+    // ================================================================
+    // DRAWER AVATAR
+    // ================================================================
     const drawerAvatar = document.getElementById('drawerAvatar');
     const drawerName = document.getElementById('drawerName');
     const drawerRole = document.getElementById('drawerRole');
-    if (drawerAvatar) drawerAvatar.textContent = initials;
+    
+    if (drawerAvatar) {
+        if (profileImage) {
+            drawerAvatar.innerHTML = '';
+            drawerAvatar.style.background = 'transparent';
+            drawerAvatar.style.border = '2px solid var(--primary)';
+            const img = document.createElement('img');
+            img.src = profileImage + '?t=' + Date.now();
+            img.style.cssText = 'width:100%;height:100%;border-radius:50%;object-fit:cover;';
+            img.onerror = function() {
+                drawerAvatar.innerHTML = initials;
+                drawerAvatar.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-light))';
+                drawerAvatar.style.border = 'none';
+            };
+            drawerAvatar.appendChild(img);
+        } else {
+            drawerAvatar.textContent = initials;
+            drawerAvatar.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-light))';
+            drawerAvatar.style.border = 'none';
+        }
+    }
+    
     if (drawerName) drawerName.textContent = name;
-    if (drawerRole) drawerRole.textContent = currentUser.role === 'requester' ? 'Requester' : 'Helper';
+    if (drawerRole) {
+        const roleMap = {
+            'requester': 'Requester',
+            'helper': 'Helper',
+            'admin': 'Admin',
+            'user': 'User'
+        };
+        drawerRole.textContent = roleMap[currentUser.role] || 'User';
+    }
+}
+
+// ================================================================
+// 🗑️ DELETE PROFILE PHOTO
+// ================================================================
+
+async function deleteProfilePhoto() {
+    if (!currentUser) {
+        showNotification('Anda harus login terlebih dahulu', 'error');
+        return;
+    }
+
+    // Konfirmasi sebelum menghapus
+    if (!confirm('Apakah Anda yakin ingin menghapus foto profil?')) {
+        return;
+    }
+
+    showLoading(true);
+    const btn = document.getElementById('profileAvatarDeleteBtn');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('user_id', currentUser.id);
+        formData.append('action', 'delete_photo');
+
+        const response = await fetch('update_profile.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Update currentUser
+            currentUser.profile_image = null;
+
+            // Update UI
+            const placeholder = document.getElementById('profileAvatarPlaceholder');
+            const image = document.getElementById('profileAvatarImage');
+            const deleteBtn = document.getElementById('profileAvatarDeleteBtn');
+            
+            if (placeholder) {
+                placeholder.style.display = 'flex';
+                const name = currentUser.name || currentUser.nama_lengkap || 'User';
+                placeholder.textContent = getInitials(name);
+            }
+            if (image) {
+                image.style.display = 'none';
+                image.src = '';
+            }
+            if (deleteBtn) {
+                deleteBtn.classList.remove('show');
+                deleteBtn.style.display = 'none';
+            }
+
+            // Update header dan drawer avatar
+            updateUserUI();
+
+            showNotification('✅ Foto profil berhasil dihapus!', 'success');
+        } else {
+            showNotification('❌ Gagal: ' + result.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting profile photo:', error);
+        showNotification('❌ Terjadi kesalahan: ' + error.message, 'error');
+    } finally {
+        showLoading(false);
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-trash"></i>';
+        }
+    }
 }
 
 // ================================================================
@@ -483,42 +760,6 @@ document.getElementById('roleHelperMobile').addEventListener('click', function()
 });
 
 // ================================================================
-// DARK MODE
-// ================================================================
-
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-
-    const toggle = document.getElementById('darkModeToggleMobile');
-    if (toggle) toggle.checked = isDark;
-
-    const label = document.getElementById('darkToggleLabel');
-    if (label) label.textContent = isDark ? 'Mode Terang' : 'Mode Gelap';
-
-    const icon = document.querySelector('#drawerDarkToggle i');
-    if (icon) icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-
-    localStorage.setItem('darkMode', isDark ? 'true' : 'false');
-}
-
-function initDarkMode() {
-    const isDark = localStorage.getItem('darkMode') === 'true';
-    if (isDark) {
-        document.body.classList.add('dark-mode');
-        const toggle = document.getElementById('darkModeToggleMobile');
-        if (toggle) toggle.checked = true;
-        const label = document.getElementById('darkToggleLabel');
-        if (label) label.textContent = 'Mode Terang';
-        const icon = document.querySelector('#drawerDarkToggle i');
-        if (icon) icon.className = 'fas fa-sun';
-    }
-}
-
-document.getElementById('darkModeToggleMobile').addEventListener('change', toggleDarkMode);
-document.getElementById('drawerDarkToggle').addEventListener('click', toggleDarkMode);
-
-// ================================================================
 // LOGOUT - Reset notifikasi
 // ================================================================
 
@@ -548,8 +789,6 @@ document.getElementById('drawerLogout').addEventListener('click', function(e) {
     e.preventDefault();
     logout();
 });
-
-document.getElementById('logoutBtnMobile').addEventListener('click', logout);
 
 // ================================================================
 // LOAD JOBS - FIXED: ERROR HANDLING UNTUK RESPONSE 500
@@ -837,14 +1076,43 @@ function createJobCard(job, isInProgress) {
     const shortLocation = job.location ? (job.location.length > 35 ? job.location.substring(0, 35) + '...' : job.location) : 'Lokasi tidak tersedia';
     const lowestOffer = job.lowest_offer ? '💰 Tawaran termurah: Rp ' + job.lowest_offer.toLocaleString('id-ID') : '';
 
-    let actionsHtml = '';
-    const isHelper = currentUser?.role === 'helper' || currentUser?.role === 'user';
+    // ================================================================
+    // AVATAR REQUESTER / HELPER DENGAN FOTO PROFIL
+    // ================================================================
     const isRequester = currentUser?.role === 'requester';
-    const isJobOwner = currentUser?.id === job.user_id;
+    const displayName = isRequester ? (job.helper_name || 'Helper') : (job.requester_name || 'Requester');
+    const initials = getInitials(displayName);
+    
+    // Pilih foto berdasarkan role
+    let profileImage = null;
+    if (isRequester) {
+        profileImage = job.helper_profile_image || null;
+    } else {
+        profileImage = job.requester_profile_image || null;
+    }
+    
+    let avatarHtml = '';
+    if (profileImage) {
+        avatarHtml = `
+            <img src="${profileImage}?t=${Date.now()}" 
+                 style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);flex-shrink:0;"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <span style="display:none;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;font-size:0.7rem;font-weight:700;align-items:center;justify-content:center;flex-shrink:0;">${initials}</span>
+        `;
+    } else {
+        avatarHtml = `
+            <span style="display:inline-flex;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;font-size:0.7rem;font-weight:700;align-items:center;justify-content:center;flex-shrink:0;">${initials}</span>
+        `;
+    }
 
     // ================================================================
-    // STATUS: PERBAIKAN - Helper upload ulang
+    // ACTIONS (sama seperti sebelumnya)
     // ================================================================
+    let actionsHtml = '';
+    const isHelper = currentUser?.role === 'helper' || currentUser?.role === 'user';
+    const isJobOwner = currentUser?.id === job.user_id;
+
+    // STATUS: PERBAIKAN - Helper upload ulang
     if (job.status === 'perbaikan' && isHelper && job.helper_id === currentUser?.id) {
         actionsHtml = `
             <div class="card-actions">
@@ -857,9 +1125,7 @@ function createJobCard(job, isInProgress) {
             </div>
         `;
     }
-    // ================================================================
     // STATUS: IN PROGRESS - Helper upload bukti
-    // ================================================================
     else if (job.status === 'in-progress' || job.status === 'ongoing') {
         actionsHtml = `
             <div class="card-actions">
@@ -872,9 +1138,7 @@ function createJobCard(job, isInProgress) {
             </div>
         `;
     }
-    // ================================================================
     // STATUS: PAID - Helper mulai bekerja
-    // ================================================================
     else if (job.status === 'paid' && isHelper && job.helper_id === currentUser?.id) {
         actionsHtml = `
             <div class="card-actions">
@@ -887,9 +1151,7 @@ function createJobCard(job, isInProgress) {
             </div>
         `;
     }
-    // ================================================================
     // STATUS: SELECTED - Requester bayar
-    // ================================================================
     else if (job.status === 'selected' && isRequester && isJobOwner) {
         actionsHtml = `
             <div class="card-actions">
@@ -899,58 +1161,47 @@ function createJobCard(job, isInProgress) {
             </div>
         `;
     }
-// ================================================================
-// Di dalam createJobCard() - Bagian STATUS OPEN / OFFERED
-// ================================================================
-
-else if (job.status === 'open' || job.status === 'offered') {
-    const isHelper = currentUser?.role === 'helper' || currentUser?.role === 'user';
-    const isRequester = currentUser?.role === 'requester';
-    const isJobOwner = currentUser?.id === job.user_id;
-    
-    if (isHelper && !isJobOwner) {
-        // Helper melihat tombol Tawar
-        const hasOffered = jobs.some(j => j.id === job.id && j.offers && j.offers.some(o => o.helper_id === currentUser.id && o.status === 'pending'));
-        actionsHtml = `
-            <div class="card-actions">
-                <button class="btn btn-primary" onclick="event.stopPropagation(); createOffer(${job.id})">
-                    <i class="fas fa-gavel"></i> Tawar
-                </button>
-                <button class="btn btn-outline" onclick="event.stopPropagation(); openOffersModal(${job.id})">
-                    <i class="fas fa-list"></i> Lihat Tawaran ${job.offer_count > 0 ? '('+job.offer_count+')' : ''}
-                </button>
-            </div>
-        `;
-    } else if (isRequester && isJobOwner) {
-        // 🔥 REQUESTER: Lihat tawaran dan pilih
-        actionsHtml = `
-            <div class="card-actions">
-                <button class="btn btn-primary" onclick="event.stopPropagation(); openOffersModal(${job.id})">
-                    <i class="fas fa-list"></i> Lihat Tawaran ${job.offer_count > 0 ? '('+job.offer_count+')' : ''}
-                </button>
-                ${job.offer_count === 0 ? `
-                    <button class="btn btn-ghost" onclick="event.stopPropagation(); cancelJob(${job.id})">
-                        <i class="fas fa-times"></i> Batal
+    // STATUS: OPEN / OFFERED
+    else if (job.status === 'open' || job.status === 'offered') {
+        if (isHelper && !isJobOwner) {
+            const hasOffered = jobs.some(j => j.id === job.id && j.offers && j.offers.some(o => o.helper_id === currentUser.id && o.status === 'pending'));
+            actionsHtml = `
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick="event.stopPropagation(); createOffer(${job.id})">
+                        <i class="fas fa-gavel"></i> Tawar
                     </button>
-                ` : ''}
-                <button class="btn btn-outline" onclick="event.stopPropagation(); openReportModalMobile(${job.id})">
-                    <i class="fas fa-flag"></i> Laporkan
-                </button>
-            </div>
-        `;
-    } else {
-        actionsHtml = `
-            <div class="card-actions">
-                <button class="btn btn-outline" onclick="event.stopPropagation(); openOffersModal(${job.id})">
-                    <i class="fas fa-list"></i> Lihat Tawaran ${job.offer_count > 0 ? '('+job.offer_count+')' : ''}
-                </button>
-            </div>
-        `;
+                    <button class="btn btn-outline" onclick="event.stopPropagation(); openOffersModal(${job.id})">
+                        <i class="fas fa-list"></i> Lihat Tawaran ${job.offer_count > 0 ? '('+job.offer_count+')' : ''}
+                    </button>
+                </div>
+            `;
+        } else if (isRequester && isJobOwner) {
+            actionsHtml = `
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick="event.stopPropagation(); openOffersModal(${job.id})">
+                        <i class="fas fa-list"></i> Lihat Tawaran ${job.offer_count > 0 ? '('+job.offer_count+')' : ''}
+                    </button>
+                    ${job.offer_count === 0 ? `
+                        <button class="btn btn-ghost" onclick="event.stopPropagation(); cancelJob(${job.id})">
+                            <i class="fas fa-times"></i> Batal
+                        </button>
+                    ` : ''}
+                    <button class="btn btn-outline" onclick="event.stopPropagation(); openReportModalMobile(${job.id})">
+                        <i class="fas fa-flag"></i> Laporkan
+                    </button>
+                </div>
+            `;
+        } else {
+            actionsHtml = `
+                <div class="card-actions">
+                    <button class="btn btn-outline" onclick="event.stopPropagation(); openOffersModal(${job.id})">
+                        <i class="fas fa-list"></i> Lihat Tawaran ${job.offer_count > 0 ? '('+job.offer_count+')' : ''}
+                    </button>
+                </div>
+            `;
+        }
     }
-}
-    // ================================================================
     // STATUS: PENDING_ACC - Requester ACC/Reject
-    // ================================================================
     else if (job.status === 'pending_acc' && isRequester && isJobOwner) {
         actionsHtml = `
             <div class="card-actions">
@@ -966,9 +1217,7 @@ else if (job.status === 'open' || job.status === 'offered') {
             </div>
         `;
     }
-    // ================================================================
     // STATUS: COMPLETED - Rating
-    // ================================================================
     else if (job.status === 'completed') {
         const canRate = (isRequester && isJobOwner) || (isHelper && job.helper_id === currentUser?.id);
         actionsHtml = `
@@ -984,9 +1233,7 @@ else if (job.status === 'open' || job.status === 'offered') {
             </div>
         `;
     }
-    // ================================================================
     // DEFAULT
-    // ================================================================
     else {
         actionsHtml = `
             <div class="card-actions">
@@ -997,6 +1244,9 @@ else if (job.status === 'open' || job.status === 'offered') {
         `;
     }
 
+    // ================================================================
+    // CARD HTML
+    // ================================================================
     card.innerHTML = `
         <div class="card-img" style="position:relative;">
             ${imageHtml}
@@ -1016,9 +1266,14 @@ else if (job.status === 'open' || job.status === 'offered') {
             <div class="card-price">${formattedPrice}</div>
             ${budgetDisplay ? `<div style="font-size:0.7rem;color:var(--gray);">${budgetDisplay}</div>` : ''}
             ${lowestOffer ? `<div style="font-size:0.7rem;color:#059669;font-weight:600;">${lowestOffer}</div>` : ''}
-            <div class="card-meta">
-                <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(shortLocation)}</span>
-                <span><i class="fas fa-user"></i> ${escapeHtml(job.requester_name || 'Anonymous')}</span>
+            <div class="card-meta" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0;">
+                <span style="display:flex;align-items:center;gap:4px;">
+                    <i class="fas fa-map-marker-alt"></i> ${escapeHtml(shortLocation)}
+                </span>
+                <span style="display:flex;align-items:center;gap:4px;">
+                    ${avatarHtml}
+                    <span style="font-size:0.7rem;color:var(--gray);">${escapeHtml(displayName)}</span>
+                </span>
             </div>
             ${shortDesc ? `<div class="card-desc">📝 ${escapeHtml(shortDesc)}</div>` : ''}
             ${actionsHtml}
@@ -2622,7 +2877,28 @@ async function loadReviews() {
                 }
             }
             
-            const initial = (r.rater_name || 'U').charAt(0).toUpperCase();
+            const name = r.rater_name || 'Pengguna';
+            const initials = getInitials(name);
+            
+            // ================================================================
+            // AVATAR RATER DENGAN FOTO PROFIL
+            // ================================================================
+            const profileImage = r.rater_profile_image || null;
+            
+            let avatarHtml = '';
+            if (profileImage) {
+                avatarHtml = `
+                    <img src="${profileImage}?t=${Date.now()}" 
+                         style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);flex-shrink:0;"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span style="display:none;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;font-weight:700;font-size:1rem;align-items:center;justify-content:center;flex-shrink:0;">${initials}</span>
+                `;
+            } else {
+                avatarHtml = `
+                    <span style="display:inline-flex;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;font-weight:700;font-size:1rem;align-items:center;justify-content:center;flex-shrink:0;">${initials}</span>
+                `;
+            }
+            
             const roleLabel = r.rater_role === 'requester' ? 'Requester' : 'Helper';
             
             let ulasanHtml = '';
@@ -2634,13 +2910,13 @@ async function loadReviews() {
             
             reviewDiv.innerHTML = `
                 <div style="display:flex;align-items:flex-start;gap:12px;">
-                    <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg, var(--primary), var(--primary-light));color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;flex-shrink:0;">
-                        ${initial}
+                    <div style="display:flex;align-items:center;justify-content:center;flex-shrink:0;width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid var(--primary);">
+                        ${avatarHtml}
                     </div>
                     <div style="flex:1;min-width:0;">
                         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;">
                             <div>
-                                <strong style="font-size:0.9rem;">${escapeHtml(r.rater_name || 'Pengguna')}</strong>
+                                <strong style="font-size:0.9rem;">${escapeHtml(name)}</strong>
                                 <span style="color:var(--gray);font-size:0.7rem;margin-left:6px;">(${roleLabel})</span>
                             </div>
                             <div style="font-size:0.65rem;color:var(--gray-light);">
@@ -3587,65 +3863,11 @@ async function loadConversationsMobile() {
 }
 
 // ================================================================
-// CHAT FUNCTIONS - LENGKAP
-// ================================================================
-
-function displayMessagesMobile(messages) {
-    const el = document.getElementById('chatMessagesMobile');
-    if (!el) {
-        console.error('❌ chatMessagesMobile element not found');
-        return;
-    }
-
-    console.log('📝 Displaying messages:', messages.length);
-
-    if (!messages || messages.length === 0) {
-        el.innerHTML = `<div class="empty-state"><i class="fas fa-comment-slash"></i><h3>Belum ada pesan</h3><p>Mulai percakapan sekarang!</p></div>`;
-        return;
-    }
-
-    let html = '';
-    let lastDate = '';
-    
-    // 🔥 Ambil data partner dari chatState
-    const partnerName = chatState.currentConversation?.other_name || 'Partner';
-
-    messages.forEach(msg => {
-        const dateStr = msg.date_only || formatMsgDate(msg.created_at);
-        if (dateStr && dateStr !== lastDate) {
-            html += `<div class="msg-date">${escapeHtml(dateStr)}</div>`;
-            lastDate = dateStr;
-        }
-
-        const isMe = msg.is_me || msg.sender_id == currentUser.id;
-        const cls = isMe ? 'sent' : 'received';
-        const time = msg.time_only || formatMsgTime(msg.created_at);
-        
-        // 🔥 TAMPILKAN NAMA PENGIRIM UNTUK PESAN DITERIMA
-        let senderNameHtml = '';
-        if (!isMe) {
-            // Tampilkan nama pengirim di atas bubble pesan
-            senderNameHtml = `<div style="font-size:0.65rem;font-weight:600;color:var(--primary);margin-bottom:2px;margin-left:4px;">${escapeHtml(partnerName)}</div>`;
-        }
-
-        html += `
-            <div class="msg ${cls}" data-id="${msg.id}">
-                ${senderNameHtml}
-                ${escapeHtml(msg.message)}
-                <span class="time">${time}</span>
-            </div>
-        `;
-    });
-
-    el.innerHTML = html;
-    el.scrollTop = el.scrollHeight;
-}
-
-// ================================================================
-// POLL NEW MESSAGES MOBILE - Cek pesan baru
+// 🔥 POLL NEW MESSAGES - LEBIH CEPAT
 // ================================================================
 
 async function pollNewMessagesMobile(jobId, otherId) {
+    // 🔥 JIKA TIDAK ADA LAST MESSAGE ID, SKIP
     if (!chatState.lastMessageId) {
         console.log('⏭️ No last message ID, skipping poll');
         return;
@@ -3658,12 +3880,28 @@ async function pollNewMessagesMobile(jobId, otherId) {
 
         if (data.success && data.messages && data.messages.length > 0) {
             console.log('📨 New messages received:', data.messages.length);
+            
+            // 🔥 APPEND MESSAGES
             appendMessagesMobile(data.messages);
+            
+            // 🔥 UPDATE LAST MESSAGE ID
             chatState.lastMessageId = data.newest_id || chatState.lastMessageId;
+            
+            // 🔥 UPDATE CONVERSATIONS
             loadConversationsMobile();
+            
+            // 🔥 UPDATE BADGE
+            const badge = document.getElementById('chatBadgeBottom');
+            if (badge) {
+                const total = data.messages.filter(m => !m.is_me).length;
+                if (total > 0) {
+                    badge.textContent = total;
+                    badge.style.display = 'inline-block';
+                }
+            }
         }
     } catch (e) {
-        // silent fail - jangan ganggu user
+        // Silent fail
         console.log('Polling error (silent):', e.message);
     }
 }
@@ -3691,7 +3929,6 @@ function appendMessagesMobile(messages) {
     const el = document.getElementById('chatMessagesMobile');
     if (!el) return;
 
-    // Remove empty state
     const empty = el.querySelector('.empty-state');
     if (empty) empty.remove();
 
@@ -3705,11 +3942,9 @@ function appendMessagesMobile(messages) {
         }
     }
 
-    // 🔥 Ambil data partner dari chatState
     const partnerName = chatState.currentConversation?.other_name || 'Partner';
 
     messages.forEach(msg => {
-        // Skip if already displayed
         if (msg.id && msg.id <= chatState.lastMessageId) return;
 
         const dateStr = msg.date_only || formatMsgDate(msg.created_at);
@@ -3724,23 +3959,116 @@ function appendMessagesMobile(messages) {
         const isMe = msg.is_me || msg.sender_id == currentUser.id;
         const cls = isMe ? 'sent' : 'received';
         const time = msg.time_only || formatMsgTime(msg.created_at);
-        
-        // 🔥 TAMPILKAN NAMA PENGIRIM UNTUK PESAN DITERIMA
+
+        const isLocation = msg.type === 'location' || 
+                           msg.is_location === 1 || 
+                           msg.is_location === '1' ||
+                           (msg.message && msg.message.startsWith('📍'));
+
         let senderNameHtml = '';
         if (!isMe) {
-            senderNameHtml = `<div style="font-size:0.65rem;font-weight:600;color:var(--primary);margin-bottom:2px;margin-left:4px;">${escapeHtml(partnerName)}</div>`;
+            senderNameHtml = `
+                <div style="font-size:0.65rem;font-weight:600;color:var(--primary);margin-bottom:2px;margin-left:4px;">
+                    ${escapeHtml(partnerName)}
+                </div>
+            `;
+        }
+
+        let messageHtml = '';
+
+        if (isLocation) {
+            console.log('📍 appendMessagesMobile: Location detected!', msg);
+
+            let lat = parseFloat(msg.latitude) || parseFloat(msg.location_lat) || 0;
+            let lng = parseFloat(msg.longitude) || parseFloat(msg.location_lng) || 0;
+            
+            // ================================================================
+            // 🔥🔥🔥 PERBAIKI: NAMA LOKASI (FALLBACK BERTINGKAT)
+            // ================================================================
+            let name = msg.location_name || msg.location_data || '';
+            
+            // Jika name = '0' atau kosong, coba dari message
+            if (!name || name === '0' || name === '') {
+                if (msg.message) {
+                    const nameMatch = msg.message.replace(/^📍\s*/, '').trim();
+                    if (nameMatch && !nameMatch.includes('http')) {
+                        name = nameMatch;
+                    }
+                }
+            }
+            
+            // Jika masih kosong, coba dari address
+            if (!name || name === '0' || name === '') {
+                name = msg.location_address || '';
+            }
+            
+            // Jika masih kosong, buat dari koordinat
+            if (!name || name === '0' || name === '') {
+                name = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            }
+            
+            // 🔥 Pastikan nama tidak '0' atau 'Lokasi Saya' (terlalu generik)
+            if (name === '0' || name === 'Lokasi Saya') {
+                name = msg.location_address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            }
+            
+            // ================================================================
+            // 🔥🔥🔥 PERBAIKI: ALAMAT
+            // ================================================================
+            let address = msg.location_address || '';
+            if (!address || address === '0' || address === '') {
+                address = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            }
+
+            // Fallback dari message
+            if ((!lat || !lng) && msg.message) {
+                const match = msg.message.match(/q=([0-9.-]+),([0-9.-]+)/);
+                if (match) {
+                    lat = parseFloat(match[1]);
+                    lng = parseFloat(match[2]);
+                }
+            }
+
+            const mapsUrl = `https://maps.google.com/maps?q=${lat},${lng}`;
+            
+            const isSent = cls === 'sent';
+            const bgColor = isSent ? '#1a4a7a' : '#eff6ff';
+            const borderColor = isSent ? '#3b82f6' : '#93c5fd';
+            const textColor = isSent ? '#ffffff' : '#1e293b';
+            const subTextColor = isSent ? '#93c5fd' : '#64748b';
+            const coordColor = isSent ? '#60a5fa' : '#94a3b8';
+            const iconColor = isSent ? '#60a5fa' : '#3b82f6';
+
+            messageHtml = `
+                <div style="display:flex !important;align-items:center !important;gap:10px !important;background:${bgColor} !important;border:1px solid ${borderColor} !important;border-radius:12px !important;padding:10px 14px !important;margin:4px 0 !important;cursor:pointer !important;width:100% !important;min-width:200px !important;max-width:100% !important;box-sizing:border-box !important;overflow:hidden !important;"
+                     onclick="window.open('${mapsUrl}', '_blank')">
+                    <div style="flex-shrink:0 !important;width:32px !important;height:32px !important;display:flex !important;align-items:center !important;justify-content:center !important;">
+                        <i class="fas fa-map-marker-alt" style="color:${iconColor} !important;font-size:1.2rem !important;"></i>
+                    </div>
+                    <div style="flex:1 !important;min-width:0 !important;overflow:hidden !important;">
+                        <div style="font-weight:600 !important;font-size:0.85rem !important;color:${textColor} !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">${escapeHtml(name)}</div>
+                        <div style="font-size:0.7rem !important;color:${subTextColor} !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">${escapeHtml(address)}</div>
+                        ${lat && lng ? `<div style="font-size:0.6rem !important;color:${coordColor} !important;margin-top:2px !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">📍 ${lat.toFixed(6)}, ${lng.toFixed(6)}</div>` : ''}
+                    </div>
+                    <div style="flex-shrink:0 !important;padding-left:8px !important;">
+                        <i class="fas fa-external-link-alt" style="color:${iconColor} !important;font-size:0.9rem !important;"></i>
+                    </div>
+                </div>
+            `;
+        } else {
+            messageHtml = escapeHtml(msg.message);
         }
 
         const div = document.createElement('div');
         div.className = `msg ${cls}`;
-        div.innerHTML = `${senderNameHtml}${escapeHtml(msg.message)}<span class="time">${time}</span>`;
+        div.dataset.id = msg.id;
+        div.innerHTML = `${senderNameHtml}${messageHtml}<span class="time">${time}</span>`;
         el.appendChild(div);
 
         if (msg.id && msg.id > chatState.lastMessageId) {
             chatState.lastMessageId = msg.id;
         }
 
-        // Notification for received messages
         if (!isMe && msg.id && !chatState.notifiedIds.has(msg.id)) {
             chatState.notifiedIds.add(msg.id);
             const name = chatState.currentConversation?.other_name || 'Pesan';
@@ -3828,15 +4156,30 @@ function renderConversationList(conversations) {
         const item = document.createElement('div');
         item.className = 'chat-list-item';
         
-        // 🔥 TAMPILKAN NAMA LENGKAP, BUKAN INISIAL
         const fullName = conv.other_party || 'Pengguna';
         const initials = getInitials(fullName);
+        const profileImage = conv.other_profile_image || null;
         
         const unread = conv.unread_count > 0 ? `<span class="unread-badge">${conv.unread_count}</span>` : '';
 
-        // 🔥 TAMPILKAN NAMA LENGKAP DI HTML
+        // ================================================================
+        // AVATAR DENGAN FOTO PROFIL
+        // ================================================================
+        let avatarHtml = '';
+        if (profileImage) {
+            avatarHtml = `
+                <div style="width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--primary);">
+                    <img src="${profileImage}?t=${Date.now()}" 
+                         style="width:100%;height:100%;object-fit:cover;" 
+                         onerror="this.parentElement.innerHTML='<div class=\\'chat-avatar\\'>${initials}</div>'">
+                </div>
+            `;
+        } else {
+            avatarHtml = `<div class="chat-avatar">${initials}</div>`;
+        }
+
         item.innerHTML = `
-            <div class="chat-avatar">${initials}</div>
+            ${avatarHtml}
             <div class="chat-info">
                 <div class="name" style="font-weight:600;font-size:0.9rem;">${escapeHtml(fullName)}</div>
                 <div class="last-msg">${escapeHtml(conv.last_message || 'Belum ada pesan')}</div>
@@ -3854,6 +4197,10 @@ function renderConversationList(conversations) {
     });
 }
 
+// ================================================================
+// 🔥 OPEN CHAT - DENGAN POLLING 2 DETIK
+// ================================================================
+
 async function openChatMobile(jobId, otherName, otherId, jobTitle) {
     if (!currentUser) {
         showNotification('Anda harus login terlebih dahulu', 'error');
@@ -3865,7 +4212,7 @@ async function openChatMobile(jobId, otherName, otherId, jobTitle) {
     jobId = parseInt(jobId);
     otherId = parseInt(otherId);
 
-    // Stop old polling
+    // 🔥 STOP POLLING LAMA
     if (chatState.pollingInterval) {
         clearInterval(chatState.pollingInterval);
         chatState.pollingInterval = null;
@@ -3884,21 +4231,48 @@ async function openChatMobile(jobId, otherName, otherId, jobTitle) {
     document.getElementById('chatSidebar').style.display = 'none';
     document.getElementById('chatMainMobile').style.display = 'flex';
 
-    // 🔥 PASTIKAN TOMBOL BACK TERLIHAT DAN BISA DIKLIK
-    const backBtn = document.getElementById('chatBackMobile');
-    if (backBtn) {
-        backBtn.style.display = 'inline-block';
-        backBtn.onclick = function() {
-            closeChatMobile();
-        };
-    }
-
-    // Tampilkan nama lengkap di header chat
+    // Tampilkan nama dan avatar
     const partnerName = otherName || 'User';
     document.getElementById('chatPartnerName').textContent = partnerName;
     
     const isRequester = currentUser.role === 'requester';
     document.getElementById('chatPartnerRole').textContent = isRequester ? 'Helper' : 'Requester';
+
+    // Avatar partner
+    const partnerAvatarContainer = document.querySelector('.chat-header .partner-avatar');
+    if (partnerAvatarContainer) {
+        let partnerImage = null;
+        const convList = chatState.conversations || [];
+        const conv = convList.find(c => c.job_id == jobId);
+        if (conv) {
+            partnerImage = conv.other_profile_image || null;
+        }
+        if (!partnerImage && chatState.currentConversation) {
+            partnerImage = chatState.currentConversation.other_profile_image || null;
+        }
+
+        const initials = getInitials(partnerName);
+        
+        if (partnerImage) {
+            partnerAvatarContainer.innerHTML = '';
+            partnerAvatarContainer.style.background = 'transparent';
+            partnerAvatarContainer.style.overflow = 'hidden';
+            partnerAvatarContainer.style.border = '2px solid var(--primary)';
+            const img = document.createElement('img');
+            img.src = partnerImage + '?t=' + Date.now();
+            img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+            img.onerror = function() {
+                partnerAvatarContainer.textContent = initials;
+                partnerAvatarContainer.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-light))';
+                partnerAvatarContainer.style.border = 'none';
+            };
+            partnerAvatarContainer.appendChild(img);
+        } else {
+            partnerAvatarContainer.textContent = initials;
+            partnerAvatarContainer.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-light))';
+            partnerAvatarContainer.style.border = 'none';
+        }
+    }
 
     // Clear messages
     const messagesEl = document.getElementById('chatMessagesMobile');
@@ -3907,9 +4281,10 @@ async function openChatMobile(jobId, otherName, otherId, jobTitle) {
     // Enable input
     document.getElementById('chatInputMobile').disabled = false;
     document.getElementById('chatSendMobile').disabled = false;
+    document.getElementById('chatLocationMobile').disabled = false;
     document.getElementById('chatInputMobile').placeholder = 'Ketik pesan...';
 
-    // Check if upload button should be enabled
+    // Upload button
     const job = jobs.find(j => j.id == jobId);
     const isHelperWorker = (currentUser?.role === 'helper' || currentUser?.role === 'user') && job?.helper_id === currentUser?.id;
     const isActiveJob = job && (job.status === 'paid' || job.status === 'in-progress' || job.status === 'ongoing');
@@ -3918,7 +4293,9 @@ async function openChatMobile(jobId, otherName, otherId, jobTitle) {
     // Load messages
     await loadMessagesMobile(jobId, otherId);
 
-    // Start polling
+    // ================================================================
+    // 🔥🔥🔥 POLLING SETIAP 2 DETIK (INSTAN)
+    // ================================================================
     if (chatState.pollingInterval) {
         clearInterval(chatState.pollingInterval);
     }
@@ -3926,19 +4303,19 @@ async function openChatMobile(jobId, otherName, otherId, jobTitle) {
         if (chatState.currentConversation) {
             pollNewMessagesMobile(jobId, otherId);
         }
-    }, 3000);
+    }, 2000); // ← 2 DETIK, BUKAN 3 DETIK
 
     setTimeout(() => document.getElementById('chatInputMobile').focus(), 300);
 }
 
 // ================================================================
-// CLOSE CHAT - Kembali ke daftar percakapan
+// 🔥 CLOSE CHAT - STOP POLLING
 // ================================================================
 
 function closeChatMobile() {
     console.log('🔙 Closing chat...');
     
-    // Stop polling
+    // 🔥 STOP POLLING
     if (chatState.pollingInterval) {
         clearInterval(chatState.pollingInterval);
         chatState.pollingInterval = null;
@@ -3956,10 +4333,11 @@ function closeChatMobile() {
     // Disable input
     document.getElementById('chatInputMobile').disabled = true;
     document.getElementById('chatSendMobile').disabled = true;
+    document.getElementById('chatLocationMobile').disabled = true;
     document.getElementById('chatUploadMobile').disabled = true;
     document.getElementById('chatInputMobile').placeholder = 'Pilih percakapan...';
     
-    // Reload conversations to update unread counts
+    // Reload conversations
     loadConversationsMobile();
     
     console.log('✅ Chat closed');
@@ -3991,6 +4369,10 @@ async function loadMessagesMobile(jobId, otherId) {
     }
 }
 
+// ================================================================
+// 🔥 SEND MESSAGE - LANGSUNG TAMPIL TANPA RELOAD
+// ================================================================
+
 async function sendMessageMobile() {
     if (!currentUser || !chatState.currentConversation) {
         showNotification('Pilih percakapan terlebih dahulu', 'warning');
@@ -4012,6 +4394,20 @@ async function sendMessageMobile() {
     const sendBtn = document.getElementById('chatSendMobile');
     sendBtn.disabled = true;
 
+    // 🔥 TAMPILKAN PESAN SEMENTARA (OPTIMISTIC)
+    const tempMsg = {
+        id: Date.now(),
+        sender_id: currentUser.id,
+        receiver_id: chatState.currentConversation.other_id,
+        message: msg,
+        is_me: true,
+        created_at: new Date().toISOString(),
+        time_only: formatMsgTime(new Date().toISOString()),
+        date_only: formatMsgDate(new Date().toISOString()),
+        type: 'text'
+    };
+    appendMessagesMobile([tempMsg]);
+
     try {
         const fd = new FormData();
         fd.append('job_id', chatState.currentConversation.job_id);
@@ -4026,6 +4422,7 @@ async function sendMessageMobile() {
         console.log('📥 Send message response:', data);
 
         if (data.success) {
+            // 🔥 UPDATE PESAN DENGAN ID DARI SERVER
             const newMsg = {
                 id: data.data.id,
                 sender_id: currentUser.id,
@@ -4034,17 +4431,29 @@ async function sendMessageMobile() {
                 is_me: true,
                 created_at: data.data.created_at || new Date().toISOString(),
                 time_only: formatMsgTime(data.data.created_at || new Date().toISOString()),
-                date_only: formatMsgDate(data.data.created_at || new Date().toISOString())
+                date_only: formatMsgDate(data.data.created_at || new Date().toISOString()),
+                type: data.data.type || 'text'
             };
+            
+            // 🔥 HAPUS PESAN SEMENTARA
+            const tempEl = document.querySelector(`.msg[data-id="${tempMsg.id}"]`);
+            if (tempEl) tempEl.remove();
+            
+            // 🔥 TAMPILKAN PESAN ASLI
             appendMessagesMobile([newMsg]);
             chatState.lastMessageId = Math.max(chatState.lastMessageId, data.data.id || 0);
             loadConversationsMobile();
         } else {
+            // 🔥 HAPUS PESAN SEMENTARA JIKA GAGAL
+            const tempEl = document.querySelector(`.msg[data-id="${tempMsg.id}"]`);
+            if (tempEl) tempEl.remove();
             showNotification('Gagal kirim: ' + data.message, 'error');
             input.value = msg;
         }
     } catch (e) {
         console.error('sendMessageMobile error:', e);
+        const tempEl = document.querySelector(`.msg[data-id="${tempMsg.id}"]`);
+        if (tempEl) tempEl.remove();
         showNotification('Gagal mengirim pesan', 'error');
         input.value = msg;
     } finally {
@@ -4263,44 +4672,6 @@ document.getElementById('notifBellMobile').addEventListener('click', function() 
 // ================================================================
 // NOTIFICATION PERMISSION
 // ================================================================
-
-async function requestNotificationPermission() {
-    if (!('Notification' in window)) {
-        document.getElementById('notifStatusMobile').textContent = '⚠️ Browser tidak mendukung notifikasi';
-        return false;
-    }
-
-    if (Notification.permission === 'granted') {
-        document.getElementById('notifStatusMobile').textContent = '✅ Notifikasi aktif';
-        return true;
-    }
-
-    if (Notification.permission === 'denied') {
-        document.getElementById('notifStatusMobile').textContent = '❌ Notifikasi diblokir. Buka pengaturan browser.';
-        return false;
-    }
-
-    try {
-        const permission = await Notification.requestPermission();
-        const status = document.getElementById('notifStatusMobile');
-        if (permission === 'granted') {
-            status.textContent = '✅ Notifikasi aktif';
-            showNotification('Notifikasi berhasil diaktifkan!', 'success');
-            return true;
-        } else {
-            status.textContent = '❌ Izin ditolak';
-            return false;
-        }
-    } catch (error) {
-        console.error('Error requesting notification:', error);
-        document.getElementById('notifStatusMobile').textContent = '⚠️ Error: ' + error.message;
-        return false;
-    }
-}
-
-document.getElementById('enableNotifMobile').addEventListener('click', function() {
-    requestNotificationPermission();
-});
 
 // ================================================================
 // CREATE JOB - FORM & BUDGET RANGE
@@ -4636,12 +5007,10 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('📱 Hendimen Mobile Dashboard initializing...');
 
     checkSession();
-    initDarkMode();
     setupJobTabs();
     setDefaultTab();
 
     if (Notification.permission === 'granted') {
-        document.getElementById('notifStatusMobile').textContent = '✅ Notifikasi aktif';
     } else if (Notification.permission === 'denied') {
         document.getElementById('notifStatusMobile').textContent = '❌ Notifikasi diblokir';
     } else {
@@ -4794,21 +5163,6 @@ async function refreshEarningsNow() {
     }
 }
 window.refreshEarningsNow = refreshEarningsNow;
-
-// ================================================================
-// OVERRIDE FUNGSI UNTUK AUTO-UPDATE
-// ================================================================
-
-const originalLoadWallet = loadWallet;
-loadWallet = function() {
-    originalLoadWallet();
-    setTimeout(() => {
-        if (currentUser && (currentUser.role === 'helper' || currentUser.role === 'user')) {
-            console.log('🔄 Auto-update helper earnings from transactions...');
-            updateHelperStatsFromTransactions();
-        }
-    }, 500);
-};
 
 const originalRefreshAll = refreshAllJobDisplays;
 refreshAllJobDisplays = function() {
@@ -5411,5 +5765,1373 @@ console.log('  ✅ Pause saat tab tidak aktif');
 // ================================================================
 // END OF AUTOREFRESH
 // ================================================================
+
+// ================================================================
+// 👤 PROFILE FUNCTIONS
+// ================================================================
+
+// ===== LOAD PROFILE DATA =====
+function loadProfileData() {
+    if (!currentUser) return;
+
+    console.log('👤 Loading profile data...');
+
+    const name = currentUser.name || currentUser.nama_lengkap || 'User';
+    const email = currentUser.email || '';
+    const phone = currentUser.phone || currentUser.no_telepon || '';
+    const role = currentUser.role || 'user';
+    const initials = getInitials(name);
+    const profileImage = currentUser.profile_image || null;
+
+    // Set form fields
+    const nameInput = document.getElementById('profileName');
+    const emailInput = document.getElementById('profileEmail');
+    const phoneInput = document.getElementById('profilePhone');
+    
+    if (nameInput) nameInput.value = name;
+    if (emailInput) emailInput.value = email;
+    if (phoneInput) phoneInput.value = phone;
+
+    // Set display name
+    const nameDisplay = document.getElementById('profileNameDisplay');
+    if (nameDisplay) nameDisplay.textContent = name;
+
+    // Set role display
+    const roleDisplay = document.getElementById('profileRoleDisplay');
+    if (roleDisplay) {
+        const roleMap = {
+            'requester': 'Requester',
+            'helper': 'Helper',
+            'admin': 'Admin',
+            'user': 'User'
+        };
+        roleDisplay.textContent = roleMap[role] || 'User';
+    }
+
+    // ================================================================
+    // 🔥 SET AVATAR & TOMBOL HAPUS
+    // ================================================================
+    const placeholder = document.getElementById('profileAvatarPlaceholder');
+    const image = document.getElementById('profileAvatarImage');
+    const deleteBtn = document.getElementById('profileAvatarDeleteBtn');
+    
+    if (profileImage) {
+        if (placeholder) placeholder.style.display = 'none';
+        if (image) {
+            image.style.display = 'block';
+            image.src = profileImage + '?t=' + Date.now();
+        }
+        // 🔥 TAMPILKAN TOMBOL HAPUS
+        if (deleteBtn) {
+            deleteBtn.style.display = 'flex';
+            deleteBtn.classList.add('show');
+        }
+    } else {
+        if (placeholder) {
+            placeholder.style.display = 'flex';
+            placeholder.textContent = initials;
+        }
+        if (image) image.style.display = 'none';
+        // 🔥 SEMBUNYIKAN TOMBOL HAPUS
+        if (deleteBtn) {
+            deleteBtn.style.display = 'none';
+            deleteBtn.classList.remove('show');
+        }
+    }
+
+    // Set verification badge
+    const badge = document.getElementById('profileVerificationBadge');
+    if (badge) {
+        const status = currentUser.verification_status || 'verified';
+        if (status === 'verified') {
+            badge.innerHTML = '<span class="profile-verification-badge"><i class="fas fa-check-circle"></i> Terverifikasi</span>';
+        } else if (status === 'pending') {
+            badge.innerHTML = '<span class="profile-verification-badge pending"><i class="fas fa-clock"></i> Menunggu Verifikasi</span>';
+        } else {
+            badge.innerHTML = '<span class="profile-verification-badge rejected"><i class="fas fa-times-circle"></i> Ditolak</span>';
+        }
+    }
+
+    // Dark mode toggle status
+    updateProfileDarkToggle();
+}
+
+// ================================================================
+// 🗑️ TOMBOL HAPUS FOTO PROFIL
+// ================================================================
+
+document.addEventListener('click', function(e) {
+    const deleteBtn = e.target.closest('#profileAvatarDeleteBtn');
+    if (deleteBtn) {
+        deleteProfilePhoto();
+    }
+});
+
+// ===== UPDATE PROFILE =====
+async function updateProfile() {
+    const nameInput = document.getElementById('profileName');
+    const phoneInput = document.getElementById('profilePhone');
+    
+    const name = nameInput ? nameInput.value.trim() : '';
+    const phone = phoneInput ? phoneInput.value.trim() : '';
+
+    if (!name) {
+        showProfileStatus('Nama lengkap harus diisi!', 'error');
+        return;
+    }
+
+    if (name.length < 3) {
+        showProfileStatus('Nama lengkap minimal 3 karakter!', 'error');
+        return;
+    }
+
+    showLoading(true);
+    const btn = document.getElementById('profileSaveBtn');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-small"></span> Menyimpan...';
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('user_id', currentUser.id);
+        formData.append('nama_lengkap', name);
+        formData.append('no_telepon', phone);
+        formData.append('action', 'update_profile');
+
+        const response = await fetch('update_profile.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Update currentUser
+            currentUser.name = name;
+            currentUser.nama_lengkap = name;
+            currentUser.phone = phone;
+            currentUser.no_telepon = phone;
+
+            // Update UI
+            const nameDisplay = document.getElementById('profileNameDisplay');
+            if (nameDisplay) nameDisplay.textContent = name;
+            
+            const nameInputEl = document.getElementById('profileName');
+            if (nameInputEl) nameInputEl.value = name;
+            
+            const phoneInputEl = document.getElementById('profilePhone');
+            if (phoneInputEl) phoneInputEl.value = phone;
+
+            // Update drawer
+            const drawerName = document.getElementById('drawerName');
+            if (drawerName) drawerName.textContent = name;
+
+            // Update avatar placeholder
+            const initials = getInitials(name);
+            const placeholder = document.getElementById('profileAvatarPlaceholder');
+            if (placeholder) placeholder.textContent = initials;
+
+            showProfileStatus('✅ Profil berhasil diperbarui!', 'success');
+        } else {
+            showProfileStatus('❌ Gagal: ' + result.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        showProfileStatus('❌ Terjadi kesalahan: ' + error.message, 'error');
+    } finally {
+        showLoading(false);
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Simpan Perubahan';
+        }
+    }
+}
+
+// ===== UPLOAD PROFILE PHOTO =====
+async function uploadProfilePhoto(file) {
+    if (!file) return;
+
+    // Validasi
+    const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+        showProfileStatus('❌ Format file harus JPG, PNG, GIF, atau WEBP', 'error');
+        return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+        showProfileStatus('❌ Ukuran file maksimal 2MB', 'error');
+        return;
+    }
+
+    showLoading(true);
+    const btn = document.getElementById('profileAvatarBtn');
+    if (btn) btn.disabled = true;
+
+    try {
+        const formData = new FormData();
+        formData.append('user_id', currentUser.id);
+        formData.append('profile_image', file);
+        formData.append('action', 'upload_photo');
+
+        const response = await fetch('update_profile.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Update currentUser
+            currentUser.profile_image = result.image_url;
+
+            // Update UI
+            const placeholder = document.getElementById('profileAvatarPlaceholder');
+            const image = document.getElementById('profileAvatarImage');
+            
+            if (placeholder) placeholder.style.display = 'none';
+            if (image) {
+                image.style.display = 'block';
+                image.src = result.image_url + '?t=' + Date.now();
+            }
+
+            showProfileStatus('✅ Foto profil berhasil diupload!', 'success');
+        } else {
+            showProfileStatus('❌ Gagal: ' + result.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error uploading photo:', error);
+        showProfileStatus('❌ Terjadi kesalahan: ' + error.message, 'error');
+    } finally {
+        showLoading(false);
+        if (btn) btn.disabled = false;
+    }
+}
+
+// ===== SHOW PROFILE STATUS =====
+function showProfileStatus(message, type = 'info') {
+    const el = document.getElementById('profileStatus');
+    if (!el) return;
+
+    el.textContent = message;
+    el.className = 'profile-status ' + type;
+    el.style.display = 'block';
+    
+    // Auto hide after 5 seconds for success/info
+    if (type === 'success' || type === 'info') {
+        setTimeout(() => {
+            el.style.display = 'none';
+        }, 5000);
+    }
+}
+
+// ===== UPDATE PROFILE DARK TOGGLE =====
+function updateProfileDarkToggle() {
+    const isDark = document.body.classList.contains('dark-mode');
+    const status = document.getElementById('profileDarkToggleStatus');
+    if (status) {
+        status.textContent = isDark ? 'On 🌙' : 'Off ☀️';
+        status.style.color = isDark ? '#93c5fd' : '#64748b';
+    }
+}
+
+// ===== GET INITIALS =====
+function getInitials(name) {
+    if (!name) return 'U';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) {
+        return parts[0].substring(0, 2).toUpperCase();
+    }
+    const first = parts[0].charAt(0);
+    const last = parts[parts.length - 1].charAt(0);
+    return (first + last).toUpperCase();
+}
+
+// ================================================================
+// 🎯 EVENT LISTENERS - PROFILE
+// ================================================================
+
+// Profile form submit
+document.addEventListener('submit', function(e) {
+    const form = e.target.closest('#profileForm');
+    if (form) {
+        e.preventDefault();
+        updateProfile();
+    }
+});
+
+// Avatar upload button
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('#profileAvatarBtn');
+    if (btn) {
+        const input = document.getElementById('profileAvatarInput');
+        if (input) input.click();
+    }
+});
+
+// Avatar file input change
+document.addEventListener('change', function(e) {
+    const input = e.target.closest('#profileAvatarInput');
+    if (input && input.files && input.files[0]) {
+        uploadProfilePhoto(input.files[0]);
+        input.value = '';
+    }
+});
+
+// Profile dark mode toggle
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('#profileDarkToggle');
+    if (btn) {
+        toggleDarkMode();
+        updateProfileDarkToggle();
+    }
+});
+
+// Profile logout
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('#profileLogoutBtn');
+    if (btn) {
+        logout();
+    }
+});
+
+// ================================================================
+// 🔄 OVERRIDE NAVIGATE UNTUK PROFILE
+// ================================================================
+
+const originalNavigate = window.navigateTo || function() {};
+window.navigateTo = function(pageId) {
+    originalNavigate(pageId);
+    
+    if (pageId === 'profile') {
+        setTimeout(loadProfileData, 300);
+    }
+};
+
+// ================================================================
+// 🔄 OVERRIDE AFTER LOGIN UNTUK LOAD PROFILE
+// ================================================================
+
+const originalAfterLogin = window.afterLogin || function() {};
+window.afterLogin = async function() {
+    if (typeof originalAfterLogin === 'function') {
+        await originalAfterLogin();
+    }
+    
+    // Load profile data if profile page is active
+    const activePage = getCurrentPage();
+    if (activePage === 'profile') {
+        setTimeout(loadProfileData, 500);
+    }
+};
+
+console.log('✅ Profile functions loaded!');
+
+// ================================================================
+// 📄 RECEIPT / RESI FUNCTIONS
+// ================================================================
+
+/**
+ * Tampilkan modal resi untuk transaksi
+ */
+function showReceipt(transaction) {
+    console.log('📄 Showing receipt for transaction:', transaction);
+    
+    const container = document.getElementById('receiptContentMobile');
+    if (!container) return;
+    
+    // Cek apakah ada data resi
+    if (!transaction.receipt) {
+        container.innerHTML = `
+            <div style="text-align:center;padding:30px;color:var(--gray);">
+                <i class="fas fa-receipt" style="font-size:2rem;color:var(--gray-lighter);"></i>
+                <h3 style="margin-top:8px;font-size:0.95rem;">Tidak ada resi</h3>
+                <p style="font-size:0.8rem;">Transaksi ini tidak memiliki resi detail.</p>
+            </div>
+        `;
+        openModal('receiptModalMobile');
+        return;
+    }
+    
+    const receipt = transaction.receipt;
+    const isSuccess = transaction.status === 'Sukses' || transaction.status === 'success';
+    const isPending = transaction.status === 'Pending' || transaction.status === 'pending';
+    
+    let statusClass = 'success';
+    let statusText = '✅ Selesai';
+    if (isPending) {
+        statusClass = 'pending';
+        statusText = '⏳ Pending';
+    } else if (!isSuccess) {
+        statusClass = 'failed';
+        statusText = '❌ Gagal';
+    }
+    
+    const amount = transaction.amount || 'Rp 0';
+    const description = transaction.description || 'Transaksi';
+    const date = formatDateFull(transaction.created_at || transaction.date);
+    const typeLabel = transaction.type_label || transaction.type || 'Transaksi';
+    
+    // ================================================================
+    // 🔥 BUILD HTML RESI - BERDASARKAN TIPE
+    // ================================================================
+    let html = `
+        <div class="receipt-container">
+            <div class="receipt-header">
+                <h3>📄 RESI TRANSAKSI</h3>
+                <div class="receipt-id">#${transaction.id}</div>
+                <div style="margin-top:4px;">
+                    <span class="receipt-status ${statusClass}">${statusText}</span>
+                </div>
+            </div>
+            
+            <div class="receipt-row">
+                <span class="label">📅 Tanggal</span>
+                <span class="value">${date}</span>
+            </div>
+            
+            <div class="receipt-row">
+                <span class="label">📝 Deskripsi</span>
+                <span class="value">${escapeHtml(description)}</span>
+            </div>
+            
+            <div class="receipt-row">
+                <span class="label">🏷️ Tipe</span>
+                <span class="value">${escapeHtml(typeLabel)}</span>
+            </div>
+    `;
+
+    // ================================================================
+    // 🔥 JIKA RESI UNTUK PEKERJAAN (JOB)
+    // ================================================================
+    if (receipt.type === 'job') {
+        html += `
+            ${receipt.job_id ? `
+            <div class="receipt-row">
+                <span class="label">🔖 ID Pekerjaan</span>
+                <span class="value">#${receipt.job_id}</span>
+            </div>
+            ` : ''}
+            
+            ${receipt.title ? `
+            <div class="receipt-row">
+                <span class="label">📋 Pekerjaan</span>
+                <span class="value">${escapeHtml(receipt.title)}</span>
+            </div>
+            ` : ''}
+            
+            ${receipt.formatted_price ? `
+            <div class="receipt-row">
+                <span class="label">💰 Harga Deal</span>
+                <span class="value">${receipt.formatted_price}</span>
+            </div>
+            ` : ''}
+            
+            ${receipt.status ? `
+            <div class="receipt-row">
+                <span class="label">📌 Status Pekerjaan</span>
+                <span class="value">${getStatusName(receipt.status)}</span>
+            </div>
+            ` : ''}
+        `;
+    }
+    
+    // ================================================================
+    // 🔥 JIKA RESI UNTUK PENARIKAN SALDO (WITHDRAW)
+    // ================================================================
+    else if (receipt.type === 'withdraw') {
+        // Status withdraw
+        let wdStatus = '✅ Selesai';
+        let wdStatusClass = 'success';
+        if (receipt.status === 'pending') {
+            wdStatus = '⏳ Menunggu Verifikasi';
+            wdStatusClass = 'pending';
+        } else if (receipt.status === 'rejected') {
+            wdStatus = '❌ Ditolak';
+            wdStatusClass = 'failed';
+        }
+        
+        html += `
+            <div class="receipt-row">
+                <span class="label">🏦 Bank</span>
+                <span class="value">${escapeHtml(receipt.bank)}</span>
+            </div>
+            
+            <div class="receipt-row">
+                <span class="label">🔢 No. Rekening</span>
+                <span class="value">${escapeHtml(receipt.account_number)}</span>
+            </div>
+            
+            <div class="receipt-row">
+                <span class="label">👤 Nama Pemilik</span>
+                <span class="value">${escapeHtml(receipt.account_name)}</span>
+            </div>
+            
+            <div class="receipt-row">
+                <span class="label">💰 Nominal</span>
+                <span class="value">${receipt.formatted_nominal}</span>
+            </div>
+            
+            <div class="receipt-row">
+                <span class="label">📋 Biaya Admin</span>
+                <span class="value" style="color:#dc2626;">- ${receipt.formatted_admin_fee}</span>
+            </div>
+            
+            <div class="receipt-row" style="border-bottom:2px solid var(--primary);padding-bottom:8px;">
+                <span class="label" style="font-weight:700;">💵 Diterima</span>
+                <span class="value" style="font-weight:700;color:#059669;">${receipt.formatted_net}</span>
+            </div>
+            
+            <div class="receipt-row">
+                <span class="label">📌 Status</span>
+                <span class="value"><span class="receipt-status ${wdStatusClass}">${wdStatus}</span></span>
+            </div>
+            
+            ${receipt.admin_note ? `
+            <div class="receipt-row" style="background:#fef3c7;padding:8px 10px;border-radius:6px;margin-top:4px;">
+                <span class="label" style="color:#92400e;">📝 Catatan Admin</span>
+                <span class="value" style="color:#92400e;font-weight:400;">${escapeHtml(receipt.admin_note)}</span>
+            </div>
+            ` : ''}
+            
+            ${receipt.processed_at ? `
+            <div class="receipt-row">
+                <span class="label">⏱️ Diproses</span>
+                <span class="value">${formatDateFull(receipt.processed_at)}</span>
+            </div>
+            ` : ''}
+        `;
+    }
+
+    // ================================================================
+    // 🔥 FOOTER TOTAL
+    // ================================================================
+    html += `
+            <div class="receipt-row total">
+                <span class="label">💳 Total</span>
+                <span class="value">${amount}</span>
+            </div>
+            
+            <div class="receipt-footer">
+                <i class="fas fa-check-circle" style="color:var(--primary);"></i>
+                Terima kasih telah menggunakan Hendimen
+                <br>
+                <small>Resi ini sebagai bukti transaksi yang sah</small>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    openModal('receiptModalMobile');
+}
+
+/**
+ * Format tanggal lengkap
+ */
+function formatDateFull(dateStr) {
+    if (!dateStr) return '-';
+    try {
+        const d = new Date(dateStr);
+        const options = { 
+            day: '2-digit', 
+            month: 'long', 
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        return d.toLocaleDateString('id-ID', options);
+    } catch (e) {
+        return dateStr;
+    }
+}
+
+/**
+ * Update transaction history dengan tombol resi
+ */
+function updateTransactionHistory(transactions, role) {
+    const historyEl = document.getElementById('walletHistoryMobile');
+    if (!historyEl) return;
+
+    historyEl.innerHTML = '';
+
+    if (!transactions || transactions.length === 0) {
+        historyEl.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--gray-light);">
+            <i class="fas fa-inbox" style="display:block;font-size:1.5rem;margin-bottom:8px;"></i>
+            Belum ada transaksi
+        </td></tr>`;
+        return;
+    }
+
+    // Simpan data transaksi untuk diakses nanti
+    window._transactions = transactions;
+
+    const latest = transactions.slice(0, 10);
+    
+    latest.forEach((trans, index) => {
+        const row = document.createElement('tr');
+        
+        let amountText = trans.amount || '0';
+        let isPositive = false;
+        
+        if (amountText.startsWith('+')) {
+            isPositive = true;
+        } else if (amountText.startsWith('-')) {
+            isPositive = false;
+        } else {
+            const numericAmount = parseFloat(String(amountText).replace(/[^0-9.-]/g, ''));
+            isPositive = numericAmount >= 0;
+        }
+
+        const isSuccess = trans.status === 'Sukses' || trans.status === 'success';
+        const isPending = trans.status === 'Pending' || trans.status === 'pending';
+        
+        let statusClass = 'badge-success';
+        let statusText = 'Sukses';
+        if (isPending) {
+            statusClass = 'badge-warning';
+            statusText = 'Pending';
+        } else if (!isSuccess) {
+            statusClass = 'badge-danger';
+            statusText = '❌ Gagal';
+        }
+        
+        const amountClass = isPositive ? 'positive' : 'negative';
+        const color = isPositive ? 'var(--success)' : 'var(--danger)';
+        
+        // 🔥 CEK APAKAH ADA RESI
+        const hasReceipt = trans.receipt !== null && trans.receipt !== undefined;
+        const receiptBtn = hasReceipt ? `
+            <button class="btn-receipt" onclick="showReceipt(window._transactions[${index}])">
+                <i class="fas fa-receipt"></i> Resi
+            </button>
+        ` : '<span style="color:var(--gray-light);font-size:0.65rem;">-</span>';
+
+        row.innerHTML = `
+            <td style="font-size:0.65rem;">${formatDateShort(trans.created_at || trans.date)}</td>
+            <td style="font-size:0.7rem;">${escapeHtml(trans.description || 'Transaksi')}</td>
+            <td class="${amountClass}" style="color:${color};font-size:0.75rem;">${amountText}</td>
+            <td><span class="badge ${statusClass}" style="font-size:0.6rem;">${statusText}</span></td>
+            <td style="text-align:center;">${receiptBtn}</td>
+        `;
+        historyEl.appendChild(row);
+    });
+
+    if (transactions.length > 10) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="5" style="text-align:center;padding:8px;color:var(--gray);font-size:0.7rem;">
+            <i class="fas fa-chevron-down"></i> ${transactions.length - 10} transaksi lainnya
+        </td>`;
+        historyEl.appendChild(row);
+    }
+}
+
+
+const originalLoadWallet = loadWallet;
+loadWallet = function() {
+    originalLoadWallet();
+    // Setelah load, update history dengan tombol resi
+    setTimeout(() => {
+        const transactions = window.walletTransactions || [];
+        const role = currentUser?.role || 'requester';
+        updateTransactionHistory(transactions, role);
+    }, 300);
+};
+
+const GOOGLE_MAPS_API_KEY = 'AIzaSyCdAVl26_DjigDKPIhLIYoOOdaDPtJdHm0';
+
+// State lokasi
+let locationState = {
+    lat: null,
+    lng: null,
+    name: '',
+    address: '',
+    placeId: null,
+    isSending: false
+};
+
+
+// ================================================================
+// 🔓 OPEN CHAT - ENABLE LOCATION BUTTON
+// ================================================================
+
+// 🔥 OVERRIDE openChatMobile untuk enable tombol lokasi
+const originalOpenChat = window.openChatMobile;
+window.openChatMobile = async function(jobId, otherName, otherId, jobTitle) {
+    await originalOpenChat(jobId, otherName, otherId, jobTitle);
+    
+    // Enable tombol lokasi
+    const locBtn = document.getElementById('chatLocationMobile');
+    if (locBtn) {
+        locBtn.disabled = false;
+        locBtn.style.opacity = '1';
+    }
+};
+
+// ================================================================
+// 🔘 OPEN LOCATION MODAL
+// ================================================================
+
+document.getElementById('chatLocationMobile')?.addEventListener('click', function() {
+    if (!chatState.currentConversation) {
+        showNotification('Pilih percakapan terlebih dahulu', 'warning');
+        return;
+    }
+    
+    resetLocationState();
+    openModal('locationModalMobile');
+});
+
+
+// ================================================================
+// 🔍 GOOGLE PLACES AUTOCOMPLETE - DENGAN BIAS LOKASI
+// ================================================================
+
+let searchTimeout = null;
+let lastSearchQuery = '';
+
+document.getElementById('locationSearchInput')?.addEventListener('input', function() {
+    const query = this.value.trim();
+    const suggestionsEl = document.getElementById('locationSuggestions');
+    
+    if (query.length < 2) {
+        suggestionsEl.style.display = 'none';
+        return;
+    }
+    
+    lastSearchQuery = query;
+    
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        searchPlaces(query);
+    }, 400);
+});
+
+async function searchPlaces(query) {
+    const suggestionsEl = document.getElementById('locationSuggestions');
+    
+    // 🔥 TAMBAHKAN BIAS LOKASI (jika ada)
+    let locationBias = '';
+    if (locationState.lat && locationState.lng) {
+        locationBias = `&location=${locationState.lat},${locationState.lng}&radius=50000`;
+    }
+    
+    try {
+        const url = `google_maps_proxy.php?action=autocomplete&input=${encodeURIComponent(query)}${locationBias}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        console.log('🔍 Autocomplete response:', data);
+        
+        if (data.status === 'OK' && data.predictions && data.predictions.length > 0) {
+            suggestionsEl.style.display = 'block';
+            suggestionsEl.innerHTML = data.predictions.map(p => {
+                const mainText = p.structured_formatting?.main_text || p.description;
+                const secondaryText = p.structured_formatting?.secondary_text || '';
+                return `
+                    <div class="suggestion-item" data-placeid="${p.place_id}" data-description="${p.description}">
+                        <div class="main-text">${escapeHtml(mainText)}</div>
+                        ${secondaryText ? `<div class="sub-text">${escapeHtml(secondaryText)}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            suggestionsEl.querySelectorAll('.suggestion-item').forEach(el => {
+                el.addEventListener('click', function() {
+                    const placeId = this.dataset.placeid;
+                    const description = this.dataset.description;
+                    document.getElementById('locationSearchInput').value = description;
+                    suggestionsEl.style.display = 'none';
+                    getPlaceDetails(placeId);
+                });
+            });
+        } else {
+            suggestionsEl.style.display = 'none';
+            console.warn('⚠️ Places API error:', data.status, data.error_message);
+        }
+    } catch (error) {
+        console.error('Error searching places:', error);
+        suggestionsEl.style.display = 'none';
+    }
+}
+
+// ================================================================
+// 📍 GET PLACE DETAILS - DENGAN DETAIL LENGKAP
+// ================================================================
+
+async function getPlaceDetails(placeId) {
+    showLocationStatus('info', '🔄 Mengambil detail lokasi...');
+    
+    try {
+        const url = `google_maps_proxy.php?action=details&place_id=${encodeURIComponent(placeId)}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        console.log('📍 Place details response:', data);
+        
+        if (data.status === 'OK' && data.result) {
+            const result = data.result;
+            const lat = result.geometry?.location?.lat;
+            const lng = result.geometry?.location?.lng;
+            
+            // 🔥 CARI NAMA TERBAIK
+            let name = result.name || '';
+            let address = result.formatted_address || result.vicinity || '';
+            
+            // 🔥🔥🔥 PASTIKAN name TIDAK KOSONG
+            if (!name || name === '0' || name === '') {
+                name = address || `${lat}, ${lng}`;
+            }
+            if (!address || address === '0' || address === '') {
+                address = `${lat}, ${lng}`;
+            }
+            
+            // 🔥 SIMPAN DATA
+            locationState.lat = lat;
+            locationState.lng = lng;
+            locationState.name = name;
+            locationState.address = address;
+            locationState.placeId = placeId;
+            
+            // 🔥 TAMPILKAN DI MAP
+            showLocationPreview(lat, lng, name, address);
+            document.getElementById('sendLocationBtn').disabled = false;
+            
+            showLocationStatus('success', `✅ ${name}`);
+            
+            // 🔥 UPDATE INPUT
+            document.getElementById('locationSearchInput').value = name;
+            
+            console.log('📍 Place locationState:', locationState);
+        } else {
+            showLocationStatus('error', '❌ Gagal mengambil detail lokasi: ' + (data.status || 'Unknown'));
+        }
+    } catch (error) {
+        console.error('Error getting place details:', error);
+        showLocationStatus('error', '❌ Gagal mengambil detail lokasi');
+    }
+}
+
+
+// ================================================================
+// 📍 GET CURRENT LOCATION (GPS) - DENGAN AKURASI TINGGI
+// ================================================================
+
+document.getElementById('getCurrentLocationBtn')?.addEventListener('click', function() {
+    if (!navigator.geolocation) {
+        showLocationStatus('error', '❌ Browser tidak mendukung GPS');
+        return;
+    }
+    
+    showLocationStatus('info', '🔄 Mendapatkan lokasi dengan akurasi tinggi...');
+    document.getElementById('locationSearchInput').value = '';
+    document.getElementById('locationSuggestions').style.display = 'none';
+    
+    // 🔥 OPTION: AKURASI TINGGI + TIMEOUT 30 DETIK
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 30000,
+        maximumAge: 0
+    };
+    
+    navigator.geolocation.getCurrentPosition(
+        async function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+            
+            console.log('📍 GPS Location:', { lat, lng, accuracy });
+            
+            locationState.lat = lat;
+            locationState.lng = lng;
+            
+            // 🔥 REVERSE GEOCODING UNTUK DAPAT ALAMAT LENGKAP
+            try {
+                const url = `google_maps_proxy.php?action=geocode&lat=${lat}&lng=${lng}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                console.log('📍 Reverse geocode response:', data);
+                
+                if (data.status === 'OK' && data.results && data.results.length > 0) {
+                    // 🔥 CARI ALAMAT TERLENGKAP
+                    let bestResult = data.results[0];
+                    for (let i = 0; i < data.results.length; i++) {
+                        if (data.results[i].formatted_address.length > bestResult.formatted_address.length) {
+                            bestResult = data.results[i];
+                        }
+                    }
+                    
+                    const fullAddress = bestResult.formatted_address || '';
+                    
+                    // 🔥🔥🔥 PASTIKAN locationState.name TERISI
+                    if (fullAddress && fullAddress !== '0') {
+                        locationState.name = fullAddress;
+                        locationState.address = fullAddress;
+                    } else {
+                        // Fallback ke koordinat
+                        locationState.name = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                        locationState.address = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                    }
+                    
+                    locationState.placeId = bestResult.place_id || null;
+                    
+                    document.getElementById('locationSearchInput').value = locationState.name;
+                    showLocationPreview(lat, lng, locationState.name, locationState.address);
+                    document.getElementById('sendLocationBtn').disabled = false;
+                    
+                    showLocationStatus('success', `✅ ${locationState.name}`);
+                } else {
+                    // 🔥 FALLBACK: BUAT ALAMAT DARI KOORDINAT
+                    locationState.name = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                    locationState.address = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                    
+                    document.getElementById('locationSearchInput').value = locationState.name;
+                    showLocationPreview(lat, lng, locationState.name, locationState.address);
+                    document.getElementById('sendLocationBtn').disabled = false;
+                    
+                    showLocationStatus('warning', '⚠️ Lokasi ditemukan, alamat tidak detail');
+                }
+            } catch (error) {
+                console.error('Error reverse geocoding:', error);
+                // 🔥 FALLBACK
+                locationState.name = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                locationState.address = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                
+                document.getElementById('locationSearchInput').value = locationState.name;
+                showLocationPreview(lat, lng, locationState.name, locationState.address);
+                document.getElementById('sendLocationBtn').disabled = false;
+                
+                showLocationStatus('warning', '⚠️ Lokasi ditemukan, alamat tidak detail');
+            }
+            
+            console.log('📍 GPS locationState:', locationState);
+        },
+        function(error) {
+            let msg = 'Gagal mendapatkan lokasi: ';
+            switch (error.code) {
+                case 1: 
+                    msg += 'Izin lokasi ditolak. Aktifkan GPS dan izinkan aplikasi.';
+                    break;
+                case 2: 
+                    msg += 'Sinyal GPS tidak tersedia. Pastikan di luar ruangan.';
+                    break;
+                case 3: 
+                    msg += 'Waktu habis (30 detik). Coba lagi.';
+                    break;
+                default: 
+                    msg += error.message;
+            }
+            showLocationStatus('error', '❌ ' + msg);
+            console.error('GPS Error:', error);
+        },
+        options
+    );
+});
+
+
+// ================================================================
+// 🗺️ SHOW LOCATION PREVIEW
+// ================================================================
+
+function showLocationPreview(lat, lng, name, address) {
+    const preview = document.getElementById('locationMapPreview');
+    const container = document.getElementById('locationMapContainer');
+    const nameEl = document.getElementById('locationSelectedName');
+    const addressEl = document.getElementById('locationSelectedAddress');
+    
+    if (!preview || !container || !nameEl || !addressEl) return;
+    
+    preview.style.display = 'block';
+    nameEl.textContent = name || 'Lokasi';
+    addressEl.textContent = address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    
+    // 🔥 PAKAI PROXY SERVER UNTUK STATIC MAP
+    const mapUrl = `google_maps_proxy.php?action=staticmap&lat=${lat}&lng=${lng}&zoom=15&width=400&height=200`;
+    container.innerHTML = `<img src="${mapUrl}" style="width:100%;height:100%;object-fit:cover;" alt="Map">`;
+}
+
+// ================================================================
+// 📍 SHOW LOCATION STATUS
+// ================================================================
+
+function showLocationStatus(type, message) {
+    const statusDiv = document.getElementById('locationStatus');
+    const textEl = document.getElementById('locationStatusText');
+    
+    if (!statusDiv || !textEl) return;
+    
+    textEl.textContent = message;
+    
+    const icons = {
+        info: '<i class="fas fa-spinner fa-spin" style="color:#3b82f6;"></i>',
+        success: '<i class="fas fa-check-circle" style="color:#10b981;"></i>',
+        warning: '<i class="fas fa-exclamation-triangle" style="color:#f59e0b;"></i>',
+        error: '<i class="fas fa-exclamation-circle" style="color:#ef4444;"></i>'
+    };
+    
+    const colors = {
+        info: '#eff6ff',
+        success: '#f0fdf4',
+        warning: '#fffbeb',
+        error: '#fef2f2'
+    };
+    
+    statusDiv.style.background = colors[type] || '#f0fdf4';
+    statusDiv.innerHTML = icons[type] + ' <span>' + message + '</span>';
+}
+
+// ================================================================
+// 📤 SEND LOCATION TO CHAT (TANPA EMOJI)
+// ================================================================
+
+document.getElementById('sendLocationBtn')?.addEventListener('click', async function() {
+    if (!locationState.lat || !locationState.lng) {
+        showLocationStatus('error', '❌ Pilih lokasi terlebih dahulu');
+        return;
+    }
+    
+    if (!chatState.currentConversation) {
+        showNotification('Pilih percakapan terlebih dahulu', 'warning');
+        return;
+    }
+    
+    this.disabled = true;
+    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+    
+    const jobId = chatState.currentConversation.job_id;
+    const receiverId = chatState.currentConversation.other_id;
+    
+    // 🔥 SIMPAN KOORDINAT
+    const lat = locationState.lat;
+    const lng = locationState.lng;
+    const locationName = locationState.name || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    const locationAddress = locationState.address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    
+    console.log('📍 Sending location data:', {
+        locationName: locationName,
+        locationAddress: locationAddress,
+        lat: lat,
+        lng: lng
+    });
+    
+    // 🔥 KIRIM TANPA EMOJI
+    const fd = new FormData();
+    fd.append('job_id', jobId);
+    fd.append('sender_id', currentUser.id);
+    fd.append('receiver_id', receiverId);
+    fd.append('sender_role', currentUser.role);
+    fd.append('type', 'location');
+    fd.append('message', locationName);  // ← TANPA EMOJI
+    fd.append('is_location', '1');
+    fd.append('location_name', locationName);
+    fd.append('location_address', locationAddress);
+    fd.append('location_lat', lat);
+    fd.append('location_lng', lng);
+    
+    try {
+        const response = await fetch('send_message.php', { method: 'POST', body: fd });
+        const result = await response.json();
+        
+        console.log('📥 Server response:', result);
+        
+        if (result.success) {
+            const finalLat = result.data.latitude || lat;
+            const finalLng = result.data.longitude || lng;
+            const finalName = result.data.location_name || locationName;
+            const finalAddress = result.data.location_address || locationAddress;
+            
+            const newMsg = {
+                id: result.data.id,
+                sender_id: currentUser.id,
+                receiver_id: receiverId,
+                message: finalName,  // ← TANPA EMOJI
+                type: 'location',
+                is_me: true,
+                created_at: result.data.created_at || new Date().toISOString(),
+                time_only: formatMsgTime(result.data.created_at || new Date().toISOString()),
+                date_only: formatMsgDate(result.data.created_at || new Date().toISOString()),
+                location_name: finalName,
+                location_address: finalAddress,
+                latitude: finalLat,
+                longitude: finalLng,
+                location_lat: finalLat,
+                location_lng: finalLng
+            };
+            
+            appendMessagesMobile([newMsg]);
+            loadConversationsMobile();
+            
+            closeModal('locationModalMobile');
+            showNotification('📍 Lokasi berhasil dibagikan!', 'success');
+            
+            resetLocationState();
+        } else {
+            showNotification('Gagal: ' + result.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error sending location:', error);
+        showNotification('Terjadi kesalahan', 'error');
+    } finally {
+        this.disabled = false;
+        this.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Lokasi';
+    }
+});
+
+// ================================================================
+// 🔄 RESET LOCATION STATE
+// ================================================================
+
+function resetLocationState() {
+    locationState = {
+        lat: null,
+        lng: null,
+        name: '',
+        address: '',
+        placeId: null,
+        isSending: false
+    };
+    
+    const searchInput = document.getElementById('locationSearchInput');
+    const suggestions = document.getElementById('locationSuggestions');
+    const mapPreview = document.getElementById('locationMapPreview');
+    const sendBtn = document.getElementById('sendLocationBtn');
+    
+    if (searchInput) searchInput.value = '';
+    if (suggestions) suggestions.style.display = 'none';
+    if (mapPreview) mapPreview.style.display = 'none';
+    if (sendBtn) sendBtn.disabled = true;
+    
+    showLocationStatus('info', 'Cari lokasi atau gunakan GPS');
+}
+
+console.log('✅ Location sharing loaded!');
+
+// ================================================================
+// 🔥🔥🔥 ULTIMATE FORCE: OVERRIDE TERAKHIR
+// ================================================================
+
+// Override di detik terakhir
+setTimeout(function() {
+    console.log('🔥 ULTIMATE FORCE: Overriding displayMessagesMobile');
+    
+    // Override dengan fungsi yang bener
+    window.displayMessagesMobile = function(messages) {
+        console.log('🔥 ULTIMATE: displayMessagesMobile called');
+        
+        const el = document.getElementById('chatMessagesMobile');
+        if (!el) {
+            console.error('❌ chatMessagesMobile not found');
+            return;
+        }
+
+        if (!messages || messages.length === 0) {
+            el.innerHTML = `<div class="empty-state"><i class="fas fa-comment-slash"></i><h3>Belum ada pesan</h3><p>Mulai percakapan sekarang!</p></div>`;
+            return;
+        }
+
+        let html = '';
+        let lastDate = '';
+        const partnerName = chatState.currentConversation?.other_name || 'Partner';
+
+        messages.forEach(msg => {
+            const dateStr = msg.date_only || formatMsgDate(msg.created_at);
+            if (dateStr && dateStr !== lastDate) {
+                html += `<div class="msg-date">${escapeHtml(dateStr)}</div>`;
+                lastDate = dateStr;
+            }
+
+            const isMe = msg.is_me || msg.sender_id == currentUser.id;
+            const cls = isMe ? 'sent' : 'received';
+            const time = msg.time_only || formatMsgTime(msg.created_at);
+            
+            // 🔥 DETEKSI LOKASI (TANPA EMOJI)
+            const isLocation = msg.type === 'location' || 
+                               msg.is_location === 1 || 
+                               msg.is_location === '1';
+
+            let messageHtml = '';
+
+            if (isLocation) {
+                console.log('📍 ULTIMATE: Location detected!', msg);
+                
+                // ================================================================
+                // 🔥🔥🔥 AMBIL DATA DENGAN FALLBACK
+                // ================================================================
+                let lat = parseFloat(msg.latitude) || parseFloat(msg.location_lat) || 0;
+                let lng = parseFloat(msg.longitude) || parseFloat(msg.location_lng) || 0;
+                let name = msg.location_data || msg.location_name || '';
+                let address = msg.location_address || '';
+
+                // 🔥 FALLBACK: Jika name = '0' atau kosong
+                if (!name || name === '0' || name === '') {
+                    name = address || '';
+                }
+                // 🔥 FALLBACK: Dari message
+                if (!name || name === '0' || name === '') {
+                    if (msg.message) {
+                        const nameMatch = msg.message.replace(/^📍\s*/, '').trim();
+                        if (nameMatch && !nameMatch.includes('http')) {
+                            name = nameMatch;
+                        }
+                    }
+                }
+                // 🔥 FALLBACK: Dari koordinat
+                if (!name || name === '0' || name === '') {
+                    name = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                }
+                // 🔥 FALLBACK address
+                if (!address || address === '0' || address === '') {
+                    address = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                }
+
+                const mapsUrl = `https://maps.google.com/maps?q=${lat},${lng}`;
+                
+                const isSent = cls === 'sent';
+                const bgColor = isSent ? '#1a4a7a' : '#eff6ff';
+                const borderColor = isSent ? '#3b82f6' : '#93c5fd';
+                const textColor = isSent ? '#ffffff' : '#1e293b';
+                const subTextColor = isSent ? '#93c5fd' : '#64748b';
+                const coordColor = isSent ? '#60a5fa' : '#94a3b8';
+                const iconColor = isSent ? '#60a5fa' : '#3b82f6';
+
+                // ================================================================
+                // 🔥🔥🔥 KARTU LOKASI DENGAN KOORDINAT
+                // ================================================================
+                messageHtml = `
+                    <div style="display:flex !important;align-items:center !important;gap:10px !important;background:${bgColor} !important;border:1px solid ${borderColor} !important;border-radius:12px !important;padding:10px 14px !important;margin:4px 0 !important;cursor:pointer !important;width:100% !important;min-width:200px !important;max-width:100% !important;box-sizing:border-box !important;overflow:hidden !important;"
+                         onclick="window.open('${mapsUrl}', '_blank')">
+                        <div style="flex-shrink:0 !important;width:32px !important;height:32px !important;display:flex !important;align-items:center !important;justify-content:center !important;">
+                            <i class="fas fa-map-marker-alt" style="color:${iconColor} !important;font-size:1.2rem !important;"></i>
+                        </div>
+                        <div style="flex:1 !important;min-width:0 !important;overflow:hidden !important;">
+                            <div style="font-weight:600 !important;font-size:0.85rem !important;color:${textColor} !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">${escapeHtml(name)}</div>
+                            <div style="font-size:0.7rem !important;color:${subTextColor} !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">${escapeHtml(address)}</div>
+                            ${lat && lng ? `<div style="font-size:0.6rem !important;color:${coordColor} !important;margin-top:2px !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;">📍 ${lat.toFixed(6)}, ${lng.toFixed(6)}</div>` : ''}
+                        </div>
+                        <div style="flex-shrink:0 !important;padding-left:8px !important;">
+                            <i class="fas fa-external-link-alt" style="color:${iconColor} !important;font-size:0.9rem !important;"></i>
+                        </div>
+                    </div>
+                `;
+            } else {
+                messageHtml = escapeHtml(msg.message);
+            }
+
+            let senderNameHtml = '';
+            if (!isMe) {
+                senderNameHtml = `
+                    <div style="font-size:0.65rem;font-weight:600;color:var(--primary);margin-bottom:2px;margin-left:4px;">
+                        ${escapeHtml(partnerName)}
+                    </div>
+                `;
+            }
+
+            html += `
+                <div class="msg ${cls}" data-id="${msg.id}" style="max-width:82%;padding:9px 14px;border-radius:14px;font-size:0.82rem;word-wrap:break-word;line-height:1.4;${cls === 'sent' ? 'background:var(--primary);color:#ffffff !important;align-self:flex-end;border-bottom-right-radius:4px;' : 'background:var(--card-bg);color:var(--dark) !important;align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--border-color);'}">
+                    ${senderNameHtml}
+                    ${messageHtml}
+                    <span class="time" style="font-size:0.55rem;opacity:0.7;margin-top:3px;display:block;${cls === 'sent' ? 'color:rgba(255,255,255,0.7);' : 'color:var(--gray-light);'}">${time}</span>
+                </div>
+            `;
+        });
+
+        el.innerHTML = html;
+        el.scrollTop = el.scrollHeight;
+        console.log('✅ ULTIMATE: Messages displayed!');
+    };
+    
+    console.log('✅ ULTIMATE FORCE: displayMessagesMobile overridden!');
+}, 100);
+
+// ================================================================
+// 🗑️ DELETE ACCOUNT
+// ================================================================
+
+// Buka modal hapus akun
+document.getElementById('deleteAccountBtn')?.addEventListener('click', function() {
+    if (!currentUser) {
+        showNotification('Anda harus login terlebih dahulu', 'error');
+        return;
+    }
+    
+    // Reset form
+    document.getElementById('deleteAccountPassword').value = '';
+    document.getElementById('deleteAccountSubmitBtn').disabled = false;
+    document.getElementById('deleteAccountSubmitBtn').innerHTML = '<i class="fas fa-trash-alt"></i> Hapus Akun';
+    
+    openModal('deleteAccountModal');
+});
+
+// Submit hapus akun
+document.getElementById('deleteAccountForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    if (!currentUser) {
+        showNotification('Anda harus login terlebih dahulu', 'error');
+        return;
+    }
+    
+    const password = document.getElementById('deleteAccountPassword').value.trim();
+    
+    if (!password) {
+        showNotification('Password harus diisi!', 'error');
+        return;
+    }
+    
+    // Konfirmasi kedua (extra safety)
+    if (!confirm('⚠️ APAKAH ANDA YAKIN? Semua data akan dihapus permanen dan TIDAK BISA DIPULIHKAN!')) {
+        return;
+    }
+    
+    const submitBtn = document.getElementById('deleteAccountSubmitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+    
+    showLoading(true);
+    
+    try {
+        const formData = new FormData();
+        formData.append('user_id', currentUser.id);
+        formData.append('password', password);
+        formData.append('action', 'delete_account');
+        
+        const response = await fetch('update_profile.php', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('✅ Akun berhasil dihapus. Terima kasih telah menggunakan Hendimen.', 'success');
+            
+            // Close modal
+            closeModal('deleteAccountModal');
+            
+            // Clear session dan redirect ke index
+            setTimeout(() => {
+                // Hapus semua data lokal
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Redirect ke index
+                window.location.href = 'index.html';
+            }, 1500);
+            
+        } else {
+            showNotification('❌ Gagal: ' + result.message, 'error');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Hapus Akun';
+        }
+        
+    } catch (error) {
+        console.error('Error deleting account:', error);
+        showNotification('❌ Terjadi kesalahan: ' + error.message, 'error');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Hapus Akun';
+    } finally {
+        showLoading(false);
+    }
+});
 
 console.log('✅ Hendimen Mobile Dashboard ready!');

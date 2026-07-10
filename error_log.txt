@@ -105,3 +105,62 @@
 </html>
 
 [05-Jul-2026 03:03:50 Asia/Jakarta] update_job.php - action: pay, job_id: 488, user_id: 44
+[05-Jul-2026 11:07:04 Asia/Jakarta] job inserted, id: 489, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:07:12 Asia/Jakarta] job inserted, id: 490, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:07:22 Asia/Jakarta] job inserted, id: 491, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:11:10 Asia/Jakarta] job inserted, id: 492, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:11:27 Asia/Jakarta] job inserted, id: 493, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:11:31 Asia/Jakarta] send_location.php error: Column count doesn't match value count at row 1
+[05-Jul-2026 11:11:55 Asia/Jakarta] job inserted, id: 494, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:13:07 Asia/Jakarta] job inserted, id: 495, budget_min: 100000, budget_max: 400000
+[05-Jul-2026 11:13:07 Asia/Jakarta] 📤 FCM broadcast ke semua helper: 0 sukses, 0 gagal
+[05-Jul-2026 11:13:07 Asia/Jakarta] 📤 FCM broadcast untuk job #495: 0 sukses, 0 gagal
+[05-Jul-2026 11:13:07 Asia/Jakarta] ❌ WhatsApp notifikasi gagal: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /send-notification</pre>
+</body>
+</html>
+
+[05-Jul-2026 11:16:13 Asia/Jakarta] SQL: INSERT INTO chat_messages (job_id, sender_id, receiver_id, message, is_read, type, location_data, latitude, longitude, location_address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+[05-Jul-2026 11:16:13 Asia/Jakarta] Types: iiisissdds
+[05-Jul-2026 11:16:13 Asia/Jakarta] Values: [488,44,29,"\ud83d\udccd Lokasi",0,"location","{\"latitude\":0.4497635,\"longitude\":101.37571849999999,\"address\":\"Lokasi\",\"place_name\":\"Lokasi\",\"map_url\":\"https:\\\/\\\/www.google.com\\\/maps?q=0.4497635,101.3757185\"}",0.4497635,101.37571849999999,"Lokasi"]
+[05-Jul-2026 11:16:13 Asia/Jakarta] 📤 FCM ke user #29: 0 sukses, 0 gagal
+[05-Jul-2026 11:28:11 Asia/Jakarta] job inserted, id: 496, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:28:19 Asia/Jakarta] job inserted, id: 497, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:28:21 Asia/Jakarta] job inserted, id: 498, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:28:21 Asia/Jakarta] job inserted, id: 499, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:28:21 Asia/Jakarta] job inserted, id: 500, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:28:22 Asia/Jakarta] job inserted, id: 501, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:28:22 Asia/Jakarta] job inserted, id: 502, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:28:23 Asia/Jakarta] job inserted, id: 503, budget_min: 15000, budget_max: 25000
+[05-Jul-2026 11:36:05 Asia/Jakarta] 📤 FCM ke user #29: 0 sukses, 0 gagal
+[05-Jul-2026 23:21:47 Asia/Jakarta] job inserted, id: 504, budget_min: 10000, budget_max: 50000
+[05-Jul-2026 23:28:18 Asia/Jakarta] job inserted, id: 505, budget_min: 10000, budget_max: 50000
+[05-Jul-2026 23:28:18 Asia/Jakarta] ✅ FCM: Access token berhasil didapatkan
+[05-Jul-2026 23:28:18 Asia/Jakarta] ✅ FCM terkirim ke: fcMFXxOdSnKXcSIZE96D...
+[05-Jul-2026 23:28:18 Asia/Jakarta] 📤 FCM broadcast ke semua helper: 1 sukses, 0 gagal
+[05-Jul-2026 23:28:18 Asia/Jakarta] 📤 FCM broadcast untuk job #505: 1 sukses, 0 gagal
+[05-Jul-2026 23:28:18 Asia/Jakarta] ❌ WhatsApp notifikasi gagal: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /send-notification</pre>
+</body>
+</html>
+
+[05-Jul-2026 23:28:59 Asia/Jakarta] update_job.php - action: pay, job_id: 504, user_id: 44
+[05-Jul-2026 23:28:59 Asia/Jakarta] ✅ FCM: Access token berhasil didapatkan
+[05-Jul-2026 23:28:59 Asia/Jakarta] ✅ FCM terkirim ke: fcMFXxOdSnKXcSIZE96D...
+[05-Jul-2026 23:28:59 Asia/Jakarta] 📤 FCM ke user #29: 1 sukses, 0 gagal
+[09-Jul-2026 14:51:37 Asia/Jakarta] update_job.php - action: start, job_id: 504, user_id: 29
+[09-Jul-2026 14:51:37 Asia/Jakarta] ✅ FCM: Access token berhasil didapatkan
+[09-Jul-2026 14:51:37 Asia/Jakarta] ✅ FCM terkirim ke: fcMFXxOdSnKXcSIZE96D...
+[09-Jul-2026 14:51:37 Asia/Jakarta] 📤 FCM ke user #44: 1 sukses, 0 gagal

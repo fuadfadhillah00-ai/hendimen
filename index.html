@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Hendimen - Solusi Pekerjaan & Bantuan Terpercaya</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/OfcyLGW.png">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/8FlDKdS.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
@@ -773,7 +773,7 @@
                 display: inline-block;
             }
             .logo-img {
-                height: 60px;
+                height: 100px;
             }
             .nav-links a {
                 font-size: 0.85rem;
@@ -1061,6 +1061,41 @@
             from { transform: translateY(-20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+        
+        /* ================================================================
+   RESPONSIVE - DIDUKUNG OLEH
+   ================================================================ */
+
+@media (max-width: 600px) {
+    #didukung-oleh > div:last-child {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    #didukung-oleh > div:last-child {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 24px !important;
+    }
+}
+
+#didukung-oleh div[style*="grid-template-columns"] div:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    border-color: var(--primary);
+}
+
+/* Dark Mode */
+body.dark-mode #didukung-oleh div[style*="background:rgba(255,255,255,0.8)"] {
+    background: rgba(30,30,50,0.8) !important;
+    border-color: rgba(255,255,255,0.05) !important;
+}
+
+body.dark-mode #didukung-oleh div[style*="background:rgba(255,255,255,0.8)"]:hover {
+    border-color: var(--primary-light) !important;
+}
+        
     </style>
 </head>
 <body>
@@ -1233,6 +1268,138 @@
                 </div>
             </div>
         </section>
+        
+<!-- ================================================================ -->
+<!-- 🔥 SECTION: DIDUKUNG OLEH -->
+<!-- ================================================================ -->
+<section id="didukung-oleh" style="padding: 30px 0 20px;">
+    <h2 class="section-title">Didukung Oleh</h2>
+    <p class="section-sub">Mitra terpercaya yang mendukung Hendimen</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:750px;margin:0 auto;padding:0 16px;">
+        
+        <!-- LOGO 1 -->
+        <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:16px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;display:flex;align-items:center;justify-content:center;padding:12px;cursor:pointer;"
+             onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';this.style.borderColor='#2D63A3';"
+             onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';this.style.borderColor='rgba(255,255,255,0.6)';">
+            <img src="https://i.imgur.com/orxewXp.png" alt="Logo Partner 1" style="width:100%;height:100%;object-fit:contain;"
+                 onerror="this.parentElement.innerHTML='<span style=\'color:var(--gray);font-size:0.8rem;font-weight:600;\'>Logo 1</span>'">
+        </div>
+
+        <!-- LOGO 2 -->
+        <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:16px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;display:flex;align-items:center;justify-content:center;padding:12px;cursor:pointer;"
+             onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';this.style.borderColor='#2D63A3';"
+             onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';this.style.borderColor='rgba(255,255,255,0.6)';">
+            <img src="https://logo.uajy.ac.id/wp-content/uploads/2025/05/Logo-Tersier-Diktisaintek-Berdampak-1.png" alt="Logo Partner 2" style="width:100%;height:100%;object-fit:contain;"
+                 onerror="this.parentElement.innerHTML='<span style=\'color:var(--gray);font-size:0.8rem;font-weight:600;\'>Logo 2</span>'">
+        </div>
+
+        <!-- LOGO 3 -->
+        <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:16px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;display:flex;align-items:center;justify-content:center;padding:12px;cursor:pointer;"
+             onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';this.style.borderColor='#2D63A3';"
+             onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';this.style.borderColor='rgba(255,255,255,0.6)';">
+            <img src="https://i.imgur.com/IxRr77U.png" alt="Logo Partner 3" style="width:100%;height:100%;object-fit:contain;"
+                 onerror="this.parentElement.innerHTML='<span style=\'color:var(--gray);font-size:0.8rem;font-weight:600;\'>Logo 3</span>'">
+        </div>
+
+        <!-- LOGO 4 -->
+        <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:16px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;display:flex;align-items:center;justify-content:center;padding:12px;cursor:pointer;"
+             onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';this.style.borderColor='#2D63A3';"
+             onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';this.style.borderColor='rgba(255,255,255,0.6)';">
+            <img src="https://i.imgur.com/iat2exq.png" alt="Logo Partner 4" style="width:100%;height:100%;object-fit:contain;"
+                 onerror="this.parentElement.innerHTML='<span style=\'color:var(--gray);font-size:0.8rem;font-weight:600;\'>Logo 4</span>'">
+        </div>
+
+        <!-- LOGO 5 -->
+        <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:16px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;display:flex;align-items:center;justify-content:center;padding:12px;cursor:pointer;"
+             onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';this.style.borderColor='#2D63A3';"
+             onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';this.style.borderColor='rgba(255,255,255,0.6)';">
+            <img src="https://is3.cloudhost.id/cms-unri/fp.unri.ac.id/laravel-grapesjs/media/UNRI%20TERBARU.png" alt="Logo Partner 5" style="width:100%;height:100%;object-fit:contain;"
+                 onerror="this.parentElement.innerHTML='<span style=\'color:var(--gray);font-size:0.8rem;font-weight:600;\'>Logo 5</span>'">
+        </div>
+
+        <!-- LOGO 6 -->
+        <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:16px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;display:flex;align-items:center;justify-content:center;padding:12px;cursor:pointer;"
+             onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';this.style.borderColor='#2D63A3';"
+             onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';this.style.borderColor='rgba(255,255,255,0.6)';">
+            <img src="https://i.imgur.com/XKkaOe9.png" alt="Logo Partner 6" style="width:100%;height:100%;object-fit:contain;"
+                 onerror="this.parentElement.innerHTML='<span style=\'color:var(--gray);font-size:0.8rem;font-weight:600;\'>Logo 6</span>'">
+        </div>
+
+    </div>
+</section>
+
+        <!-- ================================================================ -->
+        <!-- 🔥 SECTION: STRUKTUR PERUSAHAAN (1-3-2) - FULL WIDTH -->
+        <!-- ================================================================ -->
+        <section id="struktur-perusahaan" style="padding: 30px 0 20px;">
+            <h2 class="section-title">Struktur Perusahaan</h2>
+            <p class="section-sub">Tim profesional yang siap memberikan pelayanan terbaik</p>
+
+            <div style="display:flex;flex-direction:column;align-items:center;gap:24px;max-width:1000px;margin:0 auto;padding:0 16px;">
+                
+                <!-- ===== BARIS 1: CEO (1 KOTAK) ===== -->
+                <div style="display:grid;grid-template-columns:1fr;max-width:240px;width:100%;">
+                    <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:20px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 2px 8px rgba(0,0,0,0.04);"
+                         onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,0.10)';this.style.borderColor='#2D63A3';"
+                         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)';this.style.borderColor='rgba(255,255,255,0.6)';">
+                        <img src="https://i.imgur.com/T2Idu1P.jpeg" alt="CEO" style="width:100%;height:100%;object-fit:cover;display:block;"
+                             onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:3.5rem;font-weight:700;color:white;background:linear-gradient(135deg,#2D63A3,#DF3B39);\'>JD</div>';">
+                    </div>
+                </div>
+
+                <!-- ===== BARIS 2: 3 MANAJER ===== -->
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%;max-width:780px;">
+                    
+                    <!-- Manajer 1 -->
+                    <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:18px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 2px 8px rgba(0,0,0,0.04);"
+                         onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,0.10)';this.style.borderColor='#2D63A3';"
+                         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)';this.style.borderColor='rgba(255,255,255,0.6)';">
+                        <img src="https://i.imgur.com/UVcJpxw.jpeg" alt="Manajer Operasional" style="width:100%;height:100%;object-fit:cover;display:block;"
+                             onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:3rem;font-weight:700;color:white;background:linear-gradient(135deg,#3A7BB0,#DF3B39);\'>AS</div>';">
+                    </div>
+
+                    <!-- Manajer 2 -->
+                    <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:18px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 2px 8px rgba(0,0,0,0.04);"
+                         onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,0.10)';this.style.borderColor='#2D63A3';"
+                         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)';this.style.borderColor='rgba(255,255,255,0.6)';">
+                        <img src="https://i.imgur.com/rQqPMb5.jpeg" alt="Manajer Keuangan" style="width:100%;height:100%;object-fit:cover;display:block;"
+                             onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:3rem;font-weight:700;color:white;background:linear-gradient(135deg,#3A7BB0,#DF3B39);\'>DN</div>';">
+                    </div>
+
+                    <!-- Manajer 3 -->
+                    <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:18px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 2px 8px rgba(0,0,0,0.04);"
+                         onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,0.10)';this.style.borderColor='#2D63A3';"
+                         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)';this.style.borderColor='rgba(255,255,255,0.6)';">
+                        <img src="https://i.imgur.com/JR94Y5K.jpeg" alt="Manajer Marketing" style="width:100%;height:100%;object-fit:cover;display:block;"
+                             onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:3rem;font-weight:700;color:white;background:linear-gradient(135deg,#3A7BB0,#DF3B39);\'>RP</div>';">
+                    </div>
+
+                </div>
+
+                <!-- ===== BARIS 3: 2 STAFF ===== -->
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;width:100%;max-width:500px;">
+                    
+                    <!-- Staff 1 -->
+                    <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:18px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 2px 8px rgba(0,0,0,0.04);"
+                         onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,0.10)';this.style.borderColor='#2D63A3';"
+                         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)';this.style.borderColor='rgba(255,255,255,0.6)';">
+                        <img src="https://i.imgur.com/JTYBBPz.jpeg" alt="Staff Developer" style="width:100%;height:100%;object-fit:cover;display:block;"
+                             onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:3rem;font-weight:700;color:white;background:linear-gradient(135deg,#3A7BB0,#DF3B39);\'>BA</div>';">
+                    </div>
+
+                    <!-- Staff 2 -->
+                    <div style="aspect-ratio:1/1;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-radius:18px;border:1px solid rgba(255,255,255,0.6);transition:all 0.3s;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 2px 8px rgba(0,0,0,0.04);"
+                         onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,0.10)';this.style.borderColor='#2D63A3';"
+                         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)';this.style.borderColor='rgba(255,255,255,0.6)';">
+                        <img src="https://i.imgur.com/w4KgTax.jpeg" alt="Staff Designer" style="width:100%;height:100%;object-fit:cover;display:block;"
+                             onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:3rem;font-weight:700;color:white;background:linear-gradient(135deg,#3A7BB0,#DF3B39);\'>SC</div>';">
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
 
         <!-- ===== CTA ===== -->
         <section class="cta-section">
@@ -1275,10 +1442,10 @@
                 </div>
                 <div class="footer-col">
                     <h4>Perusahaan</h4>
-                    <a href="#">Tentang Kami</a>
+                    <a href="about.php">Tentang Kami</a>
                     <a href="#">Karir</a>
                     <a href="#">Blog</a>
-                    <a href="#">Kebijakan Privasi</a>
+                    <a href="privacy-policy.php">Kebijakan Privasi</a>
                 </div>
                 <div class="footer-col">
                     <h4>Bantuan</h4>

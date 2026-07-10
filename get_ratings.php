@@ -1,6 +1,5 @@
 <?php
-// get_ratings.php
-// Mendapatkan rating dan ulasan
+// get_ratings.php - Mendapatkan rating dan ulasan dengan foto profil rater
 
 require_once 'config.php';
 session_start();
@@ -16,9 +15,13 @@ try {
         throw new Exception('User ID tidak valid');
     }
     
-    // Build query
+    // ================================================================
+    // BUILD QUERY - DENGAN PROFILE_IMAGE
+    // ================================================================
     $query = "SELECT r.*, 
-                     u.nama_lengkap as rater_name, u.role as rater_role,
+                     u.nama_lengkap as rater_name, 
+                     u.role as rater_role,
+                     u.profile_image as rater_profile_image,
                      j.title as job_title
               FROM ratings r
               LEFT JOIN users u ON r.rater_id = u.id
@@ -61,6 +64,7 @@ try {
             'job_title' => $row['job_title'] ?? 'Pekerjaan #' . $row['job_id'],
             'rater_id' => intval($row['rater_id']),
             'rater_name' => $row['rater_name'] ?? 'Pengguna',
+            'rater_profile_image' => $row['rater_profile_image'] ?? null,
             'rater_role' => $row['rater_role'] ?? 'user',
             'target_id' => intval($row['target_id']),
             'rating' => intval($row['rating']),
@@ -70,7 +74,9 @@ try {
     }
     $stmt->close();
     
-    // Hitung statistik
+    // ================================================================
+    // HITUNG STATISTIK
+    // ================================================================
     $total = count($ratings);
     $avg = 0;
     if ($total > 0) {

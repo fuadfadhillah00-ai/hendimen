@@ -17,7 +17,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = intval($_SESSION['user_id']);
 
 // Ambil data user
-$stmt = $conn->prepare("SELECT id, role, nama_lengkap FROM users WHERE id = ?");
+$stmt = $conn->prepare("SELECT id, role, nama_lengkap, profile_image FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
@@ -62,7 +62,7 @@ if (empty($role)) {
         $is_helper = true;
         $role = 'helper';
     } else {
-        $is_requester = true; // default
+        $is_requester = true;
         $role = 'requester';
     }
 }
@@ -78,6 +78,7 @@ if ($is_requester) {
             c.*,
             u.nama_lengkap as other_party,
             u.id as other_party_id,
+            u.profile_image as other_profile_image,
             j.title as job_title,
             j.id as job_id,
             c.requester_unread_count as unread_count
@@ -96,6 +97,7 @@ if ($is_requester) {
             c.*,
             u.nama_lengkap as other_party,
             u.id as other_party_id,
+            u.profile_image as other_profile_image,
             j.title as job_title,
             j.id as job_id,
             c.helper_unread_count as unread_count
@@ -120,6 +122,7 @@ while ($row = $result->fetch_assoc()) {
         'job_title' => $row['job_title'],
         'other_party' => $row['other_party'],
         'other_party_id' => (int)$row['other_party_id'],
+        'other_profile_image' => $row['other_profile_image'] ?? null,
         'last_message' => $row['last_message'],
         'last_message_time' => $row['last_message_time'],
         'unread_count' => (int)$row['unread_count'],

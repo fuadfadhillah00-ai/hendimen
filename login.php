@@ -40,7 +40,9 @@ if (empty($email) || empty($password_input)) {
 }
 
 // Cek user
-$stmt = $conn->prepare("SELECT * FROM users WHERE email = ? OR no_telepon = ?");
+$stmt = $conn->prepare("SELECT id, nama_lengkap, email, no_telepon, password, role, 
+                        wallet_requester, wallet_helper, profile_image, verification_status 
+                        FROM users WHERE email = ? OR no_telepon = ?");
 $stmt->bind_param("ss", $email, $email);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -52,6 +54,7 @@ if (!$user) {
 }
 
 // Verifikasi password
+// 🔥 BANDINGKAN LANGSUNG (PLAIN TEXT)
 if (!password_verify($password_input, $user['password'])) {
     echo json_encode(['success' => false, 'message' => 'Email/No Telepon atau password salah']);
     exit;
@@ -153,18 +156,19 @@ $response = [
     'message' => 'Login berhasil',
     'redirect' => $redirectUrl,
     'device' => $device,
-    'user' => [
-        'id' => $user['id'],
-        'name' => $user['nama_lengkap'],
-        'nama_lengkap' => $user['nama_lengkap'],
-        'email' => $user['email'],
-        'phone' => $user['no_telepon'] ?? '',
-        'role' => strtolower($user['role']),
-        'wallet_requester' => floatval($user['wallet_requester'] ?? 0),
-        'wallet_helper' => floatval($user['wallet_helper'] ?? 0),
-        'avatar' => getInitials($user['nama_lengkap']),
-        'verification_status' => $user['verification_status'] ?? 'verified'
-    ]
+'user' => [
+    'id' => $user['id'],
+    'name' => $user['nama_lengkap'],
+    'nama_lengkap' => $user['nama_lengkap'],
+    'email' => $user['email'],
+    'phone' => $user['no_telepon'] ?? '',
+    'role' => strtolower($user['role']),
+    'wallet_requester' => floatval($user['wallet_requester'] ?? 0),
+    'wallet_helper' => floatval($user['wallet_helper'] ?? 0),
+    'avatar' => getInitials($user['nama_lengkap']),
+    'verification_status' => $user['verification_status'] ?? 'verified',
+    'profile_image' => $user['profile_image'] ?? null  // 🔥 TAMBAHKAN INI
+]
 ];
 
 echo json_encode($response);

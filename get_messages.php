@@ -1,5 +1,5 @@
 <?php
-// get_messages.php - PERBAIKAN: Deteksi user dan role yang benar
+// get_messages.php - PERBAIKAN: Deteksi user dan role yang benar + data lokasi
 require_once 'config.php';
 session_start();
 
@@ -72,13 +72,14 @@ if (!$is_requester && !$is_helper) {
 $user_role = $is_requester ? 'requester' : 'helper';
 
 // ================================================================
-// AMBIL PESAN
+// AMBIL PESAN (DENGAN DATA LOKASI)
 // ================================================================
 
 if ($last_message_id > 0) {
     // Polling: hanya pesan baru
     $stmt = $conn->prepare("
-        SELECT m.id, m.sender_id, m.receiver_id, m.message, m.is_read, m.created_at,
+        SELECT m.id, m.sender_id, m.receiver_id, m.message, m.type, m.is_read, m.created_at,
+               m.location_data, m.latitude, m.longitude, m.location_address,
                DATE_FORMAT(m.created_at, '%H:%i') AS time_only,
                DATE_FORMAT(m.created_at, '%d/%m/%Y') AS date_only
         FROM chat_messages m
@@ -92,7 +93,8 @@ if ($last_message_id > 0) {
 } else {
     // Load awal dengan pagination
     $stmt = $conn->prepare("
-        SELECT m.id, m.sender_id, m.receiver_id, m.message, m.is_read, m.created_at,
+        SELECT m.id, m.sender_id, m.receiver_id, m.message, m.type, m.is_read, m.created_at,
+               m.location_data, m.latitude, m.longitude, m.location_address,
                DATE_FORMAT(m.created_at, '%H:%i') AS time_only,
                DATE_FORMAT(m.created_at, '%d/%m/%Y') AS date_only
         FROM chat_messages m
@@ -121,12 +123,21 @@ while ($row = $result->fetch_assoc()) {
         'sender_id' => (int)$row['sender_id'],
         'receiver_id' => (int)$row['receiver_id'],
         'message' => $row['message'],
+        'type' => $row['type'] ?? 'text',
         'is_read' => (bool)$row['is_read'],
         'is_me' => $is_me,
         'created_at' => $row['created_at'],
         'time_only' => $row['time_only'],
-        'date_only' => $row['date_only']
+        'date_only' => $row['date_only'],
+        // ================================================================
+        // 🔥🔥🔥 DATA LOKASI
+        // ================================================================
+        'location_data' => $row['location_data'],
+        'latitude' => $row['latitude'] ? floatval($row['latitude']) : null,
+        'longitude' => $row['longitude'] ? floatval($row['longitude']) : null,
+        'location_address' => $row['location_address']
     ];
+    
     if ((int)$row['id'] > $newest_id) $newest_id = (int)$row['id'];
 }
 
@@ -165,7 +176,7 @@ if (count($messages) > 0) {
 }
 
 // ================================================================
-// RESPONSE
+// 🔥 RESPONSE
 // ================================================================
 echo json_encode([
     'success' => true,

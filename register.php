@@ -1,5 +1,5 @@
 <?php
-// register.php - VERIFIKASI DINONAKTIFKAN
+// register.php - VERIFIKASI DINONAKTIFKAN (TANPA ERROR NOTIF)
 require_once 'config.php';
 
 // Hapus semua output buffer
@@ -88,8 +88,10 @@ try {
     // ================================================================
     // 🔥 VERIFIKASI DINONAKTIFKAN - LANGSUNG VERIFIED
     // ================================================================
-    $verification_status = 'verified'; // 🔥 LANGSUNG VERIFIED, TIDAK PENDING
-    
+    $verification_status = 'verified';
+
+    $conn->begin_transaction();
+
     $insert = $conn->prepare("INSERT INTO users 
         (role, nama_lengkap, email, no_telepon, password, ktp_file, 
          verification_status, wallet_requester, wallet_helper, created_at) 
@@ -105,24 +107,20 @@ try {
     $insert->close();
 
     // ================================================================
-    // NOTIFIKASI KE ADMIN (TETAP DIKIRIM TAPI TIDAK MEMBLOKIR)
+    // 🔥 NOTIFIKASI KE ADMIN - DILEWATI (TANPA ERROR)
     // ================================================================
-    $admin_notif_msg = "🆕 User baru terdaftar (auto-verified):\n";
-    $admin_notif_msg .= "Nama: " . $nama_lengkap . "\n";
-    $admin_notif_msg .= "Email: " . $email . "\n";
-    $admin_notif_msg .= "Status: Langsung aktif (verifikasi dimatikan)";
-    
-    $notif_admin = $conn->prepare("INSERT INTO notifications (user_id, message, type, is_read, created_at) VALUES (0, ?, 'admin', 0, NOW())");
-    $notif_admin->bind_param("s", $admin_notif_msg);
-    $notif_admin->execute();
-    $notif_admin->close();
+    // Tidak ada notifikasi ke admin untuk menghindari foreign key error
+    // Admin bisa melihat user baru di dashboard
+
+    $conn->commit();
 
     // ========== KIRIM RESPONSE ==========
     ob_clean();
     echo json_encode([
         'success' => true,
-        'message' => 'Registrasi berhasil! Silakan login.',
-        'requires_verification' => false, // 🔥 TIDAK PERLU VERIFIKASI
+        'message' => '✅ Registrasi berhasil! Silakan login.',
+        'requires_verification' => false,
+        'redirect' => 'auth.html?tab=login',
         'data' => [
             'email' => $email,
             'user_id' => $user_id
@@ -130,6 +128,7 @@ try {
     ]);
 
 } catch (Exception $e) {
+    if (isset($conn)) $conn->rollback();
     ob_clean();
     echo json_encode([
         'success' => false,

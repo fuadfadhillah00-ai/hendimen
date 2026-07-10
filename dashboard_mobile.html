@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Hendimen - Dashboard Mobile</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/WOMGJ6U.png">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/8FlDKdS.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="manifest" href="/manifest.json">
@@ -175,38 +175,6 @@
         .stars-container .star.lit { color: #f59e0b; }
         .rating-label { text-align: center; font-size: 0.85rem; color: #92400e; opacity: 0.6; }
 
-        /* Dark Mode */
-        body.dark-mode { background: #0f0f23; color: #f0f0f0; }
-        body.dark-mode .mobile-header { background: #1a1a2e; border-bottom-color: #3d3d5c; }
-        body.dark-mode .bottom-nav { background: #1a1a2e; border-top-color: #3d3d5c; }
-        body.dark-mode .bottom-nav .nav-item { color: #64748b; }
-        body.dark-mode .bottom-nav .nav-item.active { color: #3A7BB0; }
-        body.dark-mode .drawer { background: #1a1a2e; }
-        body.dark-mode .drawer-menu a { color: #f0f0f0; }
-        body.dark-mode .drawer-menu a.active { background: #2d3560; color: #3A7BB0; }
-        body.dark-mode .stat-card { background: #252540; border-color: #3d3d5c; }
-        body.dark-mode .job-card { background: #252540; border-color: #3d3d5c; }
-        body.dark-mode .wallet-card { background: #252540; border-color: #3d3d5c; }
-        body.dark-mode .modal-content { background: #1a1a2e; }
-        body.dark-mode .chat-container { background: #1a1a2e; border-color: #3d3d5c; }
-        body.dark-mode .chat-messages { background: #141428; }
-        body.dark-mode .chat-messages .msg.received { background: #2d2d44; color: #f0f0f0; }
-        body.dark-mode .chat-header { background: #1a1a2e; border-bottom-color: #3d3d5c; }
-        body.dark-mode .chat-input-area { background: #1a1a2e; border-top-color: #3d3d5c; }
-        body.dark-mode .chat-input-area input { background: #2d2d44; border-color: #3d3d5c; color: #f0f0f0; }
-        body.dark-mode .search-box input { background: #252540; border-color: #3d3d5c; color: #f0f0f0; }
-        body.dark-mode .filter-row select { background: #252540; border-color: #3d3d5c; color: #f0f0f0; }
-        body.dark-mode .tabbed-menu { background: #2d2d44; }
-        body.dark-mode .tabbed-menu .tab-btn { color: #94a3b8; }
-        body.dark-mode .tabbed-menu .tab-btn.active { background: #252540; color: #3A7BB0; }
-        body.dark-mode .role-switch-mobile { background: #2d2d44; }
-        body.dark-mode .role-switch-mobile .role-btn { color: #94a3b8; }
-        body.dark-mode .role-switch-mobile .role-btn.active { background: #2D63A3; color: white; }
-        body.dark-mode .modal-content .form-group input,
-        body.dark-mode .modal-content .form-group select,
-        body.dark-mode .modal-content .form-group textarea { background: #2d2d44; border-color: #3d3d5c; color: #f0f0f0; }
-        body.dark-mode .history-table td { border-bottom-color: #3d3d5c; }
-
         /* Utility */
         .text-center { text-align: center; }
         .mt-8 { margin-top: 8px; }
@@ -250,11 +218,6 @@
         body.requester-mode .wallet-helper { display: none !important; }
         body.helper-mode .wallet-requester { display: none !important; }
         .wallet-helper, .wallet-requester { transition: display 0.2s; }
-
-        /* Drawer dark mode toggle */
-        .drawer-dark-toggle { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 10px; cursor: pointer; background: none; border: none; width: 100%; font-weight: 500; font-size: 0.95rem; color: #1e293b; }
-        .drawer-dark-toggle i { width: 22px; text-align: center; }
-        body.dark-mode .drawer-dark-toggle { color: #f0f0f0; }
 
         /* Profile completion */
         .profile-completion { background: #eef2ff; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; }
@@ -373,7 +336,7 @@
         <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu">
             <i class="fas fa-bars"></i>
         </button>
-        <img src="https://i.imgur.com/cuIWlLe.png" class="logo" alt="Hendimen">
+        <img src="https://i.imgur.com/LQixG93.png" class="logo" alt="Hendimen">
         <div class="header-actions">
             <div class="notif-icon" id="notifBellMobile">
                 <i class="fas fa-bell"></i>
@@ -394,50 +357,45 @@
             </div>
             <button class="drawer-close" id="drawerClose">&times;</button>
         </div>
-        <ul class="drawer-menu">
-            <li><a href="#" class="active" data-page="home"><i class="fas fa-home"></i> Beranda</a></li>
-            <li><a href="#" data-page="jobs"><i class="fas fa-briefcase"></i> Pekerjaan Saya</a></li>
-            <li><a href="#" data-page="messages"><i class="fas fa-comments"></i> Pesan</a></li>
-            <li><a href="#" data-page="wallet"><i class="fas fa-wallet"></i> Dompet Saya</a></li>
-            <li><a href="#" data-page="rating"><i class="fas fa-star"></i> Rating &amp; Ulasan</a></li>
-            <li><a href="#" data-page="history"><i class="fas fa-history"></i> Riwayat</a></li>
-            <li><a href="#" data-page="settings"><i class="fas fa-cog"></i> Pengaturan</a></li>
-            <li class="divider"></li>
-            <li>
-                <button class="drawer-dark-toggle" id="drawerDarkToggle">
-                    <i class="fas fa-moon"></i> <span id="darkToggleLabel">Mode Gelap</span>
-                </button>
-            </li>
-            <li><a href="#" id="drawerLogout"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
-        </ul>
+<ul class="drawer-menu">
+    <li><a href="#" class="active" data-page="home"><i class="fas fa-home"></i> Beranda</a></li>
+    <li><a href="#" data-page="jobs"><i class="fas fa-briefcase"></i> Pekerjaan Saya</a></li>
+    <li><a href="#" data-page="messages"><i class="fas fa-comments"></i> Pesan</a></li>
+    <li><a href="#" data-page="wallet"><i class="fas fa-wallet"></i> Dompet Saya</a></li>
+    <li><a href="#" data-page="rating"><i class="fas fa-star"></i> Rating &amp; Ulasan</a></li>
+    <li><a href="#" data-page="history"><i class="fas fa-history"></i> Riwayat</a></li>
+    <li><a href="#" data-page="profile"><i class="fas fa-user"></i> Profil Saya</a></li>
+    <li class="divider"></li>
+    <li><a href="#" id="drawerLogout"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+</ul>
     </nav>
 
-    <!-- ===== BOTTOM NAV ===== -->
-    <nav class="bottom-nav" id="bottomNav">
-        <button class="nav-item active" data-page="home">
-            <i class="fas fa-home"></i>
-            <span>Beranda</span>
-        </button>
-        <button class="nav-item" data-page="jobs">
-            <i class="fas fa-briefcase"></i>
-            <span>Pekerjaan</span>
-        </button>
-        <button class="nav-item" data-page="messages">
-            <span class="badge-wrap">
-                <i class="fas fa-comments"></i>
-                <span class="badge" id="chatBadgeBottom">0</span>
-            </span>
-            <span>Pesan</span>
-        </button>
-        <button class="nav-item" data-page="wallet">
-            <i class="fas fa-wallet"></i>
-            <span>Dompet</span>
-        </button>
-        <button class="nav-item" data-page="settings">
-            <i class="fas fa-ellipsis-h"></i>
-            <span>Lainnya</span>
-        </button>
-    </nav>
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="bottom-nav" id="bottomNav">
+    <button class="nav-item active" data-page="home">
+        <i class="fas fa-home"></i>
+        <span>Beranda</span>
+    </button>
+    <button class="nav-item" data-page="jobs">
+        <i class="fas fa-briefcase"></i>
+        <span>Pekerjaan</span>
+    </button>
+    <button class="nav-item" data-page="messages">
+        <span class="badge-wrap">
+            <i class="fas fa-comments"></i>
+            <span class="badge" id="chatBadgeBottom">0</span>
+        </span>
+        <span>Pesan</span>
+    </button>
+    <button class="nav-item" data-page="wallet">
+        <i class="fas fa-wallet"></i>
+        <span>Dompet</span>
+    </button>
+    <button class="nav-item" data-page="profile">
+        <i class="fas fa-user"></i>
+        <span>Profil</span>
+    </button>
+</nav>
 
     <!-- ===== MAIN CONTENT ===== -->
     <div class="mobile-container">
@@ -620,22 +578,38 @@
 
                 <!-- Chat Main (ditampilkan saat percakapan dipilih) -->
                 <div class="chat-main" id="chatMainMobile" style="display:none;">
-                    <div class="chat-header">
-                        <button class="back" id="chatBackMobile"><i class="fas fa-arrow-left"></i></button>
-                        <div>
-                            <div style="font-weight:700;font-size:0.9rem;" id="chatPartnerName">Nama</div>
-                            <div style="font-size:0.7rem;color:#64748b;" id="chatPartnerRole">Requester</div>
-                        </div>
-                        <div style="margin-left:auto;font-size:0.7rem;color:#3ECF8E;"><span class="status-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3ECF8E;margin-right:4px;"></span>Online</div>
-                    </div>
-                    <div class="chat-messages" id="chatMessagesMobile">
-                        <div class="empty-state"><i class="fas fa-comment-slash"></i><h3>Mulai percakapan</h3></div>
-                    </div>
-                    <div class="chat-input-area">
-                        <button class="upload-btn" id="chatUploadMobile" disabled><i class="fas fa-cloud-upload-alt"></i></button>
-                        <input type="text" id="chatInputMobile" placeholder="Ketik pesan..." disabled>
-                        <button class="send-btn" id="chatSendMobile" disabled><i class="fas fa-paper-plane"></i></button>
-                    </div>
+<div class="chat-header">
+    <button class="back" id="chatBackMobile" onclick="closeChatMobile()">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+    <!-- AVATAR PARTNER DI SAMPING NAMA -->
+    <div class="partner-avatar" style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;font-weight:700;font-size:0.9rem;flex-shrink:0;">
+        U
+    </div>
+    <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:0.9rem;" id="chatPartnerName">Nama</div>
+        <div style="font-size:0.7rem;color:#64748b;" id="chatPartnerRole">Requester</div>
+    </div>
+    <div style="margin-left:auto;font-size:0.7rem;color:#3ECF8E;">
+        <span class="status-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3ECF8E;margin-right:4px;"></span>Online
+    </div>
+</div>
+<div class="chat-messages" id="chatMessagesMobile">
+    <div class="empty-state">
+        <i class="fas fa-comment-slash"></i>
+        <h3>Belum ada pesan</h3>
+        <p>Mulai percakapan sekarang!</p>
+    </div>
+</div>
+<div class="chat-input-area">
+    <button class="upload-btn" id="chatUploadMobile" disabled><i class="fas fa-cloud-upload-alt"></i></button>
+    <!-- 🔥 TAMBAHKAN TOMBOL LOKASI -->
+    <button class="location-btn" id="chatLocationMobile" disabled style="width:40px;height:40px;border-radius:50%;border:none;background:#3b82f6;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="fas fa-map-marker-alt"></i>
+    </button>
+    <input type="text" id="chatInputMobile" placeholder="Ketik pesan..." disabled>
+    <button class="send-btn" id="chatSendMobile" disabled><i class="fas fa-paper-plane"></i></button>
+</div>
                 </div>
             </div>
         </section>
@@ -739,46 +713,100 @@
             <div id="historyListMobile" class="job-list"></div>
         </section>
 
-        <!-- ============================================================ -->
-        <!-- SECTION: SETTINGS -->
-        <!-- ============================================================ -->
-        <section id="page-settings" class="page-section">
-            <h2 class="section-title"><i class="fas fa-cog"></i> Pengaturan</h2>
+<!-- ============================================================ -->
+<!-- SECTION: PROFILE (GANTI SETTINGS) -->
+<!-- ============================================================ -->
+<section id="page-profile" class="page-section">
+    <div class="profile-container">
 
-            <div style="background:white;border-radius:14px;padding:16px;border:1px solid #e2e8f0;">
+        <!-- Status Message -->
+        <div class="profile-status" id="profileStatus"></div>
 
-                <div class="form-group" style="margin-bottom:16px;">
-                    <label style="font-weight:600;font-size:0.85rem;">Notifikasi Browser</label>
-                    <button class="btn btn-primary" id="enableNotifMobile" style="width:100%;padding:10px;border-radius:10px;font-size:0.85rem;">
-                        <i class="fas fa-bell"></i> Aktifkan Notifikasi
-                    </button>
-                    <span id="notifStatusMobile" style="display:block;margin-top:6px;font-size:0.75rem;color:#64748b;"></span>
-                    <small style="display:block;margin-top:4px;font-size:0.7rem;color:#94a3b8;">Dapatkan pemberitahuan pesan dan update pekerjaan</small>
-                </div>
+<!-- Avatar Section -->
+<div class="profile-avatar-section">
+    <div class="profile-avatar-wrapper">
+        <div id="profileAvatarDisplay">
+            <div class="profile-avatar-placeholder" id="profileAvatarPlaceholder">U</div>
+            <img class="profile-avatar" id="profileAvatarImage" style="display:none;" alt="Foto Profil">
+        </div>
+        <button class="profile-avatar-upload-btn" id="profileAvatarBtn" title="Ubah Foto Profil">
+            <i class="fas fa-camera"></i>
+        </button>
+        <!-- 🔥 TAMBAHKAN TOMBOL HAPUS FOTO -->
+        <button class="profile-avatar-delete-btn" id="profileAvatarDeleteBtn" title="Hapus Foto Profil" style="display:none;">
+            <i class="fas fa-trash"></i>
+        </button>
+        <input type="file" id="profileAvatarInput" accept="image/*" style="display:none;">
+    </div>
+    <div class="profile-name-display" id="profileNameDisplay">Nama User</div>
+    <div class="profile-role-display" id="profileRoleDisplay">Requester</div>
+    <div id="profileVerificationBadge"></div>
+</div>
 
-                <div class="form-group" style="margin-bottom:16px;">
-                    <label style="font-weight:600;font-size:0.85rem;">Mode Tampilan</label>
-                    <div style="display:flex;align-items:center;gap:12px;">
-                        <span style="font-size:0.85rem;">Mode Gelap</span>
-                        <label class="switch" style="position:relative;display:inline-block;width:44px;height:24px;">
-                            <input type="checkbox" id="darkModeToggleMobile">
-                            <span style="position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:24px;transition:0.3s;"></span>
-                        </label>
-                    </div>
-                </div>
-
-                <button class="btn btn-outline" id="logoutBtnMobile" style="width:100%;padding:12px;border-radius:10px;font-size:0.9rem;">
-                    <i class="fas fa-sign-out-alt"></i> Keluar Akun
-                </button>
+        <!-- Profile Form -->
+        <form class="profile-form" id="profileForm">
+            <div class="form-group">
+                <label for="profileName"><i class="fas fa-user"></i> Nama Lengkap</label>
+                <input type="text" class="form-control" id="profileName" placeholder="Nama lengkap Anda" required>
             </div>
-        </section>
+
+            <div class="form-group">
+                <label for="profileEmail"><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" class="form-control" id="profileEmail" placeholder="Email Anda" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="profilePhone"><i class="fas fa-phone"></i> Nomor Telepon</label>
+                <input type="tel" class="form-control" id="profilePhone" placeholder="Nomor telepon Anda" required>
+            </div>
+
+            <button type="submit" class="btn-save-profile" id="profileSaveBtn">
+                <i class="fas fa-save"></i> Simpan Perubahan
+            </button>
+        </form>
+
+        <!-- Menu Items -->
+        <ul class="profile-menu-list">
+            <li>
+                <a href="#" onclick="navigateTo('wallet')">
+                    <i class="fas fa-wallet"></i> Dompet Saya
+                    <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="navigateTo('rating')">
+                    <i class="fas fa-star"></i> Rating & Ulasan
+                    <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="navigateTo('history')">
+                    <i class="fas fa-history"></i> Riwayat Pekerjaan
+                    <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
+                </a>
+            </li>
+        </ul>
+
+<!-- Logout Button -->
+<button class="btn-logout-profile" id="profileLogoutBtn">
+    <i class="fas fa-sign-out-alt"></i> Keluar Akun
+</button>
+
+<!-- 🔥 TAMBAHKAN: HAPUS AKUN -->
+<button class="btn-delete-account" id="deleteAccountBtn">
+    <i class="fas fa-trash-alt"></i> Hapus Akun
+</button>
+
+
+    </div>
+</section>
 
     </div><!-- /mobile-container -->
 
     <!-- ============================================================ -->
     <!-- MODALS -->
     <!-- ============================================================ -->
-
+    
     <!-- MODAL: Create Job (DENGAN BUDGET RANGE) -->
     <div class="modal-overlay" id="createJobModalMobile">
         <div class="modal-content">
@@ -1129,6 +1157,32 @@
         </div>
     </div>
 
+    <!-- ============================================================ -->
+<!-- MODAL: RESI TRANSAKSI -->
+<!-- ============================================================ -->
+<div class="modal-overlay" id="receiptModalMobile">
+    <div class="modal-content">
+        <div class="modal-header" style="background:linear-gradient(135deg,#2D63A3,#3A7BB0);margin:-24px -20px 16px;padding:16px 20px;border-radius:20px 20px 0 0;color:white;">
+            <h2 style="color:white;font-size:1rem;"><i class="fas fa-receipt"></i> Detail Resi</h2>
+            <button class="close" data-modal="receiptModalMobile" style="color:white;">&times;</button>
+        </div>
+        
+        <div id="receiptContentMobile">
+            <div style="text-align:center;padding:20px;">
+                <i class="fas fa-spinner fa-spin" style="font-size:1.5rem;color:var(--primary);"></i>
+                <p>Memuat data resi...</p>
+            </div>
+        </div>
+        
+        <div class="btn-group" style="margin-top:16px;">
+            <button class="btn btn-ghost" data-modal="receiptModalMobile">Tutup</button>
+            <button class="btn btn-primary" id="receiptPrintBtnMobile" onclick="window.print()">
+                <i class="fas fa-print"></i> Cetak
+            </button>
+        </div>
+    </div>
+</div>
+
     <!-- MODAL: Upload Bukti -->
     <div class="modal-overlay" id="uploadBuktiModalMobile">
         <div class="modal-content">
@@ -1162,6 +1216,97 @@
             </button>
         </div>
     </div>
+
+<!-- ============================================================ -->
+<!-- MODAL: BAGIKAN LOKASI -->
+<!-- ============================================================ -->
+<div class="modal-overlay" id="locationModalMobile">
+    <div class="modal-content" style="max-width:500px;">
+        <div class="modal-header">
+            <h2><i class="fas fa-map-marker-alt" style="color:#3b82f6;"></i> Bagikan Lokasi</h2>
+            <button class="close" data-modal="locationModalMobile">&times;</button>
+        </div>
+
+        <!-- Status GPS -->
+        <div id="locationStatus" style="background:#f0fdf4;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.85rem;display:flex;align-items:center;gap:8px;">
+            <i class="fas fa-spinner fa-spin" style="color:#3b82f6;"></i>
+            <span id="locationStatusText">Mendapatkan lokasi Anda...</span>
+        </div>
+
+        <!-- Input Pencarian Lokasi -->
+        <div class="form-group" style="margin-bottom:12px;">
+            <label><i class="fas fa-search"></i> Cari lokasi</label>
+            <input type="text" class="form-control" id="locationSearchInput" placeholder="Cari alamat atau tempat..." style="padding:10px 14px;border:1.5px solid var(--border-color);border-radius:var(--radius-sm);font-size:0.9rem;width:100%;">
+            <div id="locationSuggestions" style="display:none;background:var(--card-bg);border:1px solid var(--border-color);border-radius:8px;margin-top:4px;max-height:150px;overflow-y:auto;position:relative;z-index:10;"></div>
+        </div>
+
+        <!-- Map Preview -->
+        <div id="locationMapPreview" style="display:none;margin-bottom:12px;border-radius:8px;overflow:hidden;border:1px solid var(--border-color);">
+            <div id="locationMapContainer" style="width:100%;height:200px;background:#e8edf5;"></div>
+            <div id="locationSelectedInfo" style="padding:10px 14px;background:var(--card-bg);font-size:0.85rem;">
+                <strong id="locationSelectedName">-</strong>
+                <br>
+                <span id="locationSelectedAddress" style="color:var(--gray);font-size:0.75rem;">-</span>
+            </div>
+        </div>
+
+        <!-- Tombol Aksi -->
+        <div class="btn-group" style="display:flex;gap:10px;margin-top:8px;">
+<button class="btn btn-ghost" onclick="closeModal('locationModalMobile')" style="flex:1;padding:10px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;">
+     Batal
+</button>
+            <button class="btn btn-primary" id="sendLocationBtn" style="flex:2;padding:10px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;background:#3b82f6;color:white;border:none;" disabled>
+                <i class="fas fa-paper-plane"></i> Kirim Lokasi
+            </button>
+            <button class="btn btn-success" id="getCurrentLocationBtn" style="flex:1;padding:10px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;background:#10b981;color:white;border:none;">
+                <i class="fas fa-location-dot"></i> Lokasi Saya
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: HAPUS AKUN -->
+<!-- ============================================================ -->
+<div class="modal-overlay" id="deleteAccountModal">
+    <div class="modal-content" style="max-width:450px;">
+        <div class="modal-header" style="background:linear-gradient(135deg,#dc2626,#b91c1c);margin:-24px -20px 16px;padding:16px 20px;border-radius:20px 20px 0 0;color:white;">
+            <h2 style="color:white;font-size:1rem;"><i class="fas fa-exclamation-triangle"></i> Hapus Akun</h2>
+            <button class="close" data-modal="deleteAccountModal" style="color:white;">&times;</button>
+        </div>
+
+        <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:0.85rem;color:#991b1b;">
+            <i class="fas fa-warning"></i>
+            <strong>Peringatan!</strong>
+            <ul style="margin:8px 0 0 20px;font-size:0.8rem;">
+                <li>Semua data Anda akan <strong>dihapus permanen</strong></li>
+                <li>Data pekerjaan, transaksi, dan riwayat chat <strong>tidak bisa dipulihkan</strong></li>
+                <li>Akun Anda akan dinonaktifkan</li>
+            </ul>
+        </div>
+
+        <div style="background:#fef9e6;border:1px solid #fde68a;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:0.8rem;color:#92400e;">
+            <i class="fas fa-info-circle"></i>
+            Untuk keamanan, silakan konfirmasi dengan password Anda.
+        </div>
+
+        <form id="deleteAccountForm">
+            <div class="form-group">
+                <label for="deleteAccountPassword"><i class="fas fa-lock"></i> Konfirmasi Password</label>
+                <input type="password" class="form-control" id="deleteAccountPassword" placeholder="Masukkan password Anda" required>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:16px;">
+                <button type="button" class="btn btn-ghost" data-modal="deleteAccountModal" style="flex:1;padding:12px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;">
+                    <i class="fas fa-times"></i> Batal
+                </button>
+                <button type="submit" class="btn btn-danger" id="deleteAccountSubmitBtn" style="flex:2;padding:12px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;background:#dc2626;color:white;border:none;">
+                    <i class="fas fa-trash-alt"></i> Hapus Akun
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
     <!-- ============================================================ -->
     <!-- JavaScript Mobile -->
